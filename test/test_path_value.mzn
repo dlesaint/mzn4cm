@@ -166,7 +166,7 @@ let {
 ++ [ "(" ++ show(cmap.arc_labels[fix(o_x_arc_path[i])].arc.t) ++ "," ++ show(cmap.arc_labels[fix(o_x_arc_path[i])].arc.h) ++ ")" ++ if i < max(index_set(o_x_arc_path)) then " - " else "" endif | i in index_set(o_x_arc_path)]
 ++ ["\n"]
 ++ ["Influence  path=\t"]
-++ [ showInfluence(fix(x_influence_path[i])) ++ if i < max(index_set(x_influence_path)) then " - " else "" endif | i in index_set(x_influence_path)]
+++ [ showInfluence(fix(x_influence_path[i])) ++ if i < max(index_set(x_influence_path)) then " " else "" endif | i in index_set(x_influence_path)]
 ++ ["\n"]
 ++ ["I-block path =\t\t"]
 ++ [show(x_influence_path)]
