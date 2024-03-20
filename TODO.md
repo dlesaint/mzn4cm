@@ -9,7 +9,7 @@
 
 # Bugs
 
-- fix path_value for propagation computation
+- ~~fix path_value for propagation computation~~
 
 - fix itype_rational_plus_times (handling of null itype elements)
 
@@ -34,6 +34,10 @@
 - add smallerThan relation (par/var function) to algebra and itype APIs
 
 - implement script for regression testing on benchmarks = cmql_path_value X cmap x itype
+
+- write README doc including design architecture and *howto* guidelines
+
+- copy and extend `cmap.md` from php4cm with definitions on itype signatures (sorts, etc)
 
 ---
 
