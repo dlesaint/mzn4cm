@@ -1,0 +1,39 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% NO-OPT BOOLEAN AND/OR I-TYPE
+
+itype_nr_sorts = 1;
+
+itype_signature = (
+	% the name of the i-type
+% 	name:					"no-opt boolean and/or i-type",
+	% the category of the i-type
+	category:			ITYPE_CATEGORY_SINGLE_SORTED,
+	% the tuple of sorts of the i-type
+	sorts:					[ITYPE_SORT_BOOL],
+	% the operations of the i-type
+	operations:		[(ITYPE_AGGREGATION):ITYPE_AGGREGATION_AND, (ITYPE_PROPAGATION):ITYPE_PROPAGATION_OR],
+);
+
+itype_domains = (
+	cardinalities:	[<>],
+);
+
+itype_algebra = (
+	% the algebraic properties of the i-type operations
+	properties:		[
+									(ITYPE_AGGREGATION,	ALGEBRAIC_PROPERTY_HAS_ABSORBING_ELEMENT):	true,
+									(ITYPE_AGGREGATION,	ALGEBRAIC_PROPERTY_HAS_NEUTRAL_ELEMENT):		true,
+									(ITYPE_AGGREGATION,	ALGEBRAIC_PROPERTY_COMMUTATIVITY):				true,
+									(ITYPE_AGGREGATION,	ALGEBRAIC_PROPERTY_ASSOCIATIVITY):				true,
+									
+									(ITYPE_PROPAGATION,	ALGEBRAIC_PROPERTY_HAS_ABSORBING_ELEMENT):	true,
+									(ITYPE_PROPAGATION,	ALGEBRAIC_PROPERTY_HAS_NEUTRAL_ELEMENT):		true,
+									(ITYPE_PROPAGATION,	ALGEBRAIC_PROPERTY_COMMUTATIVITY):				true,
+									(ITYPE_PROPAGATION,	ALGEBRAIC_PROPERTY_ASSOCIATIVITY):				true,
+								],
+	% the algebraic elements of the i-type operations
+	aggregation_absorbing:	(iblock:[0]),
+	aggregation_neutral:		(iblock:[1]),
+	propagation_absorbing:	(iblock:[1]),
+	propagation_neutral:		(iblock:[0]),	
+);

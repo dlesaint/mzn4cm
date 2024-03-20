@@ -1,0 +1,143 @@
+# CONTENTS
+
+- [What is mzn4cm](#what-is-mzn4cm)
+
+- [Installation](#installation)
+
+  - [Minizinc](#minizinc)
+
+- [Basic Usage](#basic-usage)
+
+  - [Datasets](#datasets)
+  - [Testing](#testing)
+
+- [Model structure](#model-structure)
+
+    - [Modules](#modules)
+
+        - [Digaphs](#digraph)
+
+        - [Algebras](#algebras)
+
+        - [I-types](#i-types)
+
+        - [C-maps](#c-maps)
+
+        - [CMQL Queries](#cmql-queries)
+
+    - [Module Composition](#module-composition)
+
+- [HowTo](#howto)
+
+    - [Define A C-map](#define-a-c-map)
+
+    - [Add A New I-type](#add-a-new-i-type)
+
+- [About](#about)
+
+  - [Author](#author)
+  - [License](#license)
+
+---
+
+# What is mzn4cm
+
+TODO IGNORE
+mzn4cm is a Minizinc library to build and query cognitive maps (aka. cmaps).
+It is packaged with sample digraphs, i-types and c-maps and a couple of test scripts which can be run from the command line.
+
+Background definitions on cmaps, digraphs and influence types are documented in `cmaps.html` (converted from `cmaps.md`).
+
+
+---
+
+# Installation
+
+---
+
+## Minizinc
+
+
+---
+
+# Basic Usage
+
+---
+
+## Datasets
+
+---
+
+## Testing
+
+- for runs with single cmap
+`clear; minizinc model/main.mzn -d data/icmap/icm_B_1_dg_3x3_acyclic_1.dzn -d data/itype/itype_opt_bool_or_and.dzn`
+`clear; minizinc model/main.mzn -d data/icmap/icm_B_1_dg_3x3_acyclic_1.dzn -d data/itype/itype_bool_or_and.dzn`
+`clear; minizinc model/main.mzn -d data/icmap/icm_B_1_dg_3x3_acyclic_1.dzn -d data/itype/itype_opt_bool_and_or.dzn`
+`clear; minizinc model/main.mzn -d data/icmap/icm_B_1_dg_3x3_acyclic_1.dzn -d data/itype/itype_bool_and_or.dzn`
+
+`clear; minizinc model/main.mzn -d data/icmap/icm_S_1_dg_3x3_acyclic_1.dzn -d data/itype/itype_opt_enum_signed.dzn`
+`clear; minizinc model/main.mzn -d data/icmap/icm_S_1_dg_3x3_acyclic_1.dzn -d data/itype/itype_enum_signed.dzn`
+
+`clear; minizinc model/main.mzn -d data/icmap/icm_R_1_dg_3x3_acyclic_1.dzn -d data/itype/itype_opt_rational_plus_times.dzn`
+
+`clear; minizinc model/main.mzn -d data/icmap/icm_R_1_dg_3x3_acyclic_1.dzn -d data/itype/itype_rational_plus_times.dzn`
+
+`clear; minizinc model/main.mzn -d data/icmap/icm_R_1_dg_3x3_acyclic_1.dzn -d data/itype/itype_opt_rational_min_max.dzn`
+
+
+- for runs with multiple cmaps
+`clear; minizinc model/main.mzn -d data/icmap/icm_sg_1_dg_3_3_1.dzn -d data/itype/itype_opt_sg.dzn -D icmaps=\[icm_sg_1_dg_3_3_1\]`
+
+
+---
+
+# Model Structure
+
+---
+
+## Modules
+
+### Digraphs
+
+### Algebras
+
+### I-types
+
+### C-maps
+
+### CMQL Queries
+
+---
+
+## Module Composition
+
+
+---
+
+# HowTo
+
+---
+
+## Define A C-map
+
+---
+
+## Add A New I-type
+
+
+---
+
+# About
+
+---
+
+## Author
+
+David Lesaint - david.lesaint@univ-angers.fr
+
+---
+
+## License
+
+mzn4cm is licensed under the NOLICENSE license.

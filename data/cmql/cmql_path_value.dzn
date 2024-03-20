@@ -1,0 +1,12 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% PATH_VALUE QUERY DATA
+
+% origin node
+origin_node = 1;
+% 1 for internet testing
+% 8 for internet
+
+% destination node
+destination_node = 8;
+% 8 for route testing
+% 6 for internet testing

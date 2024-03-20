@@ -1,0 +1,19 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% DIGRAPH INSTANCE
+
+dg_3x2_chain_1 = (
+	% name
+	name:"dg_3x2_chain_1",
+	
+	% number of nodes
+	nr_nodes:3,
+	
+	% number of arcs
+	nr_arcs:2,
+	
+	% arcs
+	a:[
+	(t:1, h:2),
+	(t:2, h:3),
+	]
+);

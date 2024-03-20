@@ -1,0 +1,58 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% INPUT C-MAP
+
+icmap = (
+% icm_S_1_dg_13x26_internet_1 = (
+	% name
+	name:"icm_S_1_dg_13x26_internet_1",
+	
+	% i-type
+	itype: itype,
+	
+	% node-labeling concepts
+	node_labels:[
+		(node:1, concept:(name:"contrôle_presse")),
+		(node:2, concept:(name:"infos_pro_régime")),
+		(node:3, concept:(name:"contestation_régime")),
+		(node:4, concept:(name:"régime_autoritaire")),
+		(node:5, concept:(name:"filtrage_internet")),
+		(node:6, concept:(name:"liberté_expression")),
+		(node:7, concept:(name:"contournement_filtrage")),
+		(node:8, concept:(name:"instruction")),
+		(node:9, concept:(name:"communication")),
+		(node:10, concept:(name:"sentiment_démocratique")),
+		(node:11, concept:(name:"réunion_individus")),
+		(node:12, concept:(name:"répression")),
+		(node:13, concept:(name:"manifestations")),
+	],
+	
+	% arc-labeling influences
+	arc_labels:[
+		(arc:(t:1, h:2), influence:(iblock:[P])),
+		(arc:(t:1, h:6), influence:(iblock:[P])),
+		(arc:(t:2, h:3), influence:(iblock:[N])),
+		(arc:(t:2, h:4), influence:(iblock:[P])),
+		(arc:(t:3, h:13), influence:(iblock:[P])),
+		(arc:(t:4, h:1), influence:(iblock:[P])),
+		(arc:(t:4, h:5), influence:(iblock:[P])),
+		(arc:(t:4, h:12), influence:(iblock:[P])),
+		(arc:(t:5, h:2), influence:(iblock:[P])),
+		(arc:(t:5, h:6), influence:(iblock:[N])),
+		(arc:(t:5, h:8), influence:(iblock:[N])),
+		(arc:(t:6, h:3), influence:(iblock:[P])),
+		(arc:(t:6, h:9), influence:(iblock:[P])),
+		(arc:(t:7, h:5), influence:(iblock:[N])),
+		(arc:(t:8, h:7), influence:(iblock:[P])),
+		(arc:(t:8, h:9), influence:(iblock:[P])),
+		(arc:(t:8, h:10), influence:(iblock:[P])),
+		(arc:(t:9, h:10), influence:(iblock:[P])),
+		(arc:(t:9, h:11), influence:(iblock:[P])),
+		(arc:(t:10, h:4), influence:(iblock:[N])),
+		(arc:(t:11, h:6), influence:(iblock:[P])),
+		(arc:(t:11, h:13), influence:(iblock:[P])),
+		(arc:(t:12, h:3), influence:(iblock:[P])),
+		(arc:(t:12, h:7), influence:(iblock:[N])),
+		(arc:(t:12, h:11), influence:(iblock:[N])),
+		(arc:(t:13, h:4), influence:(iblock:[N])),
+	],
+);

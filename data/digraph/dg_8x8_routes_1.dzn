@@ -1,0 +1,25 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% DIGRAPH INSTANCE
+
+dg_8x8_routes_1 = (
+	% name
+	name:"dg_8x8_routes_1",
+	
+	% number of nodes
+	nr_nodes:8,
+	
+	% number of arcs
+	nr_arcs:8,
+	
+	% arcs
+	a:[
+		(t:1, h:5),
+		(t:2, h:5),
+		(t:2, h:6),
+		(t:3, h:7),
+		(t:4, h:7),
+		(t:5, h:8),
+		(t:6, h:8),
+		(t:7, h:8),
+	]
+);
