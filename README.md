@@ -1,4 +1,4 @@
-# CONTENTS
+# MZN4CM
 
 - [What is mzn4cm](#what-is-mzn4cm)
 
@@ -33,6 +33,8 @@
 
     - [Add A New I-type](#add-a-new-i-type)
 
+- [Remarks](#remarks)
+
 - [About](#about)
 
   - [Author](#author)
@@ -42,12 +44,12 @@
 
 # What is mzn4cm
 
-TODO IGNORE
+<!--
 mzn4cm is a Minizinc library to build and query cognitive maps (aka. cmaps).
 It is packaged with sample digraphs, i-types and c-maps and a couple of test scripts which can be run from the command line.
 
 Background definitions on cmaps, digraphs and influence types are documented in `cmaps.html` (converted from `cmaps.md`).
-
+-->
 
 ---
 
@@ -88,10 +90,10 @@ clear; minizinc test/test_path_value.mzn -d data/icmap/icm_S_1_dg_4x3_chain_1.dz
 clear; minizinc test/test_path_value.mzn -d data/icmap/icm_R_1_dg_8x8_routes_1.dzn -d data/itype/itype_opt_rational_plus_times.dzn -d data/cmql/cmql_path_value.dzn
 
 
-
+<!--
 - (ingore) for runs with multiple cmaps
 `clear; minizinc model/main.mzn -d data/icmap/icm_sg_1_dg_3_3_1.dzn -d data/itype/itype_opt_sg.dzn -D icmaps=\[icm_sg_1_dg_3_3_1\]`
-
+-->
 
 ---
 
@@ -111,6 +113,8 @@ clear; minizinc test/test_path_value.mzn -d data/icmap/icm_R_1_dg_8x8_routes_1.d
 
 ### CMQL Queries
 
+### CMQL Language
+
 ---
 
 ## Module Composition
@@ -127,6 +131,15 @@ clear; minizinc test/test_path_value.mzn -d data/icmap/icm_R_1_dg_8x8_routes_1.d
 ---
 
 ## Add A New I-type
+
+
+---
+
+# Remarks
+
+- Since INFLUENCE_SUBDOMAIN typedefed in influence_api as int, user-defined labels are ints (or enum cases since automatically coerced to ints) 
+but this is not really satisfactiroy for bool => have to use pseudo-bool.
+
 
 
 ---
