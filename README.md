@@ -70,23 +70,26 @@ Background definitions on cmaps, digraphs and influence types are documented in 
 
 ## Testing
 
-- for runs with single cmap
-`clear; minizinc model/main.mzn -d data/icmap/icm_B_1_dg_3x3_acyclic_1.dzn -d data/itype/itype_opt_bool_or_and.dzn`
-`clear; minizinc model/main.mzn -d data/icmap/icm_B_1_dg_3x3_acyclic_1.dzn -d data/itype/itype_bool_or_and.dzn`
-`clear; minizinc model/main.mzn -d data/icmap/icm_B_1_dg_3x3_acyclic_1.dzn -d data/itype/itype_opt_bool_and_or.dzn`
-`clear; minizinc model/main.mzn -d data/icmap/icm_B_1_dg_3x3_acyclic_1.dzn -d data/itype/itype_bool_and_or.dzn`
+Set query parameters, if needed, in `data/cmql/cmql_path_value.dzn`.
+Adapt based on your itype the inclusion directives in `model/include/include_ioperations.mzn` and `model/include/include_itype.mzn`.
 
-`clear; minizinc model/main.mzn -d data/icmap/icm_S_1_dg_3x3_acyclic_1.dzn -d data/itype/itype_opt_enum_signed.dzn`
-`clear; minizinc model/main.mzn -d data/icmap/icm_S_1_dg_3x3_acyclic_1.dzn -d data/itype/itype_enum_signed.dzn`
+Examples:
 
-`clear; minizinc model/main.mzn -d data/icmap/icm_R_1_dg_3x3_acyclic_1.dzn -d data/itype/itype_opt_rational_plus_times.dzn`
+- Opt-enum with no origin/destination in input:
 
-`clear; minizinc model/main.mzn -d data/icmap/icm_R_1_dg_3x3_acyclic_1.dzn -d data/itype/itype_rational_plus_times.dzn`
+`clear; minizinc test/test_path_value.mzn -d data/icmap/icm_S_1_dg_4x3_chain_1.dzn -d data/itype/itype_opt_enum_signed.dzn`
 
-`clear; minizinc model/main.mzn -d data/icmap/icm_R_1_dg_3x3_acyclic_1.dzn -d data/itype/itype_opt_rational_min_max.dzn`
+- Opt-enum with origin/destination set in `data/cmql/cmql_path_value.dzn`:
+
+clear; minizinc test/test_path_value.mzn -d data/icmap/icm_S_1_dg_4x3_chain_1.dzn -d data/itype/itype_opt_enum_signed.dzn -d data/cmql/cmql_path_value.dzn
+
+- Opt-rational with origin/destination set in `data/cmql/cmql_path_value.dzn`:
+
+clear; minizinc test/test_path_value.mzn -d data/icmap/icm_R_1_dg_8x8_routes_1.dzn -d data/itype/itype_opt_rational_plus_times.dzn -d data/cmql/cmql_path_value.dzn
 
 
-- for runs with multiple cmaps
+
+- (ingore) for runs with multiple cmaps
 `clear; minizinc model/main.mzn -d data/icmap/icm_sg_1_dg_3_3_1.dzn -d data/itype/itype_opt_sg.dzn -D icmaps=\[icm_sg_1_dg_3_3_1\]`
 
 
