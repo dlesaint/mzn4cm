@@ -1,0 +1,26 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% INPUT C-MAP
+
+icmap = (
+% icm_R_1_dg_4x3_chain_1 = (
+	% name
+	name:"icm_R_1_dg_4x3_chain_1",
+
+	% i-type
+	itype: itype,
+	
+	% node-labeling concepts
+	node_labels:[
+	(node:1, concept:(name:"c1")),
+	(node:2, concept:(name:"c2")),
+	(node:3, concept:(name:"c3")),
+	(node:4, concept:(name:"c4")),
+	],
+	
+	% arc-labeling influence blocks
+	arc_labels:[
+	(arc:(t:1, h:2), influence:(iblock:[1,1])),
+	(arc:(t:2, h:3), influence:(iblock:[3,1])),
+	(arc:(t:3, h:4), influence:(iblock:[2,1])),
+	],
+);
