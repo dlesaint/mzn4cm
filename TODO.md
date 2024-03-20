@@ -11,7 +11,9 @@
 
 - fix path_value for propagation computation
 
-- clean handling of null itype elements
+- fix itype_rational_plus_times (handling of null itype elements)
+
+    -- assertion failed: (1-1) type checking: virtual influence over non-opt i-type (par)
 
 ---
 
@@ -30,6 +32,8 @@
 - refactor all itype operations files into one single file if feasible
 
 - add smallerThan relation (par/var function) to algebra and itype APIs
+
+- implement script for regression testing on benchmarks = cmql_path_value X cmap x itype
 
 ---
 
@@ -63,12 +67,14 @@
 
 - allow to work and query several cmaps over the same itype simultaneously
 
-- add new restrictions/extensions to extend original CQML primitive `path_value`
+- check whether constraint `path_value` may be reified so as to use it in negative context (`not(path_value(...)`)) if needs be
+
+- add new restrictions/extensions in th eform of side constraints to extend original CQML primitive `path_value`
 
     - bounding path length
 
     - bounding propagated influence value
 
-    - membership of extreme or internal nodes and interna arcs
+    - membership of extreme or internal nodes and internal arcs
 
     - etc
