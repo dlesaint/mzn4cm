@@ -1,0 +1,19 @@
+## back/pending files
+_*
+*.bak
+
+## vscode
+.vscode
+scheduler.code-workspace
+
+## directories
+docs
+tmp
+
+## composer
+vendor
+
+## misc
+tmp
+
+
