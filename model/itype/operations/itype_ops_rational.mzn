@@ -159,12 +159,14 @@ function var int: greatestCommonDivisor(var int: x, var int: y)
 		var 1..(size+1): z;
 		array[0..size] of var int: x_gcd;
 		array[0..size] of var int: y_gcd;
+		
 		constraint forall (i in 0..(size)) (
 			x_gcd[i] = x mod (i+1) /\ y_gcd[i] = y mod (i+1)
 		);
 		constraint z = 1+  max([i | i in 0..size where x_gcd[i] == 0 /\ y_gcd[i] ==0]);
-	} in 			
- 		max(z,1)
+		
+	} in 
+ 		1
 ;
 
 %
