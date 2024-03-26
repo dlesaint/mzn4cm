@@ -9,6 +9,8 @@
 %		- PAR/VAR I-TYPE RELATIONS 
 %			- iEquals (par)
 %			- iEquals (var)
+%			- iSmallerThan (par)
+%			- iSmallerThan (var)
 %		- PAR/VAR BINARY I-TYPE OPERATIONS
 %			-	iAggregate (par)
 %			-	iAggregate (var)

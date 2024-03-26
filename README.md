@@ -1,55 +1,47 @@
-# MZN4CM
+# mzn4cm
 
 - [What is mzn4cm](#what-is-mzn4cm)
 
 - [Installation](#installation)
-
   - [Minizinc](#minizinc)
 
 - [Basic Usage](#basic-usage)
-
   - [Datasets](#datasets)
   - [Testing](#testing)
+    - [Sample commands](#sample-commands)
+    - [Web visualization](#web-visualization)
 
-- [Model structure](#model-structure)
-
+- [Design Principles And Structure](#design-principles-and-structure)
     - [Modules](#modules)
-
-        - [Digaphs](#digraph)
-
-        - [Algebras](#algebras)
-
+        - [Digraphs](#digraphs)
+        - [Algebraic Structures](#algebraic-structures)
         - [I-types](#i-types)
-
         - [C-maps](#c-maps)
-
         - [CMQL Queries](#cmql-queries)
-
     - [Module Composition](#module-composition)
 
 - [HowTo](#howto)
-
+    - [Add An I-type](#add-an-i-type)
     - [Define A C-map](#define-a-c-map)
 
-    - [Add A New I-type](#add-a-new-i-type)
-
-- [Remarks](#remarks)
+<!-- [Remarks](#remarks) -->
 
 - [About](#about)
-
-  - [Author](#author)
+  - [Authors](#authors)
   - [License](#license)
 
 ---
 
 # What is mzn4cm
 
-<!--
-mzn4cm is a Minizinc library to build and query cognitive maps (aka. cmaps).
-It is packaged with sample digraphs, i-types and c-maps and a couple of test scripts which can be run from the command line.
+mzn4cm is a Constraint Programming (CP) library to build and query cognitive maps based on the Cognitive Map Query Language (CMQL).
+It is implemented with [Minizinc](https://www.minizinc.org/) - a high-level CP modelling language -
+and comes packaged with sample digraphs, influence types and cognitive maps as well as a couple of test scripts which can be run from the command line or the Minizinc IDE.
 
-Background definitions on cmaps, digraphs and influence types are documented in `cmaps.html` (converted from `cmaps.md`).
--->
+Background definitions on digraphs, influence types (aka. i-types) and cognitive maps (aka. c-maps) are documented in `cmaps.html` (converted from `cmaps.md`).
+The original specification of CMQL is provided in the [PhD thesis of Adrian Robert](https://theses.hal.science/tel-03676196). 
+
+Note: this an alpha release of mzn4cp which implements a small subset of CMQL (influence propagation queries mainly).  
 
 ---
 
@@ -59,6 +51,9 @@ Background definitions on cmaps, digraphs and influence types are documented in 
 
 ## Minizinc
 
+mzn4cm assumes Minizinc version 2.8.3 or above. It has been tested using GECODE but alternative back-end CP solvers may be used (OR-tools, Chuffed, ...).
+
+To install the Minizinc distribution and IDE, visit [Minizinc](https://www.minizinc.org/software.html).
 
 ---
 
@@ -68,26 +63,89 @@ Background definitions on cmaps, digraphs and influence types are documented in 
 
 ## Datasets
 
+Datasets are organized as follows:
+
+- digraphs are stored in `./data/digraph`
+
+- i-types are stored in `./data/itype`
+
+- c-maps are stored in `./data/icmap`
+
+- sample CMQL query data are stored in `./data/cmql`.
+
+Datasets are Minizinc data files (`.dzn`) but may alternatively be encoded using [Minizinc JSON format](https://www.minizinc.org/doc-2.8.3/en/spec.html#json-support).
+
+All datasets are commented to help you create your own datasets: a complete documentation of the dataset schemas will be provided in future releases.
+
+
 ---
 
 ## Testing
 
-Set query parameters, if needed, in `data/cmql/cmql_path_value.dzn`.
-Adapt based on your itype the inclusion directives in `model/include/include_ioperations.mzn` and `model/include/include_itype.mzn`.
+Running mzn4cp assumes:
 
-Examples:
+- choosing an i-type dataset in `./data/itype`
 
-- Opt-enum with no origin/destination in input:
+- choosing a c-map based on the i-type in `./data/icmap`
 
-`clear; minizinc test/test_path_value.mzn -d data/icmap/icm_S_1_dg_4x3_chain_1.dzn -d data/itype/itype_opt_enum_signed.dzn`
+- and, optionally, customizing a CMQL query on the c-map `./data/cmql`.
 
-- Opt-enum with origin/destination set in `data/cmql/cmql_path_value.dzn`:
+Note. This release of mzn4cp requires commenting in or out file inclusion directives present in `./model/include/include_ioperations.mzn` and `./model/include/include_itype.mzn` in order to enable support for the target i-type (this won't be needed in future releases). For instance, comment out the following lines if you run a query over an enumerated i-type:
 
-clear; minizinc test/test_path_value.mzn -d data/icmap/icm_S_1_dg_4x3_chain_1.dzn -d data/itype/itype_opt_enum_signed.dzn -d data/cmql/cmql_path_value.dzn
+`include "./../itype/operations/itype_ops_enum.mzn";`
 
-- Opt-rational with origin/destination set in `data/cmql/cmql_path_value.dzn`:
+in `./model/include/include_ioperations.mzn`
 
-clear; minizinc test/test_path_value.mzn -d data/icmap/icm_R_1_dg_8x8_routes_1.dzn -d data/itype/itype_opt_rational_plus_times.dzn -d data/cmql/cmql_path_value.dzn
+and
+
+`include "./../itype/operations/itype_ops_enum.mzn";`
+
+in `./model/include/include_ioperations.mzn`
+
+
+### Sample commands
+
+Here are sample commands to run from the command line.
+
+1. Propage influence using query `path_value` between any pair of nodes of a c-map built with the signed opt-enumerated i-type:
+
+```
+minizinc \
+-d ./data/itype/itype_opt_enum_signed.dzn \
+-d ./data/icmap/icm_S_1_dg_4x3_chain_1.dzn \
+./test/test_path_value.mzn
+```
+
+2. Run the same query by binding origin and/or destination nodes set in `data/cmql/cmql_path_value.dzn`:
+
+```
+minizinc \
+-d ./data/itype/itype_opt_enum_signed.dzn \
+-d ./data/icmap/icm_S_1_dg_4x3_chain_1.dzn \
+-d ./data/cmql/cmql_path_value.dzn \
+./test/test_path_value.mzn 
+```
+
+3. Switch to a cmap build over the rational opt-itype $(\mathbb{Q}, +, \times)$ by adapting inclusion directives first and then running:
+
+```
+minizinc \
+-d ./data/icmap/icm_R_1_dg_8x8_routes_1.dzn \
+-d ./data/itype/itype_opt_rational_plus_times.dzn \
+-d ./data/cmql/cmql_path_value.dzn \
+./test/test_path_value.mzn
+```
+
+
+### Web visualization
+
+You may run the same commands from the Minizinc IDE:
+
+1. Open up mzn4cm project file `./mzn4cp.mzp`.
+
+2. Run model file `./test/test_path_value.mzn`by pre-selecting first the required i-type and c-map datafiles.
+
+A web page will open showing the c-map and allowing you to browe through the different solutions computed for the query. Note that you may configure the number of requested solutions by ticking the appropriate flag in the IDE configurator.
 
 
 <!--
@@ -97,7 +155,7 @@ clear; minizinc test/test_path_value.mzn -d data/icmap/icm_R_1_dg_8x8_routes_1.d
 
 ---
 
-# Model Structure
+# Design Principles And Structure
 
 ---
 
@@ -105,7 +163,7 @@ clear; minizinc test/test_path_value.mzn -d data/icmap/icm_R_1_dg_8x8_routes_1.d
 
 ### Digraphs
 
-### Algebras
+### Algebraic Structures
 
 ### I-types
 
@@ -124,15 +182,17 @@ clear; minizinc test/test_path_value.mzn -d data/icmap/icm_R_1_dg_8x8_routes_1.d
 
 # HowTo
 
----
-
-## Define A C-map
 
 ---
 
-## Add A New I-type
+## Add An I-type
+
+---
+
+## Add A C-map
 
 
+<!--
 ---
 
 # Remarks
@@ -140,6 +200,7 @@ clear; minizinc test/test_path_value.mzn -d data/icmap/icm_R_1_dg_8x8_routes_1.d
 - Since INFLUENCE_SUBDOMAIN typedefed in influence_api as int, user-defined labels are ints (or enum cases since automatically coerced to ints) 
 but this is not really satisfactiroy for bool => have to use pseudo-bool.
 
+-->
 
 
 ---
@@ -148,7 +209,7 @@ but this is not really satisfactiroy for bool => have to use pseudo-bool.
 
 ---
 
-## Author
+## Authors
 
 David Lesaint - david.lesaint@univ-angers.fr
 
