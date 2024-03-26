@@ -155,18 +155,19 @@ function var int: greatestCommonDivisor(var int: x, var int: y)
 	:: "greatestCommonDivisor($x,$y): returns greatest common divisor of $x and $y - (var)"
 	=
 	let {
-		int : size = min(min(ub(x), ub(y)),100);
-		var 1..(size+1): z;
-		array[0..size] of var int: x_gcd;
-		array[0..size] of var int: y_gcd;
-		
-		constraint forall (i in 0..(size)) (
-			x_gcd[i] = x mod (i+1) /\ y_gcd[i] = y mod (i+1)
-		);
-		constraint z = 1+  max([i | i in 0..size where x_gcd[i] == 0 /\ y_gcd[i] ==0]);
-		
-	} in 
- 		1
+		set of int: GCD = 1..min(min(ub(x),ub(y)),100);
+		array[GCD] of var int: x_gcd;
+		array[GCD] of var int: y_gcd;
+		constraint x_gcd[1] == x;
+		constraint y_gcd[1] == y;
+ 		constraint forall(i in min(GCD)+1..<max(GCD))(x_gcd[i] == y_gcd[i-1]);		
+ 		constraint forall(i in min(GCD)+1..<max(GCD))(if y_gcd[i-1] == 0 \/ y_gcd[i-1] == -1 \/ x_gcd[i-1] == -1 then y_gcd[i] == -1 else y_gcd[i] == x_gcd[i-1] mod y_gcd[i-1] endif);
+		var GCD: z;
+		constraint z = min([i | i in GCD where x_gcd[i] == 0 \/ y_gcd[i] == 0]);
+		var GCD: j;
+		constraint j = if x_gcd[z] == 0 then y_gcd[z] else x_gcd[z] endif;
+	} in
+		j
 ;
 
 %
