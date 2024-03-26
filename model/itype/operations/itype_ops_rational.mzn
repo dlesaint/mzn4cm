@@ -125,7 +125,8 @@ function var DEOPT_INFLUENCE: iPropagate(var DEOPT_INFLUENCE: x, var DEOPT_INFLU
 	if 		getPropagation(itype) == ITYPE_PROPAGATION_PLUS
 	then	iRationalPlus(x, y)
 	elseif	getPropagation(itype) == ITYPE_PROPAGATION_TIMES
-	then	iRationalTimes(x, y)
+	then	iRationalTimes(x, y) % add smallerThan relation (par/var function) to algebra and itype APIs
+
 	elseif	getPropagation(itype) == ITYPE_PROPAGATION_MIN
 	then	iRationalMin(x, y)
 	elseif	getPropagation(itype) == ITYPE_PROPAGATION_MAX
@@ -155,18 +156,20 @@ function int: greatestCommonDivisor(int: x, int: y)
 function var int: greatestCommonDivisor(var int: x, var int: y)
 	:: "greatestCommonDivisor($x,$y): returns greatest common divisor of $x and $y - (var)"
 	=
-	%TODO finish
 	let {
-		set of int: GCD = 1..50; % !! TODO adjust ...
+		set of int: GCD = 1..min(min(ub(x),ub(y)),100);
 		array[GCD] of var int: x_gcd;
 		array[GCD] of var int: y_gcd;
-		constraint x_gcd[max(GCD)] == if abs(x) > abs(y) then abs(x) else abs(y) endif;
-		constraint y_gcd[max(GCD)] == if abs(x) > abs(y) then abs(y) else abs(x) endif;
-% 		constraint forall(i in min(GCD)..<max(GCD))(x_gcd[i] == if ... endif;
-% 		constraint forall(i in min(GCD)..<max(GCD))(x_gcd[i] == if ... endif;
+		constraint x_gcd[1] == x;
+		constraint y_gcd[1] == y;
+ 		constraint forall(i in min(GCD)+1..<max(GCD))(x_gcd[i] == y_gcd[i-1]);		
+ 		constraint forall(i in min(GCD)+1..<max(GCD))(if y_gcd[i-1] == 0 \/ y_gcd[i-1] == -1 \/ x_gcd[i-1] == -1 then y_gcd[i] == -1 else y_gcd[i] == x_gcd[i-1] mod y_gcd[i-1] endif);
+		var GCD: z;
+		constraint z = min([i | i in GCD where x_gcd[i] == 0 \/ y_gcd[i] == 0]);
+		var GCD: j;
+		constraint j = if x_gcd[z] == 0 then y_gcd[z] else x_gcd[z] endif;
 	} in
-% 		x_gcd[1]
-		1
+		j
 ;
 
 %
