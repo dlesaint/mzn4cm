@@ -154,9 +154,8 @@ function int: greatestCommonDivisor(int: x, int: y)
 function var int: greatestCommonDivisor(var int: x, var int: y)
 	:: "greatestCommonDivisor($x,$y): returns greatest common divisor of $x and $y - (var)"
 	=
-	%TODO finish
 	let {
-		int : size = min(min(ub(x), ub(y)),1000);
+		int : size = min(min(ub(x), ub(y)),100);
 		var 1..(size+1): z;
 		array[0..size] of var int: x_gcd;
 		array[0..size] of var int: y_gcd;
@@ -165,8 +164,7 @@ function var int: greatestCommonDivisor(var int: x, var int: y)
 		);
 		constraint z = 1+  max([i | i in 0..size where x_gcd[i] == 0 /\ y_gcd[i] ==0]);
 	} in 			
- 		z
-	
+ 		max(z,1)
 ;
 
 %
