@@ -162,12 +162,13 @@ function var int: greatestCommonDivisor(var int: x, var int: y)
 		constraint y_gcd[1] == y;
  		constraint forall(i in min(GCD)+1..<max(GCD))(x_gcd[i] == y_gcd[i-1]);		
  		constraint forall(i in min(GCD)+1..<max(GCD))(if y_gcd[i-1] == 0 \/ y_gcd[i-1] == -1 \/ x_gcd[i-1] == -1 then y_gcd[i] == -1 else y_gcd[i] == x_gcd[i-1] mod y_gcd[i-1] endif);
-		var int: z;
-		%constraint z = (max(x_gcd[j], y_gcd[j]) j == min(i | i in GCD where x_gcd[i] == 0 \/ y_gcd[i] == 0));
-		constraint forall (i in GCD) (if x_gcd[i] == 0 then y_gcd[i] else x_gcd[i] endif)
+		var GCD: z;
+		constraint z = min([i | i in GCD where x_gcd[i] == 0 \/ y_gcd[i] == 0]);
+		var GCD: j;
+		constraint j = if x_gcd[z] == 0 then y_gcd[z] else x_gcd[z] endif;
 	} in
 % 		x_gcd[1]
-		z
+		j
 ;
 
 %
