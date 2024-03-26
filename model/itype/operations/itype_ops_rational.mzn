@@ -155,16 +155,19 @@ function var int: greatestCommonDivisor(var int: x, var int: y)
 	=
 	%TODO finish
 	let {
-		set of int: GCD = 1..50; % !! TODO adjust ...
+		set of int: GCD = 1..min(min(ub(x),ub(y)),100);
 		array[GCD] of var int: x_gcd;
 		array[GCD] of var int: y_gcd;
-		constraint x_gcd[max(GCD)] == if abs(x) > abs(y) then abs(x) else abs(y) endif;
-		constraint y_gcd[max(GCD)] == if abs(x) > abs(y) then abs(y) else abs(x) endif;
-% 		constraint forall(i in min(GCD)..<max(GCD))(x_gcd[i] == if ... endif;
-% 		constraint forall(i in min(GCD)..<max(GCD))(x_gcd[i] == if ... endif;
+		constraint x_gcd[1] == x;
+		constraint y_gcd[1] == y;
+ 		constraint forall(i in min(GCD)+1..<max(GCD))(x_gcd[i] == y_gcd[i-1]);		
+ 		constraint forall(i in min(GCD)+1..<max(GCD))(if y_gcd[i-1] == 0 \/ y_gcd[i-1] == -1 \/ x_gcd[i-1] == -1 then y_gcd[i] == -1 else y_gcd[i] == x_gcd[i-1] mod y_gcd[i-1] endif);
+		var int: z;
+		%constraint z = (max(x_gcd[j], y_gcd[j]) j == min(i | i in GCD where x_gcd[i] == 0 \/ y_gcd[i] == 0));
+		constraint forall (i in GCD) (if x_gcd[i] == 0 then y_gcd[i] else x_gcd[i] endif)
 	} in
 % 		x_gcd[1]
-		1
+		z
 ;
 
 %
