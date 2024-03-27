@@ -160,10 +160,10 @@ function var int: greatestCommonDivisor(var int: x, var int: y)
 		set of int: GCD = 1..min(min(ub(x),ub(y)),100);
 		array[GCD] of var int: x_gcd;
 		array[GCD] of var int: y_gcd;
-		constraint x_gcd[1] == x;
-		constraint y_gcd[1] == y;
+		constraint x_gcd[1] == if x > 0 then x else -x endif;
+		constraint y_gcd[1] == if y > 0 then y else -y endif;
  		constraint forall(i in min(GCD)+1..<max(GCD))(x_gcd[i] == y_gcd[i-1]);		
- 		constraint forall(i in min(GCD)+1..<max(GCD))(if y_gcd[i-1] == 0 \/ y_gcd[i-1] == -1 \/ x_gcd[i-1] == -1 then y_gcd[i] == -1 else y_gcd[i] == x_gcd[i-1] mod y_gcd[i-1] endif);
+ 		constraint forall(i in min(GCD)+1..<max(GCD))(if y_gcd[i-1] == 0 \/ y_gcd[i-1] == 0 then y_gcd[i] == 0 else y_gcd[i] == x_gcd[i-1] mod y_gcd[i-1] endif);
 		var GCD: z;
 		constraint z = min([i | i in GCD where x_gcd[i] == 0 \/ y_gcd[i] == 0]);
 		var GCD: j;
