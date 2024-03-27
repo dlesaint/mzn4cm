@@ -33,7 +33,7 @@ itype_algebra = (
 								],
 	% the algebraic elements of the i-type operations
 	aggregation_absorbing:	(iblock:[<>,<>]),
-	aggregation_neutral:		(iblock:[0,1]),
-	propagation_absorbing:	(iblock:[0,1]),
-	propagation_neutral:		(iblock:[1,1]),	
+	aggregation_neutral:		(iblock:[<>,<>]),
+	propagation_absorbing:	(iblock:[<>,<>]),
+	propagation_neutral:		(iblock:[<>,<>]),	
 );
