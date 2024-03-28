@@ -39,6 +39,8 @@
 
 - copy and extend `cmap.md` from php4cm with definitions on itype signatures (sorts, etc)
 
+- Display all solutions instead of just one
+
 ---
 
 # Extensions
