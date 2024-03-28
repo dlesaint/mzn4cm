@@ -21,7 +21,7 @@
 
 - add is_defined_var annotation to enum/bool itype functional constraints
 
-- implement GCD constraint for rational itype - determine upper-bound on number of *recursive* computation steps based on input rational arguments
+- ~~implement GCD constraint for rational itype~~ - determine upper-bound on number of *recursive* computation steps based on input rational arguments
 
 - distinguish between the *undefined element* (needed for inexistent algebraic elements) and the *null itype element*
 
