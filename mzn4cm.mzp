@@ -11,10 +11,9 @@
         "model/algebra/algebra_api.mzn",
         "model/algebra/algebra_imp_api.mzn",
         "test/test_path_value.mzn",
-        "model/cmql/primitive/primitive_path_value.mzn",
         "data/cmql/cmql_path_value.dzn"
     ],
-    "openTab": 11,
+    "openTab": 10,
     "projectFiles": [
         "data/cmql/cmql_path_value.dzn",
         "data/digraph/dg_13x26_internet_1.dzn",
@@ -31,6 +30,7 @@
         "data/icmap/icm_R_1_dg_3x3_acyclic_1.dzn",
         "data/icmap/icm_R_1_dg_3x3_cyclic_1.dzn",
         "data/icmap/icm_R_1_dg_4x3_chain_1.dzn",
+        "data/icmap/icm_R_1_dg_4x3_chain_2.dzn",
         "data/icmap/icm_R_1_dg_8x8_routes_1.dzn",
         "data/icmap/icm_S_1_dg_13x26_internet_1.dzn",
         "data/icmap/icm_S_1_dg_3x2_chain_1.dzn",
