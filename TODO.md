@@ -11,7 +11,7 @@
 
 - ~~fix path_value for propagation computation~~
 
-- fix itype_rational_plus_times (handling of null itype elements)
+- fix itype_rational_plus_times and itype_enum_signed (handling of null itype elements)
 
     -- assertion failed: (1-1) type checking: virtual influence over non-opt i-type (par)
 
@@ -21,7 +21,7 @@
 
 - add is_defined_var annotation to enum/bool itype functional constraints
 
-- implement GCD constraint for rational itype - determine upper-bound on number of *recursive* computation steps based on input rational arguments
+- ~~implement GCD constraint for rational itype~~ - determine upper-bound on number of *recursive* computation steps based on input rational arguments
 
 - distinguish between the *undefined element* (needed for inexistent algebraic elements) and the *null itype element*
 
