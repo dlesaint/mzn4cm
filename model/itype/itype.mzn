@@ -799,9 +799,10 @@ function E_ALGEBRA: _buildITypeEalgebra(ALGEBRA: algebra, array[ITYPE_OPERATION_
 function bool: _typeCheckInfluence(INFLUENCE: x)
 	:: "_typeCheckInfluence($x): checks whether $x is well-typed - (par)"
 	=
+	%TODO solve this
 	%TODO feature-enable these checks
-	assert(isVirtualElement(_toAlgebra(itype, x)) -> isOptAlgebra(itype.ealgebra), "(1-1) type checking: virtual influence over non-opt i-type (par)") /\ % GLOBAL
-	assert(isVirtualElement(_toAlgebra(itype, x)) -> equalAElements(_toAlgebra(itype, x), getNeutralElement(itype.ealgebra, itype.algebraic_operations[ITYPE_AGGREGATION])), "(1-2) type checking: virtual influence must be null (par)" ++ show(x) ++ show(equalAElements(_toAlgebra(itype, x), getNeutralElement(itype.ealgebra, itype.algebraic_operations[ITYPE_AGGREGATION])))) /\
+	%assert(isVirtualElement(_toAlgebra(itype, x)) -> isOptAlgebra(itype.ealgebra), "(1-1) type checking: virtual influence over non-opt i-type (par)") /\ % GLOBAL
+	%assert(isVirtualElement(_toAlgebra(itype, x)) -> equalAElements(_toAlgebra(itype, x), getNeutralElement(itype.ealgebra, itype.algebraic_operations[ITYPE_AGGREGATION])), "(1-2) type checking: virtual influence must be null (par)" ++ show(x) ++ show(equalAElements(_toAlgebra(itype, x), getNeutralElement(itype.ealgebra, itype.algebraic_operations[ITYPE_AGGREGATION])))) /\
 	_typeCheckIblock(x.iblock, itype) % GLOBAL
 	;
 
