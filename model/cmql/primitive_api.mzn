@@ -44,11 +44,12 @@ predicate cmql_value (
     array[int] of var int: x_arc_path_length,
     array[int,int] of var opt int: x_node_path,
     array[int,int] of var opt int: x_arc_path,    
-	array[int] of var INFLUENCE: x_influence_path,
-    array[int] of int: from, % placed in signature for visualization only
-	array[int] of int: to, % placed in signature for visualization only
-	array[int] of var bool: x_node_in, % placed in signature for visualization only
-	array[int] of var bool: x_arc_in % placed in signature for visualization only
+	array[int] of var INFLUENCE: x_influences,
+    array[int,int] of var INFLUENCE: x_influence_paths,
+    array[int,int] of int: from, % placed in signature for visualization only
+	array[int,int] of int: to, % placed in signature for visualization only
+	array[int,int] of var bool: x_node_in, % placed in signature for visualization only
+	array[int,int] of var bool: x_arc_in % placed in signature for visualization only
     )
     :: "predicate: cmql_path_value"
 ;

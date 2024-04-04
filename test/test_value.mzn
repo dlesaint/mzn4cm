@@ -63,10 +63,10 @@ constraint assert((occurs(origin_node) \/ occurs(destination_node)) -> deopt(ori
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% QUERY DATA/VARS FOR VISUALIZATION ONLY
 
-array[ARC_ID] of NODE_ID: from = array1d(ARC_ID, cmap.adigraph.tail_head[ARC_ID, TAIL]);
-array[ARC_ID] of NODE_ID: to = array1d(ARC_ID, cmap.adigraph.tail_head[ARC_ID, HEAD]);
-array[NODE_ID] of var bool: x_node_in 	:: no_output;
-array[ARC_ID] of var bool: x_arc_in 	:: no_output;
+array[int,ARC_ID] of NODE_ID: from = array1d(ARC_ID, cmap.adigraph.tail_head[ARC_ID, TAIL]);
+array[int,ARC_ID] of NODE_ID: to = array1d(ARC_ID, cmap.adigraph.tail_head[ARC_ID, HEAD]);
+array[int,NODE_ID] of var bool: x_node_in 	:: no_output;
+array[int,ARC_ID] of var bool: x_arc_in 	:: no_output;
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -96,7 +96,10 @@ array[int,ARC_ID] of var opt ARC_ID: x_arc_path
 ;
 
 %
-array[ARC_ID] of var INFLUENCE: x_influence_path;
+array[int] of var INFLUENCE: x_influences;
+
+%
+array[int,ARC_ID] of var INFLUENCE: x_influence_paths;
 
 %
 var INFLUENCE: x_influence
@@ -114,7 +117,7 @@ constraint :: "constraint: path propagation between origin and destination nodes
 			% binds destination node if given
 		/\	(occurs(destination_node) -> x_destination_node == destination_node)
 			% query
-		/\	cmql_value(cmap, x_influence, x_origin_node, x_destination_node, x_arc_path_length, x_node_path, x_arc_path, x_influence_path, from, to, x_node_in, x_arc_in)
+		/\	cmql_value(cmap, x_influence, x_origin_node, x_destination_node, x_arc_path_length, x_node_path, x_arc_path,x_influences, x_influence_paths, from, to, x_node_in, x_arc_in)
 ;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -156,10 +159,10 @@ let {
 %++ [ "(" ++ show(cmap.arc_labels[fix(o_x_arc_path[i])].arc.t) ++ "," ++ show(cmap.arc_labels[fix(o_x_arc_path[i])].arc.h) ++ ")" ++ if i < max(index_set(o_x_arc_path)) then " - " else "" endif | i in index_set(o_x_arc_path)]
 ++ ["\n"]
 ++ ["Influence  path=\t"]
-++ [ showInfluence(fix(x_influence_path[i])) ++ if i < max(index_set(x_influence_path)) then " " else "" endif | i in index_set(x_influence_path)]
+%++ [ showInfluence(fix(x_influence_paths[i])) ++ if i < max(index_set(x_influence_paths)) then " " else "" endif | i in index_set(x_influence_paths)]
 ++ ["\n"]
 ++ ["I-block path =\t\t"]
-++ [show(x_influence_path)]
+++ [show(x_influence_paths)]
 ++ ["\n"]
 ++ ["Propagated influence =\t"]
 ++ [showInfluence(fix(x_influence)) ++ " == " ++ show(fix(x_influence))]
