@@ -19,7 +19,7 @@ include "./../model/include/include_ioperations.mzn";
 include "./../model/include/include_cmql.mzn";
 
 % CMQL VISUALIZATION (optional)
-include "./../model/cmql/primitive/primitive_value_viz.mzn";
+%include "./../model/cmql/primitive/primitive_value_viz.mzn";
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% ASSERTIONS
@@ -46,6 +46,9 @@ set of int: NODE_ID = index_set(cmap.node_labels);
 %
 set of int: ARC_ID = index_set(cmap.arc_labels);
 
+%
+set of int: NB_ARC = 1..3;
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% QUERY INPUT DATA
 
@@ -63,10 +66,10 @@ constraint assert((occurs(origin_node) \/ occurs(destination_node)) -> deopt(ori
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% QUERY DATA/VARS FOR VISUALIZATION ONLY
 
-array[int,ARC_ID] of NODE_ID: from = array1d(ARC_ID, cmap.adigraph.tail_head[ARC_ID, TAIL]);
-array[int,ARC_ID] of NODE_ID: to = array1d(ARC_ID, cmap.adigraph.tail_head[ARC_ID, HEAD]);
-array[int,NODE_ID] of var bool: x_node_in 	:: no_output;
-array[int,ARC_ID] of var bool: x_arc_in 	:: no_output;
+array[ARC_ID] of NODE_ID: from = array1d(ARC_ID, cmap.adigraph.tail_head[ARC_ID, TAIL]);
+array[ARC_ID] of NODE_ID: to = array1d(ARC_ID, cmap.adigraph.tail_head[ARC_ID, HEAD]);
+array[NB_ARC,NODE_ID] of var bool: x_node_in 	:: no_output;
+array[NB_ARC,ARC_ID] of var bool: x_arc_in 	:: no_output;
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -83,23 +86,23 @@ var NODE_ID: x_destination_node
 ;
 
 %
-array[int] of var 0..card(ARC_ID): x_arc_path_length;
+array[NB_ARC] of var 0..card(ARC_ID): x_arc_path_length;
 
 %
-array[int,NODE_ID] of var opt NODE_ID: x_node_path
+array[NB_ARC,NODE_ID] of var opt NODE_ID: x_node_path
 	:: no_output
 ;
 
 %
-array[int,ARC_ID] of var opt ARC_ID: x_arc_path
+array[NB_ARC,ARC_ID] of var opt ARC_ID: x_arc_path
 	:: no_output
 ;
 
 %
-array[int] of var INFLUENCE: x_influences;
+array[NB_ARC] of var INFLUENCE: x_influences;
 
 %
-array[int,ARC_ID] of var INFLUENCE: x_influence_paths;
+array[NB_ARC,ARC_ID] of var INFLUENCE: x_influence_paths;
 
 %
 var INFLUENCE: x_influence
