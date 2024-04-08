@@ -11,9 +11,12 @@
         "model/algebra/algebra_api.mzn",
         "model/algebra/algebra_imp_api.mzn",
         "test/test_path_value.mzn",
-        "data/cmql/cmql_path_value.dzn"
+        "data/cmql/cmql_path_value.dzn",
+        "model/cmql/primitive/primitive_value.mzn",
+        "test/test_value.mzn",
+        "model/cmql/primitive/primitive_path_value.mzn"
     ],
-    "openTab": 10,
+    "openTab": 12,
     "projectFiles": [
         "data/cmql/cmql_path_value.dzn",
         "data/digraph/dg_13x26_internet_1.dzn",
@@ -56,6 +59,7 @@
         "model/cmap/cmap_display.mzn",
         "model/cmql/primitive/primitive_path_value.mzn",
         "model/cmql/primitive/primitive_path_value_viz.mzn",
+        "model/cmql/primitive/primitive_value.mzn",
         "model/cmql/primitive_api.mzn",
         "model/display/visualisation.mzn",
         "model/feature/feature.mzn",
@@ -90,7 +94,8 @@
         "model/utils/utils_string.mzn",
         "mzn4cm.mpc",
         "test/test_no_cmql.mzn",
-        "test/test_path_value.mzn"
+        "test/test_path_value.mzn",
+        "test/test_value.mzn"
     ],
     "selectedSolverConfigFile": "mzn4cm.mpc",
     "version": 106
