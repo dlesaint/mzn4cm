@@ -47,7 +47,7 @@ set of int: NODE_ID = index_set(cmap.node_labels);
 set of int: ARC_ID = index_set(cmap.arc_labels);
 
 %
-set of int: NB_ARC = 1..3;
+set of int: NB_PATH = 1..3;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% QUERY INPUT DATA
@@ -68,8 +68,8 @@ constraint assert((occurs(origin_node) \/ occurs(destination_node)) -> deopt(ori
 
 array[ARC_ID] of NODE_ID: from = array1d(ARC_ID, cmap.adigraph.tail_head[ARC_ID, TAIL]);
 array[ARC_ID] of NODE_ID: to = array1d(ARC_ID, cmap.adigraph.tail_head[ARC_ID, HEAD]);
-array[NB_ARC,NODE_ID] of var bool: x_node_in 	:: no_output;
-array[NB_ARC,ARC_ID] of var bool: x_arc_in 	:: no_output;
+array[NB_PATH,NODE_ID] of var bool: x_node_in 	:: no_output;
+array[NB_PATH,ARC_ID] of var bool: x_arc_in 	:: no_output;
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -86,23 +86,23 @@ var NODE_ID: x_destination_node
 ;
 
 %
-array[NB_ARC] of var 0..card(ARC_ID): x_arc_path_length;
+var 0..card(NB_PATH): x_nb_true_path;
 
 %
-array[NB_ARC,NODE_ID] of var opt NODE_ID: x_node_path
+array[NB_PATH,NODE_ID] of var opt NODE_ID: x_node_path
 	:: no_output
 ;
 
 %
-array[NB_ARC,ARC_ID] of var opt ARC_ID: x_arc_path
+array[NB_PATH,ARC_ID] of var opt ARC_ID: x_arc_path
 	:: no_output
 ;
 
 %
-array[NB_ARC] of var INFLUENCE: x_influences;
+array[NB_PATH] of var INFLUENCE: x_influences;
 
 %
-array[NB_ARC,ARC_ID] of var INFLUENCE: x_influence_paths;
+array[NB_PATH,ARC_ID] of var INFLUENCE: x_influence_paths;
 
 %
 var INFLUENCE: x_influence
@@ -120,7 +120,7 @@ constraint :: "constraint: path propagation between origin and destination nodes
 			% binds destination node if given
 		/\	(occurs(destination_node) -> x_destination_node == destination_node)
 			% query
-		/\	cmql_value(cmap, x_influence, x_origin_node, x_destination_node, x_arc_path_length, x_node_path, x_arc_path,x_influences, x_influence_paths, from, to, x_node_in, x_arc_in)
+		/\	cmql_value(cmap, x_influence, x_origin_node, x_destination_node, x_nb_true_path, x_node_path, x_arc_path,x_influences, x_influence_paths, from, to, x_node_in, x_arc_in)
 ;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -152,7 +152,7 @@ let {
 	%array[int] of var ARC_ID : o_x_arc_path = deopt([x_arc_path[i] | i in index_set(x_arc_path) where occurs(fix(x_arc_path[i]))]);
 } in
 	 ["Path length =\t\t"]
-++ [ show(x_arc_path_length)]
+++ [ show(x_nb_true_path)]
 ++ ["\n"]
 ++	 ["Node path =\t\t"]
 % ++ [my_show1d_indexed(D_INT, (map2name(D_NODE_ID, [fix(o_x_node_path[i]) | i in index_set(o_x_node_path)])))]

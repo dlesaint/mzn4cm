@@ -16,8 +16,8 @@ include "./../../feature/feature_api.mzn";
 include "./../../feature/feature.mzn";
 include "./../../ranges/ranges_api.mzn";
 include "./../../ranges/ranges.mzn";
+include "./../../utils/lex.mzn";
 
-include "strict_lex2.mzn";
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% PREDICATES FOR PATH COMPUTATION
 
@@ -47,10 +47,11 @@ let {
 % 		array[ARC_ID] of NODE_ID: from = array1d(ARC_ID, cmap.adigraph.tail_head[ARC_ID, TAIL]);
 % 		array[ARC_ID] of NODE_ID: to = array1d(ARC_ID, cmap.adigraph.tail_head[ARC_ID, HEAD]);
 		
-        array[NB_PATH, IBLOCK_COMPONENT] of opt int: iblocks = array2d(NB_PATH, IBLOCK_COMPONENT, [x_influences[i].iblock[j] | i in NB_PATH, j in IBLOCK_COMPONENT]);
-		array[NB_PATH, IBLOCK_COMPONENT] of var opt int: x_iblocks;
+        %array[NB_PATH, IBLOCK_COMPONENT] of opt int: iblocks = array2d(NB_PATH, IBLOCK_COMPONENT, [x_influences[i].iblock[j] | i in NB_PATH, j in IBLOCK_COMPONENT]);
+		
 % 		array[NODE_ID] of var bool: x_node_in;
 % 		array[ARC_ID] of var bool: x_arc_in;
+        array[NB_PATH, IBLOCK_COMPONENT] of var opt int: x_iblocks;
         array[NB_PATH] of var int: x_arc_path_length;
 	} in 
 		forall(i in NB_PATH) (
@@ -68,13 +69,15 @@ let {
                 x_node_in[i,NODE_ID], 
                 x_arc_in[i,ARC_ID])
             )        
-        /\	(x_iblocks[min(NB_PATH), IBLOCK_COMPONENT] == [iblocks[x_influences[min(NB_PATH)], j] | j in IBLOCK_COMPONENT])
+        %Assignations du premier block
+        /\	(x_iblocks[min(NB_PATH), IBLOCK_COMPONENT] == [x_influences[min(NB_PATH)].iblock[j] | j in IBLOCK_COMPONENT])
         % assignation de l’influence
         /\ forall(i in min(NB_PATH)<..max(NB_PATH))(
 					(occurs(x_influences[i]) -> x_iblocks[i, IBLOCK_COMPONENT] 
 % 					x_influence_path[i]
-					 == iPropagate((iblock: deopt([(iblocks[x_influences[i], j]) | j in IBLOCK_COMPONENT])), (iblock: deopt(x_iblocks[i-1, IBLOCK_COMPONENT]))).iblock)
-			)
+					 == iAggregate((iblock: deopt([x_influences[i].iblock[j] | j in IBLOCK_COMPONENT])), (iblock: deopt(x_iblocks[i-1, IBLOCK_COMPONENT]))).iblock)
+			)            
         /\ x_influence == (iblock: [x_iblocks[nb_true_path, i] | i in IBLOCK_COMPONENT])
-        /\ nb_true_path == count(forall (i in NB_PATH) (occurs(x_influences[i])))
+        /\ nb_true_path == count([occurs(x_influences[i]) | i in NB_PATH])
+        /\ lex_strict_opt(x_node_path, NB_PATH, ARC_ID)
     ;

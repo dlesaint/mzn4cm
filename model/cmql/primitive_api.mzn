@@ -41,7 +41,7 @@ predicate cmql_value (
     var INFLUENCE: x_influence,
     var int: x_origin_node,
     var int: x_destination_node,
-    array[int] of var int: x_arc_path_length,
+    var int: nb_true_path,
     array[int,int] of var opt int: x_node_path,
     array[int,int] of var opt int: x_arc_path,    
 	array[int] of var INFLUENCE: x_influences,

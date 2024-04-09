@@ -2,7 +2,7 @@
 %%% PATH_VALUE QUERY DATA
 
 % origin node
-origin_node = 2;
+origin_node = 1;
 % 1 for internet testing
 % 8 for internet
 
