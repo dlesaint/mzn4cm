@@ -50,7 +50,7 @@ set of int: NODE_ID = index_set(cmap.node_labels);
 set of int: ARC_ID = index_set(cmap.arc_labels);
 
 %
-set of int: NB_PATH = 1..nb_path(NODE_ID,ARC_ID, cmap.adigraph.a);
+set of int: NB_PATH = 1..nb_path(NODE_ID,ARC_ID, transform_matrix(NODE_ID,cmap.adigraph.a));
 
 
 

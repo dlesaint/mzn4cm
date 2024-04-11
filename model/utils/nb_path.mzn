@@ -30,3 +30,11 @@ function int: nb_path (set of int: nbSommet,set of int: nbArc, array[int,int] of
   } in 
     nbPath
  ;
+
+
+ function array[int,int] of opt int: transform_matrix (set of int: nbSommet, array[int,int] of opt int: matrix) = 
+  let {
+    array[int,int] of opt int : result = array2d(nbSommet, nbSommet, [if occurs(matrix[i,j]) then 1 else <> endif | i in nbSommet, j in nbSommet]);
+
+  } in 
+    result;

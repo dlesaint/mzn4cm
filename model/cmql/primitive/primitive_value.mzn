@@ -47,7 +47,8 @@ let {
 		set of int: ARC_ID = index_set(cmap.arc_labels);
 		%array[int] of string: rows = map2string(index_set_1of2(adg.a));
 		%array[int] of string: cols = map2string(index_set_2of2(adg.a));
-    set of int: NB_PATH = 1..nb_path(NODE_ID, ARC_ID, cmap.adigraph.a);
+        set of int: NB_PATH = 1..nb_path(NODE_ID, ARC_ID, transform_matrix(NODE_ID,cmap.adigraph.a));
+        %bool: precond = assert(false, show(cmap.adigraph.a));
 		%get_nb_path(NODE_ID, ARC_ID, cmap.adigraph.a, NB_PATH);
       
 % 		array[ARC_ID] of NODE_ID: from = array1d(ARC_ID, cmap.adigraph.tail_head[ARC_ID, TAIL]);
@@ -60,6 +61,7 @@ let {
         array[NB_PATH, IBLOCK_COMPONENT] of var opt int: x_iblocks;
         array[NB_PATH] of var int: x_arc_path_length;
 	} in 
+        
 		forall(i in NB_PATH) (
             (cmql_path_value(
                 cmap,
@@ -75,14 +77,14 @@ let {
                 x_node_in[i,NODE_ID], 
                 x_arc_in[i,ARC_ID])))     
         %Assignations du premier block
-        %/\	(x_iblocks[min(NB_PATH), IBLOCK_COMPONENT] == [x_influences[min(NB_PATH)].iblock[j] | j in IBLOCK_COMPONENT])
+        /\	(x_iblocks[min(NB_PATH), IBLOCK_COMPONENT] == [x_influences[min(NB_PATH)].iblock[j] | j in IBLOCK_COMPONENT])
         % assignation de l’influence
         /\ forall(i in min(NB_PATH)<..max(NB_PATH))(
 					(occurs(x_influences[i]) -> x_iblocks[i, IBLOCK_COMPONENT] 
 % 					x_influence_path[i]
 					 == iAggregate((iblock: deopt([x_influences[i].iblock[j] | j in IBLOCK_COMPONENT])), (iblock: deopt(x_iblocks[i-1, IBLOCK_COMPONENT]))).iblock)
 			)            
-        %/\ x_influence == (iblock: [x_iblocks[nb_true_path, i] | i in IBLOCK_COMPONENT])
-        %/\ nb_true_path == count([occurs(x_influences[i]) | i in NB_PATH])
+        /\ x_influence == (iblock: [x_iblocks[nb_true_path, i] | i in IBLOCK_COMPONENT])
+        /\ nb_true_path == count([occurs(x_influences[i]) | i in NB_PATH])
         %/\ lex_chain_opt(x_node_path, NB_PATH, ARC_ID)
     ;
