@@ -18,6 +18,9 @@ include "./../model/include/include_ioperations.mzn";
 % CMQL
 include "./../model/include/include_cmql.mzn";
 
+% utils
+include "./../model/utils/nb_path.mzn";
+
 % CMQL VISUALIZATION (optional)
 %include "./../model/cmql/primitive/primitive_value_viz.mzn";
 
@@ -47,7 +50,9 @@ set of int: NODE_ID = index_set(cmap.node_labels);
 set of int: ARC_ID = index_set(cmap.arc_labels);
 
 %
-set of int: NB_PATH = 1..3;
+set of int: NB_PATH = 1..nb_path(NODE_ID,ARC_ID, cmap.adigraph.a);
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% QUERY INPUT DATA

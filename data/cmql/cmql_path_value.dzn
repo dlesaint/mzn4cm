@@ -7,6 +7,6 @@ origin_node = 1;
 % 8 for internet
 
 % destination node
-destination_node = 3;
+destination_node = 2;
 % 8 for route testing
 % 6 for internet testing

@@ -36,6 +36,12 @@ predicate cmql_path_value(
 	:: "predicate: cmql_path_value"
 ;
 
+predicate cmql_path_value_empty(
+						var int: x_arc_path_length
+					)
+	:: "predicate: cmql_path_value_empty"
+;
+
 predicate cmql_value (
     CMAP: cmap,
     var INFLUENCE: x_influence,
@@ -51,5 +57,5 @@ predicate cmql_value (
 	array[int,int] of var bool: x_node_in, % placed in signature for visualization only
 	array[int,int] of var bool: x_arc_in % placed in signature for visualization only
     )
-    :: "predicate: cmql_path_value"
+    :: "predicate: cmql_value"
 ;

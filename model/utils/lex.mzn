@@ -28,7 +28,7 @@ predicate lex_2_table_opt (array[int] of var opt int: a, array[int] of var opt i
 ;
 
 predicate lex_chain_opt ( array[int, int] of var opt int: a, set of int: col, set of int: line) = 
-  forall (i in  col, j in col) ( (i<j) -> lex_2_table_opt(a[line, i], a[line, j], col))
+  forall (i in  col, j in col) ( (i<j) -> lex_2_table_opt(a[i,col], a[j,col], line))
 ;
 
 predicate lex_strict_opt (array[int,int] of var opt int: a, set of int: col, set of int: line) = 

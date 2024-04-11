@@ -16,7 +16,9 @@ include "./../../feature/feature_api.mzn";
 include "./../../feature/feature.mzn";
 include "./../../ranges/ranges_api.mzn";
 include "./../../ranges/ranges.mzn";
+
 include "./../../utils/lex.mzn";
+include "./../../utils/nb_path.mzn";
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% PREDICATES FOR PATH COMPUTATION
@@ -30,20 +32,24 @@ predicate cmql_value (
     var int: nb_true_path,
     array[int,int] of var opt int: x_node_path,
     array[int,int] of var opt int: x_arc_path,    
-	array[int] of var INFLUENCE: x_influences,
+	  array[int] of var INFLUENCE: x_influences,
     array[int,int] of var INFLUENCE: x_influence_paths,
     array[int] of int: from, % placed in signature for visualization only
-	array[int] of int: to, % placed in signature for visualization only
-	array[int,int] of var bool: x_node_in, % placed in signature for visualization only
-	array[int,int] of var bool: x_arc_in % placed in signature for visualization only
+	  array[int] of int: to, % placed in signature for visualization only
+	  array[int,int] of var bool: x_node_in, % placed in signature for visualization only
+	  array[int,int] of var bool: x_arc_in % placed in signature for visualization only
     )
-    :: "predicate: cmql_path_value"
+    :: "predicate: cmql_value"
 = 
 let {
-        set of int: NB_PATH = 1..3; %TODO: calculer le nombre d’arcs
+    
 		set of int: NODE_ID = index_set(cmap.node_labels);
 		set of int: ARC_ID = index_set(cmap.arc_labels);
-        
+		%array[int] of string: rows = map2string(index_set_1of2(adg.a));
+		%array[int] of string: cols = map2string(index_set_2of2(adg.a));
+    set of int: NB_PATH = 1..nb_path(NODE_ID, ARC_ID, cmap.adigraph.a);
+		%get_nb_path(NODE_ID, ARC_ID, cmap.adigraph.a, NB_PATH);
+      
 % 		array[ARC_ID] of NODE_ID: from = array1d(ARC_ID, cmap.adigraph.tail_head[ARC_ID, TAIL]);
 % 		array[ARC_ID] of NODE_ID: to = array1d(ARC_ID, cmap.adigraph.tail_head[ARC_ID, HEAD]);
 		
@@ -55,7 +61,7 @@ let {
         array[NB_PATH] of var int: x_arc_path_length;
 	} in 
 		forall(i in NB_PATH) (
-            cmql_path_value(
+            (cmql_path_value(
                 cmap,
                 x_influences[i],
                 x_origin_node, 
@@ -67,17 +73,16 @@ let {
                 from[ARC_ID], 
                 to[ARC_ID], 
                 x_node_in[i,NODE_ID], 
-                x_arc_in[i,ARC_ID])
-            )        
+                x_arc_in[i,ARC_ID])))     
         %Assignations du premier block
-        /\	(x_iblocks[min(NB_PATH), IBLOCK_COMPONENT] == [x_influences[min(NB_PATH)].iblock[j] | j in IBLOCK_COMPONENT])
+        %/\	(x_iblocks[min(NB_PATH), IBLOCK_COMPONENT] == [x_influences[min(NB_PATH)].iblock[j] | j in IBLOCK_COMPONENT])
         % assignation de l’influence
         /\ forall(i in min(NB_PATH)<..max(NB_PATH))(
 					(occurs(x_influences[i]) -> x_iblocks[i, IBLOCK_COMPONENT] 
 % 					x_influence_path[i]
 					 == iAggregate((iblock: deopt([x_influences[i].iblock[j] | j in IBLOCK_COMPONENT])), (iblock: deopt(x_iblocks[i-1, IBLOCK_COMPONENT]))).iblock)
 			)            
-        /\ x_influence == (iblock: [x_iblocks[nb_true_path, i] | i in IBLOCK_COMPONENT])
-        /\ nb_true_path == count([occurs(x_influences[i]) | i in NB_PATH])
-        /\ lex_strict_opt(x_node_path, NB_PATH, ARC_ID)
+        %/\ x_influence == (iblock: [x_iblocks[nb_true_path, i] | i in IBLOCK_COMPONENT])
+        %/\ nb_true_path == count([occurs(x_influences[i]) | i in NB_PATH])
+        %/\ lex_chain_opt(x_node_path, NB_PATH, ARC_ID)
     ;
