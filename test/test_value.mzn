@@ -125,7 +125,7 @@ constraint :: "constraint: path propagation between origin and destination nodes
 			% binds destination node if given
 		/\	(occurs(destination_node) -> x_destination_node == destination_node)
 			% query
-		/\	cmql_value(cmap, x_influence, x_origin_node, x_destination_node, x_nb_true_path, x_node_path, x_arc_path,x_influences, x_influence_paths, from, to, x_node_in, x_arc_in)
+		/\	cmql_value(cmap, x_influence, x_origin_node, x_destination_node, x_nb_true_path, x_node_path, x_arc_path,x_influences, x_influence_paths, from, to)
 ;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

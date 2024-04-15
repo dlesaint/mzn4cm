@@ -33,11 +33,11 @@ predicate cmql_value (
     array[int,int] of var opt int: x_node_path,
     array[int,int] of var opt int: x_arc_path,    
 	  array[int] of var INFLUENCE: x_influences,
-    array[int,int] of var INFLUENCE: x_influence_paths,
+    array[int,int] of var opt INFLUENCE: x_influence_paths,
     array[int] of int: from, % placed in signature for visualization only
 	  array[int] of int: to, % placed in signature for visualization only
-	  array[int,int] of var bool: x_node_in, % placed in signature for visualization only
-	  array[int,int] of var bool: x_arc_in % placed in signature for visualization only
+	  %array[int,int] of var bool: x_node_in, % placed in signature for visualization only
+	  %array[int,int] of var bool: x_arc_in % placed in signature for visualization only
     )
     :: "predicate: cmql_value"
 = 
@@ -59,7 +59,7 @@ let {
 % 		array[NODE_ID] of var bool: x_node_in;
 % 		array[ARC_ID] of var bool: x_arc_in;
         array[NB_PATH, IBLOCK_COMPONENT] of var opt int: x_iblocks;
-        array[NB_PATH] of var int: x_arc_path_length;
+        array[NB_PATH] of var opt int: x_arc_path_length;
 	} in 
         
 		forall(i in NB_PATH) (
@@ -74,8 +74,10 @@ let {
                 x_influence_paths[i,ARC_ID],
                 from[ARC_ID], 
                 to[ARC_ID], 
-                x_node_in[i,NODE_ID], 
-                x_arc_in[i,ARC_ID])))     
+                %x_node_in[i,NODE_ID], 
+                %x_arc_in[i,ARC_ID]
+                ))
+                )     
         %Assignations du premier block
         /\	(x_iblocks[min(NB_PATH), IBLOCK_COMPONENT] == [x_influences[min(NB_PATH)].iblock[j] | j in IBLOCK_COMPONENT])
         % assignation de l’influence
@@ -86,5 +88,5 @@ let {
 			)            
         /\ x_influence == (iblock: [x_iblocks[nb_true_path, i] | i in IBLOCK_COMPONENT])
         /\ nb_true_path == count([occurs(x_influences[i]) | i in NB_PATH])
-        %/\ lex_chain_opt(x_node_path, NB_PATH, ARC_ID)
+        /\ lex_chain_opt(x_node_path, NB_PATH, ARC_ID)
     ;
