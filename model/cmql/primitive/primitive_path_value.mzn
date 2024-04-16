@@ -130,6 +130,7 @@ predicate cmql_path_value(
 		/\	(forall(i in ARC_ID)(absent(x_arc_path[i]) <-> forall(j in IBLOCK_COMPONENT)(absent(x_influence_path[i].iblock[j]))))
 
 				% binds i-block vars and path influence vars
+		/\ forall(i in ARC_ID, j in IBLOCK_COMPONENT) (occurs(x_arc_path[i]) -> occurs(x_iblocks[i,j]))
 		/\	forall(i in ARC_ID)(occurs(x_influence_path[i]) -> deopt(x_influence_path[i]).iblock == x_iblocks[i, IBLOCK_COMPONENT])
 
 				% sets influence of first arc
@@ -139,10 +140,14 @@ predicate cmql_path_value(
 
 				% propagates influence recursively through path
 		/\	occurs(x_arc_path_length) -> (forall(i in min(ARC_ID)<..max(ARC_ID))(
-					(occurs(x_arc_path[i]) -> x_iblocks[i, IBLOCK_COMPONENT] 
+					let {
+						var bool: prev_arc_exist = occurs(x_arc_path[i-1]);
+						var bool: current_arc_exist = occurs(x_arc_path[i]);
+					}
+					in (prev_arc_exist /\ current_arc_exist) -> x_iblocks[i, IBLOCK_COMPONENT] 
 % 					x_influence_path[i]
 					 == iPropagate((iblock: deopt([(iblocks[x_arc_path[i], j]) | j in IBLOCK_COMPONENT])), (iblock: deopt(x_iblocks[i-1, IBLOCK_COMPONENT]))).iblock)
-			))
+			)
 		
 				% sets path influence
 		/\	occurs(x_arc_path_length) -> x_influence == (iblock: [x_iblocks[x_arc_path_length, i] | i in IBLOCK_COMPONENT])
