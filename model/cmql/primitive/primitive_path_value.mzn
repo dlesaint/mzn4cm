@@ -68,78 +68,33 @@ predicate cmql_path_value(
 		%assert(index_sets_agree(x_arc_in, x_arc_path), "cmql_path_value: index sets of $x_arc_in and $x_arc_path must agree") /\
 		%assert(dom_array(from) subset index_set(x_node_in), "cmql_path_value: nodes in $from must be in index set of $x_node_in") /\
 		%assert(dom_array(to) subset index_set(x_node_in), "cmql_path_value: nodes in $to must be in index set of $x_node_in") /\
+		if absent(x_arc_path_length) 
+		then (
+				x_influence == (iblock: getNeutralElement(cmap.itype.ealgebra, ALGEBRAIC_OPERATION_2).value)
+			/\	forall (i in NODE_ID) (absent(x_node_path[i]))
+			/\ 	forall (i in ARC_ID) (absent(x_arc_path[i]))
+			/\ forall (i in ARC_ID)	(absent(x_influence_path[i]))
+			/\	forall(i in ARC_ID, j in IBLOCK_COMPONENT) (absent(x_iblocks[i,j]))
 
-		% Absent case
-			absent(x_arc_path_length) <-> forall (i in NODE_ID) (absent(x_node_path[i]))
-		/\ 	absent(x_arc_path_length) <-> forall (i in ARC_ID) (absent(x_arc_path[i]))
-		% S’il n’y a pas de chemin, la valeur renvoyer est le neutre
-		/\ absent(x_arc_path_length) -> x_influence == (iblock: getNeutralElement(cmap.itype.ealgebra, ALGEBRAIC_OPERATION_2).value)
-		/\ absent(x_arc_path_length) <-> forall(i in ARC_ID, j in IBLOCK_COMPONENT) (absent(x_iblocks[i,j]))
-				% origin and destination nodes must be different
-		/\	x_origin_node != x_destination_node
-				% bounds path length
-		/\	occurs(x_arc_path_length) <-> deopt(x_arc_path_length) in 0..card(ARC_ID)
-				% enforces path minimality
-		/\	if	F_PATH_MINIMALITY == F_PATH_MINIMALITY_NODE
-					% all_different on opt OK - see fzn_all_different_int_opt
-			then	all_different(x_node_path)
-			else 	% F_PATH_MINIMALITY = F_PATH_MINIMALITY_ARC
-					% entailed by path computation constraints TODO check!!
-					true
-			endif
+
+		) else (
+				deopt(x_arc_path_length) in 0..card(ARC_ID)
+			/\	deopt(x_arc_path_length) > 0
+			/\	(forall(i in NODE_ID)((occurs(x_node_path[i]) <-> deopt(x_arc_path_length) >= i+1)))
+			/\	(forall(i in ARC_ID)((occurs(x_arc_path[i]) <-> deopt(x_arc_path_length) >= i)))
+			/\	(forall(i in ARC_ID)((occurs(x_influence_path[i]) <-> deopt(x_arc_path_length) >= i)))
+			/\	(forall(i in ARC_ID, j in IBLOCK_COMPONENT)((occurs(x_iblocks[i,j]) <-> deopt(x_arc_path_length) >= i)))
 			
-%				% !! dpath cannot be used inside predicate as it cannot be reified in MZN (always true? check if inexistence of path means every node/arc variable is false in input var arrays)
-% 				% determines a path possibly including cycles
-% 		/\	dpath(from, to, x_origin_node, x_destination_node, x_node_in, x_arc_in)
-
-				% forcing path existence
-				% TODO consider removing?
-		/\	occurs(x_arc_path_length) <-> deopt(x_arc_path_length) > 0
-
-				% maps arcs of path to boolean arc array
-		%/\	forall(i in ARC_ID)((x_arc_in[i] <-> exists(j in ARC_ID)(deopt(x_arc_path[j]) == i)))
-				% maps nodes of path to boolean node array
-		%/\	forall(i in NODE_ID)((x_node_in[i] <-> exists(j in NODE_ID)(deopt(x_node_path[j]) == i)))
-
-				% deopts arcs of path and sets arc path length
-		/\	occurs(x_arc_path_length) -> (forall(i in ARC_ID)((occurs(x_arc_path[i]) <-> deopt(x_arc_path_length) >= i)))
-% 				% entailed by above constraint
-% 				% sets path length to number of arcs in path
-% 				% |- arc path length is 0 iff no arcs in path
-% 		/\	x_arc_path_length = count(x_arc_in)
-		
-				% sets origin node as origin of path
-		/\	occurs(x_arc_path[min(ARC_ID)]) -> (from[deopt(x_arc_path[min(ARC_ID)])] == x_origin_node)
-				% chains arcs of path
-		/\ 	occurs(x_arc_path_length) -> (forall (i in min(ARC_ID)<..max(ARC_ID)) (deopt(x_arc_path_length) >= i -> occurs(x_arc_path[i])))
-		/\	occurs(x_arc_path_length) -> (forall(i in min(ARC_ID)<..max(ARC_ID))(deopt(x_arc_path_length) >= i -> to[deopt(x_arc_path[i-1])] == from[deopt(x_arc_path[i])]))
-				% sets destination node as destination of path
-		/\	occurs(x_arc_path_length) -> (to[deopt(x_arc_path[deopt(x_arc_path_length)])] == x_destination_node)
-
-				% matches nodes of path with tail nodes of arcs of path
-				% !! forall over ARC_ID, not NODE_ID !!
-		/\	occurs(x_arc_path_length) -> (forall(i in ARC_ID)((deopt(x_arc_path_length) >= i -> deopt(x_node_path[i]) == from[deopt(x_arc_path[i])])))
-				% matches last node of path with head node of last arc of path
-		/\	occurs(x_arc_path_length) -> (deopt(x_node_path[deopt(x_arc_path_length) + 1]) == to[deopt(x_arc_path[deopt(x_arc_path_length)])])
-				% entailed by above constraints
-				% deopts nodes of path based on node path length (= 1 + arc path length)
-		/\	occurs(x_arc_path_length) -> (forall(i in NODE_ID)((occurs(x_node_path[i]) <-> deopt(x_arc_path_length) + 1 >= i)))
-		
-				% matches influence path with arc path
-		/\	(forall(i in ARC_ID)(occurs(x_arc_path[i]) <-> forall(j in IBLOCK_COMPONENT)(occurs(x_influence_path[i].iblock[j]))))
-		/\	(forall(i in ARC_ID)(absent(x_arc_path[i]) <-> forall(j in IBLOCK_COMPONENT)(absent(x_influence_path[i].iblock[j]))))
-
-				% binds i-block vars and path influence vars
-		/\ forall(i in ARC_ID, j in IBLOCK_COMPONENT) (occurs(x_arc_path[i]) -> occurs(x_iblocks[i,j]))
-		/\	forall(i in ARC_ID)(occurs(x_influence_path[i]) -> deopt(x_influence_path[i]).iblock == x_iblocks[i, IBLOCK_COMPONENT])
-
-				% sets influence of first arc
-				% !! TODO can't look up directly on var influence object (cmap.arc_labels[x_arc_path[min(ARC_ID)]].influence) so look up on iblocks ...
-				% "type error: array access using a variable is not supported for array of a record type which contain an array"
-		/\	occurs(x_arc_path_length) -> (x_iblocks[min(ARC_ID), IBLOCK_COMPONENT] == [iblocks[x_arc_path[min(ARC_ID)], j] | j in IBLOCK_COMPONENT])
-
-				% propagates influence recursively through path
-		/\	occurs(x_arc_path_length) -> (forall(i in min(ARC_ID)<..max(ARC_ID))(
+			
+			/\	occurs(x_arc_path[min(ARC_ID)]) -> (from[deopt(x_arc_path[min(ARC_ID)])] == x_origin_node)
+			/\	(forall (i in min(ARC_ID)<..max(ARC_ID)) (deopt(x_arc_path_length) >= i -> occurs(x_arc_path[i])))
+			/\	(forall(i in min(ARC_ID)<..max(ARC_ID))(deopt(x_arc_path_length) >= i -> to[deopt(x_arc_path[i-1])] == from[deopt(x_arc_path[i])]))
+			/\	(to[deopt(x_arc_path[deopt(x_arc_path_length)])] == x_destination_node)
+			/\	(forall(i in ARC_ID)((deopt(x_arc_path_length) >= i -> deopt(x_node_path[i]) == from[deopt(x_arc_path[i])])))
+			/\	(deopt(x_node_path[deopt(x_arc_path_length) + 1]) == to[deopt(x_arc_path[deopt(x_arc_path_length)])])
+			/\ 	(forall(i in NODE_ID)((occurs(x_node_path[i]) <-> deopt(x_arc_path_length) + 1 >= i)))
+			/\ 	(x_iblocks[min(ARC_ID), IBLOCK_COMPONENT] == [iblocks[x_arc_path[min(ARC_ID)], j] | j in IBLOCK_COMPONENT])
+			/\	(forall(i in min(ARC_ID)<..max(ARC_ID))(
 					let {
 						var bool: prev_arc_exist = occurs(x_arc_path[i-1]);
 						var bool: current_arc_exist = occurs(x_arc_path[i]);
@@ -148,9 +103,27 @@ predicate cmql_path_value(
 % 					x_influence_path[i]
 					 == iPropagate((iblock: deopt([(iblocks[x_arc_path[i], j]) | j in IBLOCK_COMPONENT])), (iblock: deopt(x_iblocks[i-1, IBLOCK_COMPONENT]))).iblock)
 			)
+			/\	x_influence == (iblock: [x_iblocks[x_arc_path_length, i] | i in IBLOCK_COMPONENT])
+		) endif
+				% origin and destination nodes must be different
+		/\	x_origin_node != x_destination_node
+				% enforces path minimality
+		/\	if	F_PATH_MINIMALITY == F_PATH_MINIMALITY_NODE
+					% all_different on opt OK - see fzn_all_different_int_opt
+			then	all_different(x_node_path)
+			else 	% F_PATH_MINIMALITY = F_PATH_MINIMALITY_ARC
+					% entailed by path computation constraints TODO check!!
+					true
+			endif	
 		
-				% sets path influence
-		/\	occurs(x_arc_path_length) -> x_influence == (iblock: [x_iblocks[x_arc_path_length, i] | i in IBLOCK_COMPONENT])
+				% matches influence path with arc path
+		%/\	(forall(i in ARC_ID)(occurs(x_arc_path[i]) <-> forall(j in IBLOCK_COMPONENT)(occurs(x_influence_path[i].iblock[j]))))
+		%/\	(forall(i in ARC_ID)(absent(x_arc_path[i]) <-> forall(j in IBLOCK_COMPONENT)(absent(x_influence_path[i].iblock[j]))))
+
+				% binds i-block vars and path influence vars
+		%/\ forall(i in ARC_ID, j in IBLOCK_COMPONENT) (occurs(x_arc_path[i]) -> occurs(x_iblocks[i,j]))
+		%/\	forall(i in ARC_ID)(occurs(x_influence_path[i]) -> deopt(x_influence_path[i]).iblock == x_iblocks[i, IBLOCK_COMPONENT])
+		
 	;
 
 
