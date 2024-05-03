@@ -115,9 +115,9 @@ Let $x$ be a node of $G$.
 
 - multiplication $*$ over I is called *propagation*
 
-- the neutral element $<>$ for aggregation is called *absent influence*
+- the neutral element $<>$ for aggregation is called *null influence*
 
-- the neutral element $\_$ for propagation is called *null influence*.
+- the neutral element $\_$ for propagation is called *identity influence*.
 
 By definition of a commutative semi-ring,
 

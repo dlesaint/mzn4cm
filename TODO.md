@@ -35,9 +35,9 @@
 
 - implement script for regression testing on benchmarks = cmql_path_value X cmap x itype
 
-- write README doc including design architecture and *howto* guidelines
+- complete README doc with design architecture and *howto* guidelines
 
-- copy and extend `cmap.md` from php4cm with definitions on itype signatures (sorts, etc)
+- copy and extend `cmap.md` from php4cm with definitions on itype signatures (eg. many-sorted with min/max based on lex ordering, many-sorted with path length sort and/or path string sort etc.)
 
 - Display all solutions instead of just one
 
@@ -53,7 +53,7 @@
 
 - implement *bounded* rational itype (eg [0%,100%]) allowing non-virtual null elements both for min/max and plus/times
 
-- implement poly-sort itypes on ordered sorts so that < means lexicographic order
+- implement many-sorted itypes on ordered sorts so that < means lexicographic order
 
 - implement feature for choosing the kind of path minimality: either node minimality or arc minimality
 
@@ -67,15 +67,15 @@
 
 - build proper function API for graphs and cmaps
 
-- add graph functions/constraints: eg, acyclity, connected components
+- add graph functions/constraints: eg. acyclity, connected components
 
-- possibly, allow input parameters iving upper-bounds on path length and path numbers in order to dimension data/var structures properly
+- possibly, allow input parameters giving upper-bounds on path length and path numbers in order to dimension data/var structures properly
 
-- allow to work and query several cmaps over the same itype simultaneously
+- allow to work on, and query, several cmaps over the same itype simultaneously
 
 - check whether constraint `path_value` may be reified so as to use it in negative context (`not(path_value(...)`)) if needs be
 
-- add new restrictions/extensions in th eform of side constraints to extend original CQML primitive `path_value`
+- add new restrictions/extensions in the form of side constraints to extend original CQML primitive `path_value`
 
     - bounding path length
 

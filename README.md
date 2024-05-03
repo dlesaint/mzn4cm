@@ -11,7 +11,7 @@
     - [Sample commands](#sample-commands)
     - [Web visualization](#web-visualization)
 
-- [Design Principles And Structure](#design-principles-and-structure)
+- [Design Principles and Structure](#design-principles-and-structure)
     - [Modules](#modules)
         - [Digraphs](#digraphs)
         - [Algebraic Structures](#algebraic-structures)
@@ -21,8 +21,8 @@
     - [Module Composition](#module-composition)
 
 - [HowTo](#howto)
-    - [Add An I-type](#add-an-i-type)
-    - [Define A C-map](#define-a-c-map)
+    - [Add an I-type](#add-an-i-type)
+    - [Define a C-map](#define-a-c-map)
 
 <!-- [Remarks](#remarks) -->
 
@@ -38,10 +38,10 @@ mzn4cm is a Constraint Programming (CP) library to build and query cognitive map
 It is implemented with [Minizinc](https://www.minizinc.org/) - a high-level CP modelling language -
 and comes packaged with sample digraphs, influence types and cognitive maps as well as a couple of test scripts which can be run from the command line or the Minizinc IDE.
 
-Background definitions on digraphs, influence types (aka. i-types) and cognitive maps (aka. c-maps) are documented in `cmaps.html` (converted from `cmaps.md`).
+Background definitions on digraphs, influence types (aka. i-types) and cognitive maps (aka. c-maps) are documented in `cmaps_theory.md`).
 The original specification of CMQL is provided in the [PhD thesis of Adrian Robert](https://theses.hal.science/tel-03676196). 
 
-Note: this an alpha release of mzn4cp which implements a small subset of CMQL (influence propagation queries mainly).  
+Note: this an alpha release of mzn4cp which implements a small subset of CMQL, namely, the influence propagation and aggregation queries.  
 
 ---
 
@@ -75,7 +75,7 @@ Datasets are organized as follows:
 
 Datasets are Minizinc data files (`.dzn`) but may alternatively be encoded using [Minizinc JSON format](https://www.minizinc.org/doc-2.8.3/en/spec.html#json-support).
 
-All datasets are commented to help you create your own datasets: a complete documentation of the dataset schemas will be provided in future releases.
+All datasets are commented to help you create your own datasets: a complete documentation of the dataset schemas will be provided in future releases. <!-- TODO -->
 
 
 ---
@@ -90,7 +90,9 @@ Running mzn4cp assumes:
 
 - and, optionally, customizing a CMQL query on the c-map `./data/cmql`.
 
-Note. This release of mzn4cp requires commenting in or out file inclusion directives present in `./model/include/include_ioperations.mzn` and `./model/include/include_itype.mzn` in order to enable support for the target i-type (this won't be needed in future releases). For instance, comment out the following lines if you run a query over an enumerated i-type:
+Note. This release of mzn4cp requires commenting in or out file inclusion directives present in `./model/include/include_ioperations.mzn` and `./model/include/include_itype.mzn` in order to enable support for the target i-type (this won't be needed in future releases). <!-- TODO --> 
+
+For instance, comment out the following lines if you run a query over an enumerated i-type:
 
 `include "./../itype/operations/itype_ops_enum.mzn";`
 
@@ -143,7 +145,7 @@ You may run the same commands from the Minizinc IDE:
 
 1. Open up mzn4cm project file `./mzn4cp.mzp`.
 
-2. Run model file `./test/test_path_value.mzn`by pre-selecting first the required i-type and c-map datafiles.
+2. Run model file `./test/test_path_value.mzn` by pre-selecting first the i-type and c-map datafiles.
 
 A web page will open showing the c-map and allowing you to browe through the different solutions computed for the query. Note that you may configure the number of requested solutions by ticking the appropriate flag in the IDE configurator.
 
@@ -155,7 +157,7 @@ A web page will open showing the c-map and allowing you to browe through the dif
 
 ---
 
-# Design Principles And Structure
+# Design Principles and Structure
 
 ---
 
@@ -185,11 +187,11 @@ A web page will open showing the c-map and allowing you to browe through the dif
 
 ---
 
-## Add An I-type
+## Add an I-type
 
 ---
 
-## Add A C-map
+## Add a C-map
 
 
 <!--
@@ -197,8 +199,8 @@ A web page will open showing the c-map and allowing you to browe through the dif
 
 # Remarks
 
-- Since INFLUENCE_SUBDOMAIN typedefed in influence_api as int, user-defined labels are ints (or enum cases since automatically coerced to ints) 
-but this is not really satisfactiroy for bool => have to use pseudo-bool.
+- Since INFLUENCE_SUBDOMAIN is typedefed as `int` in influence_api, user-defined labels are ints (or enum cases since automatically coerced to ints) 
+but this is not really satisfactory for bool => have to use pseudo-bool.
 
 -->
 
@@ -212,6 +214,7 @@ but this is not really satisfactiroy for bool => have to use pseudo-bool.
 ## Authors
 
 David Lesaint - david.lesaint@univ-angers.fr
+Martin Fleurant - martin.fleurant@etud.univ-angers.fr
 
 ---
 
