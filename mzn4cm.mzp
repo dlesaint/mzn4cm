@@ -1,19 +1,16 @@
 {
     "openFiles": [
-        "test/test_no_cmql.mzn",
-        "model/include/include_cmql.mzn",
-        "model/include/include_itype.mzn",
-        "model/include/include_ioperations.mzn",
-        "model/instance/instance_api.mzn",
-        "model/cmap/cmap_api.mzn",
-        "model/itype/itype_api.mzn",
-        "model/itype/itype_imp_api.mzn",
-        "model/algebra/algebra_api.mzn",
-        "model/algebra/algebra_imp_api.mzn",
         "test/test_path_value.mzn",
-        "data/cmql/cmql_path_value.dzn"
+        "data/cmql/cmql_path_value.dzn",
+        "model/cmql/primitive/primitive_value.mzn",
+        "model/utils/nb_path.mzn",
+        "test/test_value.mzn",
+        "model/cmql/primitive/primitive_path_value.mzn",
+        "model/cmql/primitive/primitive_path_value_empty.mzn",
+        "model/utils/lex.mzn",
+        "model/cmql/primitive_api.mzn"
     ],
-    "openTab": 10,
+    "openTab": 2,
     "projectFiles": [
         "data/cmql/cmql_path_value.dzn",
         "data/digraph/dg_13x26_internet_1.dzn",
@@ -55,7 +52,9 @@
         "model/cmap/cmap_api.mzn",
         "model/cmap/cmap_display.mzn",
         "model/cmql/primitive/primitive_path_value.mzn",
+        "model/cmql/primitive/primitive_path_value_empty.mzn",
         "model/cmql/primitive/primitive_path_value_viz.mzn",
+        "model/cmql/primitive/primitive_value.mzn",
         "model/cmql/primitive_api.mzn",
         "model/display/visualisation.mzn",
         "model/feature/feature.mzn",
@@ -87,10 +86,14 @@
         "model/itype/type/itype_rational_api.mzn",
         "model/ranges/ranges.mzn",
         "model/ranges/ranges_api.mzn",
+        "model/utils/lex.mzn",
+        "model/utils/nb_path.mzn",
         "model/utils/utils_string.mzn",
         "mzn4cm.mpc",
         "test/test_no_cmql.mzn",
-        "test/test_path_value.mzn"
+        "test/test_path_value.mzn",
+        "test/test_value.mzn",
+        "../nb_path_test.mzn"
     ],
     "selectedSolverConfigFile": "mzn4cm.mpc",
     "version": 106

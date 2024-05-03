@@ -10,3 +10,4 @@
 
 include "./../cmql/primitive_api.mzn";
 include "./../cmql/primitive/primitive_path_value.mzn";
+include "./../cmql/primitive/primitive_value.mzn";
