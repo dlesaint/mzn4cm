@@ -32,31 +32,31 @@ include "./../../itype/type/itype_rational_api.mzn";
 %% PAR/VAR I-TYPE RELATIONS 
 
 %
-function bool: iEquals(DEOPT_INFLUENCE: x, DEOPT_INFLUENCE: y)
+function bool: iEquals(array[IBLOCK_COMPONENT] of int: x, array[IBLOCK_COMPONENT] of int: y)
 	:: "iEquals($x,$y): checks whether equality relation holds between $x and $y over i-type of $x - (par)"
 	=
-	x.iblock[1] * y.iblock[2] == x.iblock[2] * y.iblock[1]
+	x[1] * y[2] == x[2] * y[1]
 ;
 
 %
-function var bool: iEquals(var DEOPT_INFLUENCE: x, var DEOPT_INFLUENCE: y)
+function var bool: iEquals(array[IBLOCK_COMPONENT] of var int: x, array[IBLOCK_COMPONENT] of var int: y)
 	:: "iEquals($x,$y): checks whether equality relation holds between $x and $y over i-type of $x - (var)"
 	=
-	x.iblock[1] * y.iblock[2] == x.iblock[2] * y.iblock[1]
+	x[1] * y[2] == x[2] * y[1]
 ;
 
 %
-function bool: iSmallerThan(DEOPT_INFLUENCE: x, DEOPT_INFLUENCE: y)
+function bool: iSmallerThan(array[IBLOCK_COMPONENT] of int: x, array[IBLOCK_COMPONENT] of int: y)
 	:: "iSmallerThan($x,$y): checks whether $x is smaller than $y over i-type of $x - (par)"
 	=
-	x.iblock[1] * y.iblock[2] < x.iblock[2] * y.iblock[1]
+	x[1] * y[2] < x[2] * y[1]
 ;
 
 %
-function var bool: iSmallerThan(var DEOPT_INFLUENCE: x, var DEOPT_INFLUENCE: y)
+function var bool: iSmallerThan(array[IBLOCK_COMPONENT] of var int: x, array[IBLOCK_COMPONENT] of var int: y)
 	:: "iSmallerThan($x,$y): checks whether $x is smaller than $y over i-type of $x - (var)"
 	=
-	x.iblock[1] * y.iblock[2] < x.iblock[2] * y.iblock[1]
+	x[1] * y[2] < x[2] * y[1]
 ;
 
 
@@ -66,7 +66,7 @@ function var bool: iSmallerThan(var DEOPT_INFLUENCE: x, var DEOPT_INFLUENCE: y)
 
 %% BINARY AGGREGATION
 %
-function DEOPT_INFLUENCE: iAggregate(DEOPT_INFLUENCE: x, DEOPT_INFLUENCE: y)
+function array[IBLOCK_COMPONENT] of int: iAggregate(array[IBLOCK_COMPONENT] of int: x, array[IBLOCK_COMPONENT] of int: y)
 	:: "iAggregate($x,$y): aggregate $x with $y over i-type of $x - (par)"
 	=
 	if 		getAggregation(itype) == ITYPE_AGGREGATION_PLUS
@@ -77,12 +77,12 @@ function DEOPT_INFLUENCE: iAggregate(DEOPT_INFLUENCE: x, DEOPT_INFLUENCE: y)
 	then	iRationalMin(x, y)
 	elseif	getAggregation(itype) == ITYPE_AGGREGATION_MAX
 	then	iRationalMax(x, y)
-	else	assert(false, "bug - incomplete implementation", (iblock: []))
+	else	assert(false, "bug - incomplete implementation", [])
 	endif
 ;
 
 %
-function var DEOPT_INFLUENCE: iAggregate(var DEOPT_INFLUENCE: x, var DEOPT_INFLUENCE: y)
+function array[IBLOCK_COMPONENT] of var int: iAggregate(array[IBLOCK_COMPONENT] of var int: x, array[IBLOCK_COMPONENT] of var int: y)
 	:: "iAggregate($x,$y): aggregate $x with $y over i-type of $x - (var)"
 	=
 	if 		getAggregation(itype) == ITYPE_AGGREGATION_PLUS
@@ -93,14 +93,14 @@ function var DEOPT_INFLUENCE: iAggregate(var DEOPT_INFLUENCE: x, var DEOPT_INFLU
 	then	iRationalMin(x, y)
 	elseif	getAggregation(itype) == ITYPE_AGGREGATION_MAX
 	then	iRationalMax(x, y)
-	else	assert(false, "bug - incomplete implementation", (iblock: []))
+	else	assert(false, "bug - incomplete implementation", [])
 	endif
 ;
 
 
 %% BINARY PROPAGATION
 %
-function DEOPT_INFLUENCE: iPropagate(DEOPT_INFLUENCE: x, DEOPT_INFLUENCE: y)
+function array[IBLOCK_COMPONENT] of int: iPropagate(array[IBLOCK_COMPONENT] of int: x, array[IBLOCK_COMPONENT] of int: y)
 	:: "iPropagate($x,$y): propagate $x with $y over i-type of $x - (par)"
 	=
 	if 		getPropagation(itype) == ITYPE_PROPAGATION_PLUS
@@ -111,12 +111,12 @@ function DEOPT_INFLUENCE: iPropagate(DEOPT_INFLUENCE: x, DEOPT_INFLUENCE: y)
 	then	iRationalMin(x, y)
 	elseif	getPropagation(itype) == ITYPE_PROPAGATION_MAX
 	then	iRationalMax(x, y)
-	else	assert(false, "bug - incomplete implementation", (iblock: []))
+	else	assert(false, "bug - incomplete implementation", [])
 	endif
 ;
 
 %
-function var DEOPT_INFLUENCE: iPropagate(var DEOPT_INFLUENCE: x, var DEOPT_INFLUENCE: y) %::promise_total
+function array[IBLOCK_COMPONENT] of var int: iPropagate(array[IBLOCK_COMPONENT] of var int: x, array[IBLOCK_COMPONENT] of var int: y) %%::promise_total
 	:: "iPropagate($x,$y): propagate $x with $y over i-type of $x - (var)"
 	=
 	let {
@@ -126,12 +126,11 @@ function var DEOPT_INFLUENCE: iPropagate(var DEOPT_INFLUENCE: x, var DEOPT_INFLU
 	then	iRationalPlus(x, y)
 	elseif	getPropagation(itype) == ITYPE_PROPAGATION_TIMES
 	then	iRationalTimes(x, y) % add smallerThan relation (par/var function) to algebra and itype APIs
-
 	elseif	getPropagation(itype) == ITYPE_PROPAGATION_MIN
 	then	iRationalMin(x, y)
 	elseif	getPropagation(itype) == ITYPE_PROPAGATION_MAX
 	then	iRationalMax(x, y)
-	else	assert(false, "bug - incomplete implementation", (iblock: []))
+	else	assert(false, "bug - incomplete implementation", [])
 	endif
 ;
 
@@ -144,11 +143,11 @@ function var DEOPT_INFLUENCE: iPropagate(var DEOPT_INFLUENCE: x, var DEOPT_INFLU
 function int: greatestCommonDivisor(int: x, int: y)
 	:: "greatestCommonDivisor($x,$y): returns greatest common divisor of $x and $y - (par)"
 	=
-	if 		x == 0
+	if 			x == 0
 	then	y
 	elseif	y == 0
-	then x
-	else greatestCommonDivisor(y, x mod y)
+	then	x
+	else	greatestCommonDivisor(y, x mod y)
 	endif
 ;
 
@@ -160,10 +159,10 @@ function var int: greatestCommonDivisor(var int: x, var int: y)
 		set of int: GCD = 1..min(min(ub(x),ub(y)),100);
 		array[GCD] of var int: x_gcd;
 		array[GCD] of var int: y_gcd;
-		constraint x_gcd[1] == if x > 0 then x else -x endif;
-		constraint y_gcd[1] == if y > 0 then y else -y endif;
- 		constraint forall(i in min(GCD)+1..<max(GCD))(x_gcd[i] == y_gcd[i-1]);		
- 		constraint forall(i in min(GCD)+1..<max(GCD))(if y_gcd[i-1] == 0 \/ y_gcd[i-1] == 0 then y_gcd[i] == 0 else y_gcd[i] == x_gcd[i-1] mod y_gcd[i-1] endif);
+		constraint x_gcd[1] == abs(x);
+		constraint y_gcd[1] == abs(y);
+ 		constraint forall(i in min(GCD)<..<max(GCD))(x_gcd[i] == y_gcd[i-1]);		
+ 		constraint forall(i in min(GCD)<..<max(GCD))(if y_gcd[i-1] == 0 \/ y_gcd[i-1] == 0 then y_gcd[i] == 0 else y_gcd[i] == x_gcd[i-1] mod y_gcd[i-1] endif);
 		var GCD: z;
 		constraint z = min([i | i in GCD where x_gcd[i] == 0 \/ y_gcd[i] == 0]);
 		var GCD: j;
@@ -173,69 +172,77 @@ function var int: greatestCommonDivisor(var int: x, var int: y)
 ;
 
 %
-function DEOPT_INFLUENCE: iRationalReduce(DEOPT_INFLUENCE: x)
+function array[IBLOCK_COMPONENT] of int: iRationalReduce(array[IBLOCK_COMPONENT] of int: x)
 	:: "iRationalReduce($x,$y): reduces $x by dividing numerator and denominator with their greatest common divisor - (par)"
 	=
 	let {
-		int: gcd = greatestCommonDivisor(x.iblock[1], x.iblock[2]);
+		int: gcd = greatestCommonDivisor(x[1], x[2]);
 	} in
-		(iblock: [x.iblock[1] div gcd, x.iblock[2] div gcd])
+		[x[1] div gcd, x[2] div gcd]
 ;
 
 %
-function var DEOPT_INFLUENCE: iRationalReduce(var DEOPT_INFLUENCE: x)
+function array[IBLOCK_COMPONENT] of var int: iRationalReduce(array[IBLOCK_COMPONENT] of var int: x)
 	:: "iRationalReduce($x,$y): reduces $x by dividing numerator and denominator with their greatest common divisor - (var)"
 	=
 	let {
-		var int: gcd = greatestCommonDivisor(x.iblock[1], x.iblock[2]) ::is_defined_var;
-		var DEOPT_INFLUENCE: z ::is_defined_var;
-		constraint z.iblock[1] == x.iblock[1] div gcd;
-		constraint z.iblock[2] == x.iblock[2] div gcd;
+		var int: x_gcd = greatestCommonDivisor(x[1], x[2]) ::is_defined_var;
+		array[IBLOCK_COMPONENT] of var int: z ::is_defined_var;
+		constraint
+			(z[1] == x[1] div x_gcd) /\
+			(z[2] == x[2] div x_gcd)
+			:: defines_var(z)
+			;
 	} in
 		z
 ;
 
 %
-function DEOPT_INFLUENCE: iRationalPlus(DEOPT_INFLUENCE: x, DEOPT_INFLUENCE: y)
+function array[IBLOCK_COMPONENT] of int: iRationalPlus(array[IBLOCK_COMPONENT] of int: x, array[IBLOCK_COMPONENT] of int: y)
 	:: "iRationalPlus($x,$y): adds $x to $y over i-type of $x - (par)"
 	=
-	iRationalReduce((iblock: [x.iblock[1] * y.iblock[2] + x.iblock[2] * y.iblock[1], x.iblock[2] * y.iblock[2]]))
+	iRationalReduce([x[1] * y[2] + x[2] * y[1], x[2] * y[2]])
 ;
 
 %
-function var DEOPT_INFLUENCE: iRationalPlus(var DEOPT_INFLUENCE: x, var DEOPT_INFLUENCE: y)
+function array[IBLOCK_COMPONENT] of var int: iRationalPlus(array[IBLOCK_COMPONENT] of var int: x, array[IBLOCK_COMPONENT] of var int: y)
 	:: "iRationalPlus($x,$y): adds $x to $y over i-type of $x - (var)"
 	=
 	let {
-		var DEOPT_INFLUENCE: z ::is_defined_var;
-		constraint z.iblock[1] == x.iblock[1] * y.iblock[2] + x.iblock[2] * y.iblock[1];
-		constraint z.iblock[2] == x.iblock[2] * y.iblock[2];
+		array[IBLOCK_COMPONENT] of var int: z ::is_defined_var;
+		constraint
+			(z[1] == x[1] * y[2] + x[2] * y[1]) /\
+			(z[2] == x[2] * y[2])
+			:: defines_var(z)
+			;
 	} in
 		iRationalReduce(z)
 ;
 
 %
-function DEOPT_INFLUENCE: iRationalTimes(DEOPT_INFLUENCE: x, DEOPT_INFLUENCE: y)
+function array[IBLOCK_COMPONENT] of int: iRationalTimes(array[IBLOCK_COMPONENT] of int: x, array[IBLOCK_COMPONENT] of int: y)
 	:: "iRationalTimes($x,$y): multiplies $x and $y over i-type of $x - (par)"
 	=
-	iRationalReduce((iblock: [x.iblock[1] * y.iblock[1], x.iblock[2] * y.iblock[2]]))
+	iRationalReduce([x[1] * y[1], x[2] * y[2]])
 ;
 
 %
-function var DEOPT_INFLUENCE: iRationalTimes(var DEOPT_INFLUENCE: x, var DEOPT_INFLUENCE: y)
+function array[IBLOCK_COMPONENT] of var int: iRationalTimes(array[IBLOCK_COMPONENT] of var int: x, array[IBLOCK_COMPONENT] of var int: y)
 	:: "iRationalTimes($x,$y): multiplies $x and $y over i-type of $x - (var)"
 	=
-	% !! compiler error for: (iblock: [x.iblock[1] * y.iblock[1], x.iblock[2] * y.iblock[2]])
 	let {
-		var DEOPT_INFLUENCE: z ::is_defined_var;
-		constraint z.iblock[1] == x.iblock[1] * y.iblock[1];
-		constraint z.iblock[2] == x.iblock[2] * y.iblock[2];
+		array[IBLOCK_COMPONENT] of var int: z ::is_defined_var;
+		constraint
+			(z[1] == x[1] * y[1]) /\
+			(z[2] == x[2] * y[2])
+			:: defines_var(z)
+			;
 	} in
 		iRationalReduce(z)
 ;
 
 %
-function DEOPT_INFLUENCE: iRationalMin(DEOPT_INFLUENCE: x, DEOPT_INFLUENCE: y)
+function array[IBLOCK_COMPONENT] of int: iRationalMin(array[IBLOCK_COMPONENT] of int: x, array[IBLOCK_COMPONENT] of int: y)
 	:: "iRationalMin($x,$y): returns the minimum of $x and $y over i-type of $x - (par)"
 	=
 	if	iSmallerThan(x, y)
@@ -245,20 +252,23 @@ function DEOPT_INFLUENCE: iRationalMin(DEOPT_INFLUENCE: x, DEOPT_INFLUENCE: y)
 ;
 
 %
-function var DEOPT_INFLUENCE: iRationalMin(var DEOPT_INFLUENCE: x, var DEOPT_INFLUENCE: y)
+function array[IBLOCK_COMPONENT] of var int: iRationalMin(array[IBLOCK_COMPONENT] of var int: x, array[IBLOCK_COMPONENT] of var int: y)
 	:: "iRationalMin($x,$y): returns the minimum of $x and $y over i-type of $x - (var)"
 	=
 	let {
-		var DEOPT_INFLUENCE: z ::is_defined_var;
-		constraint iSmallerThan(x, y) -> (false /\ forall(i in IBLOCK_COMPONENT)(z.iblock[i] == x.iblock[i])); % TODO z == y ?
-		constraint iSmallerThan(y, x) -> (false /\ forall(i in IBLOCK_COMPONENT)(z.iblock[i] == y.iblock[i]));
-		constraint iEquals(x, y) -> forall(i in IBLOCK_COMPONENT)(z.iblock[i] == x.iblock[i] /\ z.iblock[i] == y.iblock[i]);
+		array[IBLOCK_COMPONENT] of var int: z ::is_defined_var;
+		constraint
+			(iSmallerThan(x, y) -> z == x) /\ 
+			(iSmallerThan(y, x) -> z == y) /\
+			(iEquals(x, y) -> z == x)
+			:: defines_var(z)
+			;
 	} in
 		z
 ;
 
 %
-function DEOPT_INFLUENCE: iRationalMax(DEOPT_INFLUENCE: x, DEOPT_INFLUENCE: y)
+function array[IBLOCK_COMPONENT] of int: iRationalMax(array[IBLOCK_COMPONENT] of int: x, array[IBLOCK_COMPONENT] of int: y)
 	:: "iRationalMax($x,$y): returns the maximum of $x and $y over i-type of $x - (par)"
 	=
 	if	iSmallerThan(x, y)
@@ -268,14 +278,17 @@ function DEOPT_INFLUENCE: iRationalMax(DEOPT_INFLUENCE: x, DEOPT_INFLUENCE: y)
 ;
 
 %
-function var DEOPT_INFLUENCE: iRationalMax(var DEOPT_INFLUENCE: x, var DEOPT_INFLUENCE: y)
+function array[IBLOCK_COMPONENT] of var int: iRationalMax(array[IBLOCK_COMPONENT] of var int: x, array[IBLOCK_COMPONENT] of var int: y)
 	:: "iRationalMax($x,$y): returns the maximum of $x and $y over i-type of $x - (var)"
 	=
 	let {
-		var DEOPT_INFLUENCE: z ::is_defined_var;
-		constraint iSmallerThan(x, y) -> forall(i in IBLOCK_COMPONENT)(z.iblock[i] == y.iblock[i]); % TODO z == y ?
-		constraint iSmallerThan(y, x) -> forall(i in IBLOCK_COMPONENT)(z.iblock[i] == x.iblock[i]);
-		constraint iEquals(x, y) -> forall(i in IBLOCK_COMPONENT)(z.iblock[i] == x.iblock[i] /\ z.iblock[i] == y.iblock[i]);
+		array[IBLOCK_COMPONENT] of var int: z ::is_defined_var;
+		constraint
+			(iSmallerThan(x, y) -> z == y) /\ 
+			(iSmallerThan(y, x) -> z == x) /\
+			(iEquals(x, y) -> z == x)
+			:: defines_var(z)
+			;
 	} in
 		z
 ;

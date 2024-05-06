@@ -3,6 +3,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% TEST CMQL QUERY: VALUE
 
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% FILE INCLUSION
 
@@ -18,11 +20,7 @@ include "./../model/include/include_ioperations.mzn";
 % CMQL
 include "./../model/include/include_cmql.mzn";
 
-% utils
-include "./../model/utils/nb_path.mzn";
 
-% CMQL VISUALIZATION (optional)
-%include "./../model/cmql/primitive/primitive_value_viz.mzn";
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% ASSERTIONS
@@ -38,95 +36,120 @@ constraint assertInstance(instance);
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% INSTANCE CMAP DATA
+%% QUERY DATA
 
-%
+% the reference c-map
 CMAP: cmap = instance.cmaps[1];
 
-%
+% the range of node ids in the c-map's digraph
 set of int: NODE_ID = index_set(cmap.node_labels);
 
-%
+% the range of arc ids in the c-map's digraph
 set of int: ARC_ID = index_set(cmap.arc_labels);
 
-%
-set of int: NB_PATH = 1..nb_path(NODE_ID,ARC_ID, transform_matrix(NODE_ID,cmap.adigraph.a));
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% QUERY INPUT DATA
-
-% optional origin node
+% the optional fixed origin node
 opt NODE_ID: origin_node;
 
-% optional destination node
+% the optional fixed destination node
 opt NODE_ID: destination_node;
 
-
-% Assertions
+% assertions
 constraint assert((occurs(origin_node) \/ occurs(destination_node)) -> deopt(origin_node )!= deopt(destination_node), "path origin and destination concepts must be different");
 
+% the range of paths of length <= max(NODE_ID), not necessarily node-minimal or arc-minimal
+set of int: PATH_ID = 1..nr_paths(transform_matrix(cmap.adigraph.a));
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% QUERY DATA/VARS FOR VISUALIZATION ONLY
-
-array[ARC_ID] of NODE_ID: from = array1d(ARC_ID, cmap.adigraph.tail_head[ARC_ID, TAIL]);
-array[ARC_ID] of NODE_ID: to = array1d(ARC_ID, cmap.adigraph.tail_head[ARC_ID, HEAD]);
-array[NB_PATH,NODE_ID] of var bool: x_node_in 	:: no_output;
-array[NB_PATH,ARC_ID] of var bool: x_arc_in 	:: no_output;
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% QUERY VARIABLES
 
-%
+% the origin node of the solution paths
 var NODE_ID: x_origin_node
 	:: no_output
 ;
 	
-%
+% the destination node of the solution paths
 var NODE_ID: x_destination_node
 	:: no_output
 ;
 
-%
-var 0..card(NB_PATH): x_nb_true_path;
+% the range for indexing any sequence of nodes corresponding to a solution path
+% - the upper-bound depends on the chosen path-minimality definition amongst the 2 variants
+set of int: NODE_PATH = if F_PATH_MINIMALITY == F_PATH_MINIMALITY_NODE then 1..min(max(NODE_ID), max(ARC_ID)+1) else 1..max(ARC_ID)+1 endif;
 
-%
-array[NB_PATH,NODE_ID] of var opt NODE_ID: x_node_path
+% the range for indexing any sequence of arcs corresponding to a solution path
+% - the upper-bound depends on the chosen path-minimality definition amongst the 2 variants
+set of int: ARC_PATH = 1..max(NODE_PATH)-1;
+
+% the number of solutions paths
+var 0..card(PATH_ID): x_nr_paths;
+
+% the lengths of the arc sequences for the solution paths
+% - x_arc_path_length[i]==0 iff the i-th solution path is empty
+array[PATH_ID] of var 0..card(ARC_PATH): x_arc_path_lengths;
+
+% the arc sequences for the solution paths completed with absent arcs
+% - x_arc_paths[i,j] is the id of the j-th occurring arc in the i-th arc sequence
+% - x_arc_paths[i,j] is absent iff the i-th arc sequence is empty or else j is greater than its length
+array[PATH_ID, ARC_PATH] of var opt ARC_ID: x_arc_paths
 	:: no_output
 ;
 
-%
-array[NB_PATH,ARC_ID] of var opt ARC_ID: x_arc_path
+% the node sequences for the solution paths completed with absent nodes
+% - x_node_paths[i,j] is the id of the j-th occurring node in the i-th node sequence
+% - x_node_paths[i,j] is absent iff the i-th arc sequence is empty or else max(0, j-2) is greater than or equal to its length
+array[PATH_ID, NODE_PATH] of var opt NODE_ID: x_node_paths
 	:: no_output
 ;
 
-%
-array[NB_PATH] of var INFLUENCE: x_influences;
+% the sequence of i-blocks labeling the arcs in each solution path and completed with absent i-blocks
+% - x_iblock_path[i,j,IBLOCK_COMPONENT] is the i-block of the j-th occurring arc in the i-th arc sequence
+% - x_iblock_path[i,j,IBLOCK_COMPONENT] is absent iff the i-th arc sequence is empty or else j is greater than its length
+array[PATH_ID, ARC_PATH, IBLOCK_COMPONENT] of var opt int: x_iblock_paths;
 
-%
-array[NB_PATH,ARC_ID] of var INFLUENCE: x_influence_paths;
+% the series of i-blocks recursively computed by propagation over the i-block sequence for each solution path
+% - x_propagated_iblocks[i,j,IBLOCK_COMPONENT] == iPropagate(x_propagated_iblocks[i,j-1,IBLOCK_COMPONENT], x_iblock_path[i,j,IBLOCK_COMPONENT])
+% - x_propagated_iblocks[i,j,IBLOCK_COMPONENT] is absent iff the i-th arc i-block sequence is empty or else j is greater than its length
+array[PATH_ID, ARC_PATH, IBLOCK_COMPONENT] of var opt int: x_propagated_iblocks;
 
-%
-var INFLUENCE: x_influence
+% the array of i-blocks corresponding to the i-blocks obtained by propagation through the solution paths
+% - x_iblocks[i,IBLOCK_COMPONENT] == x_propagated_iblocks[i,x_arc_path_lengths[i],IBLOCK_COMPONENT] iff the i-th solution path is not empty
+% - x_iblocks[i,IBLOCK_COMPONENT] is absent iff the i-th solution path is empty
+array[PATH_ID, IBLOCK_COMPONENT] of var opt int: x_iblocks;
+
+% the series of aggregated i-blocks recursively computed by aggregation over the array of i-blocks propagated through the solution paths
+% - x_aggregated_iblocks[i,IBLOCK_COMPONENT] == iAggregate(x_aggregated_iblocks[i-1,IBLOCK_COMPONENT], x_iblocks[i,IBLOCK_COMPONENT])
+% - x_aggregated_iblocks[i,IBLOCK_COMPONENT] is absent iff the i-th solution path is empty
+array[PATH_ID, IBLOCK_COMPONENT] of var opt int: x_aggregated_iblocks;
+
+% the influence aggregated from the first solution path to the last solution path and corresponding to the last term of the aggregation series
+% - x_aggregated_influence == (iblock: x_aggregated_iblocks[x_nr_paths,IBLOCK_COMPONENT]) iff x_nr_paths!=0 (a solution path exists)
+% - x_aggregated_influence == getNullInfluence(cmap.itype) iff x_nr_paths==0 (no solution path exists)
+var INFLUENCE: x_aggregated_influence
 	:: no_output
 ;
+
+% optional boolean variable representing the satisfiability of the query
+var bool: x_cmql_value;
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% QUERY
 
 %
-constraint :: "constraint: path propagation between origin and destination nodes"
-			% binds origin node if given
-			(occurs(origin_node) -> x_origin_node == origin_node)
-			% binds destination node if given
-		/\	(occurs(destination_node) -> x_destination_node == destination_node)
-			% query
-		/\	cmql_value(cmap, x_influence, x_origin_node, x_destination_node, x_nb_true_path, x_node_path, x_arc_path,x_influences, x_influence_paths, from, to)
+constraint :: "constraint: path aggregation between origin and destination nodes"
+		% binds origin node if given
+		(occurs(origin_node) -> x_origin_node == origin_node)
+		% binds destination node if given
+	/\	(occurs(destination_node) -> x_destination_node == destination_node)
+		% searches for non-empty dipath
+	/\	cmql_value(cmap, x_origin_node, x_destination_node, x_nr_paths, x_arc_path_lengths, x_arc_paths, x_node_paths, x_iblock_paths, x_propagated_iblocks, x_iblocks, x_aggregated_iblocks, x_aggregated_influence)
+	/\	x_cmql_value == (x_nr_paths == 1)
+	/\	x_cmql_value
 ;
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% OUTPUT
@@ -152,27 +175,56 @@ output :: "o_query"
 %
 output :: "o_solution"
 let {
-	%array[int,int] of var NODE_ID : o_x_node_path;
-	%forall (j in NB_ARC) (o_x_node_path[j] = deopt([x_node_path[j][i] | i in index_set(x_node_path[j]) where occurs(fix(x_node_path[j][i]))]));
-	%array[int] of var ARC_ID : o_x_arc_path = deopt([x_arc_path[i] | i in index_set(x_arc_path) where occurs(fix(x_arc_path[i]))]);
+	set of int: PATH_RANGE = 1..fix(x_nr_paths);
+	array[PATH_RANGE,IBLOCK_COMPONENT] of opt int: o_x_iblocks = array2d(PATH_RANGE, IBLOCK_COMPONENT, fix([deopt(x_iblocks[i,j]) | i in index_set_1of2(x_iblocks), j in index_set_2of2(x_iblocks) where occurs(x_iblocks[i,j])])); 
+	array[PATH_RANGE,IBLOCK_COMPONENT] of opt int: o_x_aggregated_iblocks = array2d(PATH_RANGE, IBLOCK_COMPONENT, fix([deopt(x_aggregated_iblocks[i,j]) | i in index_set_1of2(x_aggregated_iblocks), j in index_set_2of2(x_aggregated_iblocks) where occurs(x_aggregated_iblocks[i,j])])); 
 } in
-	 ["Path length =\t\t"]
-++ [ show(x_nb_true_path)]
-++ ["\n"]
-++	 ["Node path =\t\t"]
-% ++ [my_show1d_indexed(D_INT, (map2name(D_NODE_ID, [fix(o_x_node_path[i]) | i in index_set(o_x_node_path)])))]
-%++ [ cmap.node_labels[fix(o_x_node_path[i])].concept.name ++ if i < max(index_set(o_x_node_path)) then " - " else "" endif | i in index_set(o_x_node_path)]
-++ ["\n"]
-++ ["Arc path =\t\t"]
-%++ [ "(" ++ show(cmap.arc_labels[fix(o_x_arc_path[i])].arc.t) ++ "," ++ show(cmap.arc_labels[fix(o_x_arc_path[i])].arc.h) ++ ")" ++ if i < max(index_set(o_x_arc_path)) then " - " else "" endif | i in index_set(o_x_arc_path)]
-++ ["\n"]
-++ ["Influence  path=\t"]
-%++ [ showInfluence(fix(x_influence_paths[i])) ++ if i < max(index_set(x_influence_paths)) then " " else "" endif | i in index_set(x_influence_paths)]
-++ ["\n"]
-++ ["I-block path =\t\t"]
-++ [show(x_influence_paths)]
-++ ["\n"]
-++ ["Propagated influence =\t"]
-++ [showInfluence(fix(x_influence)) ++ " == " ++ show(fix(x_influence))]
-++ ["\n"]
+	["NODE_ID =\t\t"]
+++	[ show(NODE_ID)]
+++	["\n"]
+++	["NODE_PATH =\t\t"]
+++	[ show(NODE_PATH)]
+++	["\n"]
+++	["ARC_ID =\t\t"]
+++	[ show(ARC_ID)]
+++	["\n"]
+++	["ARC_PATH =\t\t"]
+++	[ show(ARC_PATH)]
+++	["\n"]
+++	["IBLOCK_COMPONENT =\t\t"]
+++	[ show(IBLOCK_COMPONENT)]
+++	["\n"]
+++	["PATH_ID =\t\t"]
+++	[ show(PATH_ID)]
+++	["\n"]
+++	["Number of paths =\t\t"]
+++	[ show(x_nr_paths)]
+% ++	["Path length =\t\t"]
+% ++	[ show(x_arc_path_lengths)]
+% ++	["\n"]
+% ++	["Node path =\t\t"]
+% % ++	[my_show1d_indexed(D_INT, (map2name(D_NODE_ID, [fix(o_x_node_paths[i]) | i in index_set(o_x_node_paths)])))]
+% ++	[cmap.node_labels[deopt(o_x_node_paths[i])].concept.name ++ if i < max(index_set(o_x_node_paths)) then " - " else "" endif | i in index_set(o_x_node_paths)]
+% ++	["\n"]
+% ++	["Arc path =\t\t"]
+% ++	[ "(" ++ show(cmap.arc_labels[deopt(o_x_arc_paths[i])].arc.t) ++ "," ++ show(cmap.arc_labels[deopt(o_x_arc_paths[i])].arc.h) ++ ")" ++ if i < max(index_set(o_x_arc_paths)) then " - " else "" endif | i in index_set(o_x_arc_paths)]
+% ++	["\n"]
+% ++	["Path arc influences=\t"]
+% ++	[ showInfluence((iblock: deopt(row(o_x_iblock_paths,i)))) ++ if i < max(index_set_1of2(o_x_iblock_paths)) then " " else "" endif | i in index_set_1of2(o_x_iblock_paths)]
+% ++	["\n"]
+% ++	["Propagated i-path=\t"]
+% ++	[ showInfluence((iblock: deopt(row(o_x_propagated_iblocks,i)))) ++ if i < max(index_set_1of2(o_x_propagated_iblocks)) then " " else "" endif | i in index_set_1of2(o_x_propagated_iblocks)]
+% ++	["\n"]
+% ++	["Propagated influence =\t"]
+% ++	[showInfluence(fix(x_propagated_influence)) ++ " == " ++ show(fix(x_propagated_influence))]
+% ++	["\n"]
+++	["Path propagated i-blocks=\t"]
+++	[ showInfluence((iblock: deopt(row(o_x_iblocks,i)))) ++ if i < max(index_set_1of2(o_x_iblocks)) then " " else "" endif | i in index_set_1of2(o_x_iblocks)]
+++	["\n"]
+++	["Aggregated i-blocks=\t"]
+++	[ showInfluence((iblock: deopt(row(o_x_aggregated_iblocks,i)))) ++ if i < max(index_set_1of2(o_x_aggregated_iblocks)) then " " else "" endif | i in index_set_1of2(o_x_aggregated_iblocks)]
+++	["\n"]
+++	["Aggregated influence =\t"]
+++	[showInfluence(fix(x_aggregated_influence)) ++ " == " ++ show(fix(x_aggregated_influence))]
+++	["\n"]
 ;

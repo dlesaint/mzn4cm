@@ -15,6 +15,11 @@
 %	- Declares
 %		- ASSERTIONS
 %			- assertADigraph
+%		- PATH COUNTING
+%		- transform_matrix
+%		- nr_paths
+%		- sum_recursive
+%		- matrix_multiply
 %		- OUTPUT
 %			- displayADigraphHeader
 %			- displayADigraphArcs

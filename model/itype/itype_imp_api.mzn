@@ -58,10 +58,10 @@ ITYPE_ALGEBRA: itype_algebra;
 %% PAR/VAR I-TYPE RELATIONS 
 
 %
-function bool: iEquals(DEOPT_INFLUENCE: x, DEOPT_INFLUENCE: y)	:: "iEquals($x,$y): checks whether equality relation holds between $x and $y over i-type of $x - (par)";
+function bool: iEquals(array[IBLOCK_COMPONENT] of int: x, array[IBLOCK_COMPONENT] of int: y)	:: "iEquals($x,$y): checks whether equality relation holds between $x and $y over i-type of $x - (par)";
 
 %
-function var bool: iEquals(var DEOPT_INFLUENCE: x, var DEOPT_INFLUENCE: y) :: "iEquals($x,$y): checks whether equality relation holds between $x and $y over i-type of $x - (var)";
+function var bool: iEquals(array[IBLOCK_COMPONENT] of var int: x, array[IBLOCK_COMPONENT] of var int: y) :: "iEquals($x,$y): checks whether equality relation holds between $x and $y over i-type of $x - (var)";
 
 
 
@@ -70,18 +70,18 @@ function var bool: iEquals(var DEOPT_INFLUENCE: x, var DEOPT_INFLUENCE: y) :: "i
 
 %% BINARY AGGREGATION
 %
-function DEOPT_INFLUENCE: iAggregate(DEOPT_INFLUENCE: x, DEOPT_INFLUENCE: y) :: "iAggregate($x,$y): aggregate $x with $y over i-type of $x - (par)";
+function array[IBLOCK_COMPONENT] of int: iAggregate(array[IBLOCK_COMPONENT] of int: x, array[IBLOCK_COMPONENT] of int: y) :: "iAggregate($x,$y): aggregate $x with $y over i-type of $x - (par)";
 
 %
-function var DEOPT_INFLUENCE: iAggregate(var DEOPT_INFLUENCE: x, var DEOPT_INFLUENCE: y) :: "iAggregate($x,$y): aggregate $x with $y over i-type of $x - (var)";
+function array[IBLOCK_COMPONENT] of var int: iAggregate(array[IBLOCK_COMPONENT] of var int: x, array[IBLOCK_COMPONENT] of var int: y) :: "iAggregate($x,$y): aggregate $x with $y over i-type of $x - (var)";
 
 
 %% BINARY PROPAGATION
 %
-function DEOPT_INFLUENCE: iPropagate(DEOPT_INFLUENCE: x, DEOPT_INFLUENCE: y)	:: "iPropagate($x,$y): propagate $x with $y over i-type of $x - (par)";
+function array[IBLOCK_COMPONENT] of int: iPropagate(array[IBLOCK_COMPONENT] of int: x, array[IBLOCK_COMPONENT] of int: y)	:: "iPropagate($x,$y): propagate $x with $y over i-type of $x - (par)";
 
 %
-function var DEOPT_INFLUENCE: iPropagate(var DEOPT_INFLUENCE: x, var DEOPT_INFLUENCE: y)	:: "iPropagate($x,$y): propagate $x with $y over i-type of $x - (var)";
+function array[IBLOCK_COMPONENT] of var int: iPropagate(array[IBLOCK_COMPONENT] of var int: x, array[IBLOCK_COMPONENT] of var int: y)	:: "iPropagate($x,$y): propagate $x with $y over i-type of $x - (var)";
 
 
 
@@ -89,4 +89,4 @@ function var DEOPT_INFLUENCE: iPropagate(var DEOPT_INFLUENCE: x, var DEOPT_INFLU
 %% OUTPUT
 
 % Getter for influence value symbol
-function string: iShow(DEOPT_INFLUENCE: x) :: "iShow($x): returns string representation of non-virtual influence $x";	
+function string: iShow(array[IBLOCK_COMPONENT] of int: x) :: "iShow($x): returns string representation of non-virtual influence $x";	

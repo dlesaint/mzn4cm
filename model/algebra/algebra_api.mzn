@@ -65,7 +65,7 @@ type ALGEBRA = record(
 	% the algebraic domain encoding as an array of dimensions
 	%		- the number of dimensions is > 0
 	%		- each dimension either maps to
-	% 			- a built-in type (bool or int) in which case the corresponding dimension value is set to <>
+	% 		- a built-in type (bool or int) in which case the corresponding dimension value is set to <>
 	%			- a range of ints or an enumeration in which case the corresponding dimension value is set to the cardinality of the range/enum
 	array[int] of opt int: dimensions,
 	% whether the algebraic domain is an option type
@@ -83,8 +83,8 @@ type A_ELEMENT = record(
 	% 3 encodings based on the domain element:
 	%		- the virtual element: all integers are absent (equal to <>)
 	%		- an undefined (non-existing) element: all integers are equal to -1 (NB. used to represent non-existing algebraic elements, eg. absence of a neutral element) TODO
-	% 		- any other domain element: the i-th integer is the encoding of the value of the domain element on the i-th dimension 
-	% 			- the interpretation of the n-uple (encoding/decoding to/from built-in types, enums, object types, etc.) is left to the client code  
+	% 	- any other domain element: the i-th integer is the encoding of the value of the domain element on the i-th dimension 
+	% 		- the interpretation of the n-uple (encoding/decoding to/from built-in types, enums, object types, etc.) is left to the client code  
 	array[int] of opt int: value,
 	);
 

@@ -49,10 +49,10 @@ array[I_DOMAIN] of string: I_;
 %
 constraint
 			assert(getCategory(itype) == ITYPE_CATEGORY_SINGLE_SORTED, "(1) implementation constraint - check i-type consistency of DZN files")
-	/\		assert(isSingleSorted(itype), "(2) implementation constraint - check i-type consistency of DZN files")
-	/\		assert(getSorts(itype)[1] == ITYPE_SORT_ENUM, "(3) implementation constraint - check i-type consistency of DZN files")
-	/\		assert(getAggregation(itype) == ITYPE_AGGREGATION_ENUM <-> getPropagation(itype) == ITYPE_PROPAGATION_ENUM, "(4-1) implementation constraint - check consistency of DZN files")
-	/\		assert(getAggregation(itype) in {ITYPE_AGGREGATION_ENUM, ITYPE_PROPAGATION_ENUM}, "(4-2) implementation constraint - check consistency of DZN files")
+	/\	assert(isSingleSorted(itype), "(2) implementation constraint - check i-type consistency of DZN files")
+	/\	assert(getSorts(itype)[1] == ITYPE_SORT_ENUM, "(3) implementation constraint - check i-type consistency of DZN files")
+	/\	assert(getAggregation(itype) == ITYPE_AGGREGATION_ENUM <-> getPropagation(itype) == ITYPE_PROPAGATION_ENUM, "(4-1) implementation constraint - check consistency of DZN files")
+	/\	assert(getAggregation(itype) in {ITYPE_AGGREGATION_ENUM, ITYPE_PROPAGATION_ENUM}, "(4-2) implementation constraint - check consistency of DZN files")
 ;
 
 
@@ -61,8 +61,8 @@ constraint
 %% OUTPUT
 
 % Getter for influence value symbol
-function string: iShow(DEOPT_INFLUENCE: x)
+function string: iShow(array[IBLOCK_COMPONENT] of int: x)
 	:: "iShow($x): returns string representation of non-virtual influence $x"
 	=
-	I_[to_enum(I_DOMAIN, x.iblock[1])]
+	I_[to_enum(I_DOMAIN, x[1])]
 	;

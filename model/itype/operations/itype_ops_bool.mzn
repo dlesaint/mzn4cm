@@ -29,17 +29,17 @@ include "./../../itype/type/itype_bool_api.mzn";
 %% PAR/VAR I-TYPE RELATIONS 
 
 %
-function bool: iEquals(DEOPT_INFLUENCE: x, DEOPT_INFLUENCE: y)
+function bool: iEquals(array[IBLOCK_COMPONENT] of int: x, array[IBLOCK_COMPONENT] of int: y)
 	:: "iEquals($x,$y): checks whether equality relation holds between $x and $y over i-type of $x - (par)"
 	=
-	assert(false, "bug: unexpected function call", false)
+	assert(false, "bug: unexpected function call (equality should be identity - see _buildAlgebra() - and so pre-checked)", false)
 	;
 	
 %
-function var bool: iEquals(var DEOPT_INFLUENCE: x, var DEOPT_INFLUENCE: y)
+function var bool: iEquals(array[IBLOCK_COMPONENT] of var int: x, array[IBLOCK_COMPONENT] of var int: y)
 	:: "iEquals($x,$y): checks whether equality relation holds between $x and $y over i-type of $x - (var)"
 	=
-	assert(false, "bug: unexpected function call", false)
+	assert(false, "bug: unexpected function call (equality should be identity - see _buildAlgebra() - and so pre-checked)", false)
 	;
 
 
@@ -49,51 +49,51 @@ function var bool: iEquals(var DEOPT_INFLUENCE: x, var DEOPT_INFLUENCE: y)
 
 %% BINARY AGGREGATION
 %
-function DEOPT_INFLUENCE: iAggregate(DEOPT_INFLUENCE: x, DEOPT_INFLUENCE: y)
+function array[IBLOCK_COMPONENT] of int: iAggregate(array[IBLOCK_COMPONENT] of int: x, array[IBLOCK_COMPONENT] of int: y)
 	:: "iAggregate($x,$y): aggregate $x with $y over i-type of $x - (par)"
 	=
 	if 		getAggregation(itype) == ITYPE_AGGREGATION_OR
-	then	(iblock: [max(x.iblock[1], y.iblock[1])])
+	then	[max(x[1], y[1])]
 	elseif	getAggregation(itype) == ITYPE_AGGREGATION_AND
-	then	(iblock: [x.iblock[1] * y.iblock[1]])
-	else	assert(false, "bug - incomplete implementation", (iblock: []))
+	then	[x[1] * y[1]]
+	else	assert(false, "bug - incomplete implementation", [])
 	endif
 ;
 
 %
-function var DEOPT_INFLUENCE: iAggregate(var DEOPT_INFLUENCE: x, var DEOPT_INFLUENCE: y)
+function array[IBLOCK_COMPONENT] of var int: iAggregate(array[IBLOCK_COMPONENT] of var int: x, array[IBLOCK_COMPONENT] of var int: y)
 	:: "iAggregate($x,$y): aggregate $x with $y over i-type of $x - (var)"
 	=
 	if 		getAggregation(itype) == ITYPE_AGGREGATION_OR
-	then	(iblock: [max(x.iblock[1], y.iblock[1])])
+	then	[max(x[1], y[1])]
 	elseif	getAggregation(itype) == ITYPE_AGGREGATION_AND
-	then	(iblock: [x.iblock[1] * y.iblock[1]])
-	else	assert(false, "bug - incomplete implementation", (iblock: []))
+	then	[x[1] * y[1]]
+	else	assert(false, "bug - incomplete implementation", [])
 	endif
 ;
 
 
 %% BINARY PROPAGATION
 %
-function DEOPT_INFLUENCE: iPropagate(DEOPT_INFLUENCE: x, DEOPT_INFLUENCE: y)
+function array[IBLOCK_COMPONENT] of int: iPropagate(array[IBLOCK_COMPONENT] of int: x, array[IBLOCK_COMPONENT] of int: y)
 	:: "iPropagate($x,$y): propagate $x with $y over i-type of $x - (par)"
 	=
 	if 		getPropagation(itype) == ITYPE_PROPAGATION_OR
-	then	(iblock: [max(x.iblock[1], y.iblock[1])])
+	then	[max(x[1], y[1])]
 	elseif	getPropagation(itype) == ITYPE_PROPAGATION_AND
-	then	(iblock: [x.iblock[1] * y.iblock[1]])
-	else	assert(false, "bug - incomplete implementation", (iblock: []))
+	then	[x[1] * y[1]]
+	else	assert(false, "bug - incomplete implementation", [])
 	endif
 ;
 
 %
-function var DEOPT_INFLUENCE: iPropagate(var DEOPT_INFLUENCE: x, var DEOPT_INFLUENCE: y)
+function array[IBLOCK_COMPONENT] of var int: iPropagate(array[IBLOCK_COMPONENT] of var int: x, array[IBLOCK_COMPONENT] of var int: y)
 	:: "iPropagate($x,$y): propagate $x with $y over i-type of $x - (var)"
 	=
 	if 		getPropagation(itype) == ITYPE_PROPAGATION_OR
-	then	(iblock: [max(x.iblock[1], y.iblock[1])])
+	then	[max(x[1], y[1])]
 	elseif	getPropagation(itype) == ITYPE_PROPAGATION_AND
-	then	(iblock: [x.iblock[1] * y.iblock[1]])
-	else	assert(false, "bug - incomplete implementation", (iblock: []))
+	then	[x[1] * y[1]]
+	else	assert(false, "bug - incomplete implementation", [])
 	endif
 ;

@@ -47,7 +47,8 @@ include "./../utils/utils_string.mzn"; % map2string
 %
 function string: showNonVirtualElement(DEOPT_A_ELEMENT: x)
 	=
-	iShow((iblock: x.value)) % GLOBAL
+	iShow(x.value) % GLOBAL
+% 	iShow((iblock: x.value)) % GLOBAL
 	;
 
 %
@@ -55,7 +56,8 @@ function string: showInfluence(INFLUENCE: x)
 	=
 	if	isVirtualInfluence(x)
 	then	"<>" % TODO on all components
-	else	iShow((iblock: deopt(x.iblock)))
+	else	iShow(deopt(x.iblock))
+% 	else	iShow((iblock: deopt(x.iblock)))
 	endif
 	;
 
@@ -176,14 +178,14 @@ function array[int] of string: displayITypePropagationOperation(ITYPE: it)
 	=
 		["Propagation:\t\t" ++ show(getPropagation(it))]
 		%TODO show tables of enum operations
-% % 	++	["\n"]
+% 	++	["\n"]
 % 	++
 % 		if hasNoBuiltInSort(it) /\ isSingleSorted(it)
 % 		then
 % 			let {
 % 				array[int] of string: rows = array1d(IBLOCK_COMPONENT, [showInfluence((iblock:[i])) | i in IBLOCK_COMPONENT]);
-% 				array[int] of string: cols = array1d(IBLOCK_COMPONENT, [showInfluence((iblock: [i])) | i in IBLOCK_COMPONENT]);
-% 				array[int, int] of string: names = array2d(IBLOCK_COMPONENT, IBLOCK_COMPONENT, [showInfluence(iPropagate((iblock: [i]),(iblock: [j]))) | i,j in IBLOCK_COMPONENT]);
+% 				array[int] of string: cols = array1d(IBLOCK_COMPONENT, [showInfluence((iblock:[i])) | i in IBLOCK_COMPONENT]);
+% 				array[int, int] of string: names = array2d(IBLOCK_COMPONENT, IBLOCK_COMPONENT, [showInfluence((iblock:iPropagate([i],[j]))) | i,j in IBLOCK_COMPONENT]);
 % 			} in
 % 				[show2d_indexed(rows, cols, names)]
 % 		else

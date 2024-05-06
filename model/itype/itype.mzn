@@ -389,7 +389,7 @@ function INFLUENCE: getNullInfluence(ITYPE: it)
 
 %
 function bool: isNullInfluenceVirtual(ITYPE: it)
-	:: "isNullInfluenceVirtual($it): checks whether the null influence over i-type $it is virtual"
+	:: "isNullInfluenceVirtual($it): checks whether the null influence over i-type $it is virtual (par)"
 	=
 	isVirtualElement(_toAlgebra(it, getNullInfluence(it)))
 ;
@@ -451,7 +451,8 @@ function bool: equals(INFLUENCE: x, INFLUENCE: y)
 	} in
 		if	(isVirtualInfluence(x) \/ isVirtualInfluence(y)) \/ isEqualityIdentityOverIType(itype) % GLOBAL
 		then	x.iblock == y.iblock % TODO true <-> both arrays have the same optionality??
-		else	iEquals((iblock: deopt(x.iblock)), (iblock: deopt(y.iblock)))
+		else	iEquals(deopt(x.iblock), deopt(y.iblock))
+% 		else	iEquals((iblock: deopt(x.iblock)), (iblock: deopt(y.iblock)))
 		endif
 	;
 
@@ -464,7 +465,8 @@ function var bool: equals(var INFLUENCE: x, var INFLUENCE: y)
 	} in
 		if	(isVirtualInfluence(x) \/ isVirtualInfluence(y)) \/ isEqualityIdentityOverIType(itype) % GLOBAL
 		then	x.iblock == y.iblock % TODO true <-> both arrays have the same optionality??
-		else	iEquals((iblock: deopt(x.iblock)), (iblock: deopt(y.iblock)))
+		else	iEquals(deopt(x.iblock), deopt(y.iblock))
+% 		else	iEquals((iblock: deopt(x.iblock)), (iblock: deopt(y.iblock)))
 		endif
 	;
 
@@ -480,12 +482,13 @@ function INFLUENCE: aggregate(INFLUENCE: x, INFLUENCE: y)
 	let {
 		bool: precond1 = _typeCheckInfluence(x, y);
 	} in
-		if 		isNullInfluence(x) % hence neutral for aggregation
-		then y
+		if 			isNullInfluence(x) % hence neutral for aggregation
+		then	y
 		elseif	isNullInfluence(y)
-		then x
+		then	x
 		else		% neither x or y null, thus none of them virtual 
-					iAggregate((iblock: deopt(x.iblock)), (iblock: deopt(y.iblock)))
+					(iblock: iAggregate(deopt(x.iblock), deopt(y.iblock)))
+% 					iAggregate((iblock: deopt(x.iblock)), (iblock: deopt(y.iblock)))
 		endif
 	;
 
@@ -496,12 +499,13 @@ function INFLUENCE: propagate(INFLUENCE: x, INFLUENCE: y)
 	let {
 		bool: precond1 = _typeCheckInfluence(x, y);
 	} in
-		if 		isNullInfluence(x) % hence absorbing for propagation
-		then x
+		if 			isNullInfluence(x) % hence absorbing for propagation
+		then 	x
 		elseif	isNullInfluence(y)
-		then y
+		then 	y
 		else		% neither x or y null, thus none of them virtual 
-					iPropagate((iblock: deopt(x.iblock)), (iblock: deopt(y.iblock)))
+					(iblock: iPropagate(deopt(x.iblock), deopt(y.iblock)))
+% 					iPropagate((iblock: deopt(x.iblock)), (iblock: deopt(y.iblock)))
 		endif
 	;
 
@@ -511,10 +515,13 @@ function var INFLUENCE: aggregate(var INFLUENCE: x, var INFLUENCE: y)
 	=
 	let {
 		constraint _typeCheckInfluence(x, y);
-		var INFLUENCE: z;
-		constraint isNullInfluence(x) -> z == y; % null neutral for aggregation
-		constraint isNullInfluence(y) -> z == x; % null neutral for aggregation
-		constraint not(isNullInfluence(x) \/ isNullInfluence(y)) -> z == iAggregate((iblock: deopt(x.iblock)), (iblock: deopt(y.iblock))) % TODO dangerous
+		var INFLUENCE: z :: is_defined_var;
+		constraint
+			(isNullInfluence(x) -> z == y) /\ % null neutral for aggregation
+			(isNullInfluence(y) -> z == x) /\ % null neutral for aggregation
+			(not(isNullInfluence(x) \/ isNullInfluence(y)) -> z == (iblock: iAggregate(deopt(x.iblock), deopt(y.iblock))))
+			:: defines_var(z)
+			;
 	} in
 		z
 	;
@@ -525,14 +532,15 @@ function var INFLUENCE: propagate(var INFLUENCE: x, var INFLUENCE: y)
 	=
 	let {
 		constraint _typeCheckInfluence(x, y);
-		var INFLUENCE: z;
-		constraint isNullInfluence(x) -> z == x; % null absorbing for propagation
-		constraint isNullInfluence(y) -> z == y; % null absorbing for propagation
-% 		constraint not(isNullInfluence(x) \/ isNullInfluence(y)) -> z == (iblock: iPropagate((iblock: deopt(x.iblock)), (iblock: deopt(y.iblock))).iblock)
-		constraint not(isNullInfluence(x) \/ isNullInfluence(y)) -> z == iPropagate((iblock: deopt(x.iblock)), (iblock: deopt(y.iblock)));
-		constraint z == iPropagate((iblock: deopt(x.iblock)), (iblock: deopt(y.iblock)));
+		var INFLUENCE: z :: is_defined_var;
+		constraint
+			(isNullInfluence(x) -> z == x) /\ % null absorbing for propagation
+			(isNullInfluence(y) -> z == y) /\ % null absorbing for propagation
+			(not(isNullInfluence(x) \/ isNullInfluence(y)) -> z == (iblock: iPropagate(deopt(x.iblock), deopt(y.iblock))))
+			:: defines_var(z)
+			;
 	} in
-		z %:: defines_var(z)
+		z
 	;
 
 
@@ -793,7 +801,7 @@ function E_ALGEBRA: _buildITypeEalgebra(ALGEBRA: algebra, array[ITYPE_OPERATION_
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% PRIVATE TYPE CHECKIING
+%% PRIVATE TYPE CHECKING
 
 %
 function bool: _typeCheckInfluence(INFLUENCE: x)
@@ -872,7 +880,7 @@ function bool: _typeCheckIblock(array[IBLOCK_COMPONENT] of int: iblock, ITYPE: i
 						else 	false % "incomplete implementation"
 						endif
 					),
-					"(1) type checking: inconsistent iblock component (par)")
+					"(1) type checking: inconsistent iblock component (par)" ++ show(iblock))
 %TODO carry on below: should build array mapping itype sorts and iblock sorts 
 % 		/\
 % 			assert(

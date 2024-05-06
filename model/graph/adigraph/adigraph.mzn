@@ -65,3 +65,43 @@ function bool: assertADigraph(ADIGRAPH: adg)
 		assert(adg.sinks == adg.heads diff adg.tails, "(9) sinks must be heads that are not tails") /\
 		assert(adg.loners == NODE diff (adg.tails union adg.heads), "(10) loners must be nodes that are neither tails nor heads")
 ;
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% PATH COUNTING
+
+%
+function array[int,int] of opt int: transform_matrix(array[int,int] of opt int: matrix) =
+	array2d(index_set_1of2(matrix), index_set_2of2(matrix), [if occurs(matrix[i,j]) then 1 else <> endif | i in index_set_1of2(matrix), j in index_set_2of2(matrix)])
+;
+
+%
+function int: nr_paths(array[int,int] of opt int: matrix) =
+	let {
+		bool: precond = assert(index_set_1of2(matrix) == index_set_2of2(matrix), "nr_paths: $matrix must be a square matrix");
+  } in 
+    sum_recursive(matrix, matrix, min(index_set_2of2(matrix))-1)
+;
+
+%
+function int: sum_recursive(array[int,int] of opt int: matrixO, array[int,int] of opt int: matrixN, int: i) = 
+	let {
+		bool: precond1 = assert(index_set_1of2(matrixO) == index_set_2of2(matrixO), "sum_recursive: $matrixO must be a square matrix");
+		bool: precond2 = assert(index_set_1of2(matrixN) == index_set_2of2(matrixN), "sum_recursive: $matrixN must be a square matrix");
+		bool: precond3 = assert(index_set_1of2(matrixO) == index_set_1of2(matrixN), "sum_recursive: the row index set of $matrixO and column index set of $matrixN must be equal");
+		int: nr_paths = sum(k in index_set_1of2(matrixN))(sum(row(matrixN, k))); % NB. sum supported on opt arrays
+		int: j = i+1;
+	} in 
+		if j == max(index_set_2of2(matrixN))
+		then		nr_paths
+		else		nr_paths + sum_recursive(matrixO, matrix_multiply(matrixN, matrixO), j)
+		endif
+;
+
+%
+function array[int,int] of opt int: matrix_multiply(array[int,int] of opt int: matrixN, array[int,int] of opt int: matrixO) =
+	let {
+		bool: precond1 = assert(index_set_2of2(matrixN) == index_set_1of2(matrixO), "matrix_multiply: the column index set of $matrixN and row index set of $matrixO must be equal");
+	} in 
+		array2d(index_set_1of2(matrixN), index_set_2of2(matrixN), [sum([if occurs(matrixN[i,k])/\ occurs(matrixO[k,j]) then matrixN[i,k]*matrixO[k,j] else <> endif | k in index_set_2of2(matrixN)]) | i in index_set_1of2(matrixN), j in index_set_2of2(matrixO)])
+	;

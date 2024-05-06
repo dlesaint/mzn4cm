@@ -136,7 +136,8 @@ enum ITYPE_OPERATION = {
 % 	ITYPE_PROPAGATION_MEAN,
 	};
 	
-% Proper range of sorts
+% Proper range of sorts for the i-type
+%% 1..n if the i-type is n-sorted
 set of int: SORT;
 
 % Class for i-type signatures
@@ -152,17 +153,32 @@ type ITYPE_SIGNATURE = record(
 % Class for i-type domains
 type ITYPE_DOMAINS = record(
 	% the cardinality of the domain associated with each sort:
-	%		- set to <> if the domain is a built-in type
-	% 		- otherwise, set to the cardinality of the corresponding user-defined enumeration or range
+	%	- set to <> if the domain is a built-in type
+	% 	- otherwise, set to the cardinality of the corresponding user-defined enumeration or range
 	array[SORT] of opt int: cardinalities,
 );
 
-% Proper range of i-block components
+% Proper range of i-block components encoding influences
 set of int: IBLOCK_COMPONENT;
 
 % Class for i-block types
+%% Every influence value (ie. an element of a i-type) is defined by a tuple consisting of one value per sort of the i-type (aka. sort-value).
+%% Each sort-value is encoded by an array of opt ints whose length and allowed values are specific to the sort.
+%% The concatenation of these arrays, called i-block, provides the encoding of the influence (see type INFLUENCE).
+%% The i-blocks of an i-type range over the same range IBLOCK_COMPONENT.
+%% The individual elements of i-blocks are called (i-block) components.
+%%
+%% An i-block type provides the encoding model for the i-blocks of an i-type.
+%% It pairs 2 arrays both ranging over IBLOCK_COMPONENT:
+%% - the first array is the array of sorts specifying which series of components are reserved to each sort for encoding the sort-values.
+%% - the second array is the array of cardinalities specifying the domain cardinality of each component (see ITYPE_DOMAINS) based on the corresponding sort in the first array.
 type IBLOCK_TYPE = record(
+	% the series of sorts of the encoding model
+	% - eg. [ITYPE_SORT_ENUM] for a single-sorted i-type over (ENUM)
+	% - eg. [ITYPE_SORT_RATIONAL,ITYPE_SORT_RATIONAL] for a single-sorted i-type over (RATIONAL)
+	% - eg. [ITYPE_SORT_ENUM,ITYPE_SORT_RATIONAL,ITYPE_SORT_RATIONAL] for a 2-sorted i-type over (ENUM,RATIONAL)
 	array[IBLOCK_COMPONENT] of ITYPE_SORT: sorts,
+	% the series of domain cardinalities of the encoding model
 	array[IBLOCK_COMPONENT] of opt int: sizes,
 );
 
@@ -286,7 +302,7 @@ function bool: isSingleSorted(ITYPE: it)	:: "function isSingleSorted($it): check
 %
 function bool: hasNoBuiltInSort(ITYPE: it)	:: "function hasNoBuiltInSort($it): checks whether i-type $it has a non built-in sort";
 
-%
+% TODO rename isManySorted
 function bool: isPolySort(ITYPE: it) :: "function isPolySort($it): checks whether i-type $it has different sorts";
 
 %
@@ -304,10 +320,7 @@ function bool: isEqualityIdentityOverIType(ITYPE: it)	:: "function isEqualityIde
 function INFLUENCE: getNullInfluence(ITYPE: it) :: "getNullInfluence($it): returns the null influence over i-type $it - (par)";
 
 %
-function var INFLUENCE: getNullInfluence(ITYPE: it) :: "getNullInfluence($it): returns the null influence over i-type $it - (var)";
-
-%
-function var bool: isNullInfluenceVirtual(ITYPE: it) :: "isNullInfluenceVirtual($it): checks whether the null influence over i-type $it is virtual";
+function bool: isNullInfluenceVirtual(ITYPE: it) :: "isNullInfluenceVirtual($it): checks whether the null influence over i-type $it is virtual (par)";
 
 %
 function bool: isNullInfluence(INFLUENCE: x) :: "isNullInfluence($x): checks whether $x is the null influence over i-type of $x - (par)";

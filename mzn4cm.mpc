@@ -1,6 +1,6 @@
 {
-    "all-satisfaction": true,
     "intermediate-solutions": true,
+    "num-solutions": 2,
     "output-objective": true,
     "solver": "org.gecode.gecode@6.3.0"
 }
