@@ -18,7 +18,7 @@
         "model/cmql/primitive_api.mzn",
         "data/cmql/cmql_path_value.dzn"
     ],
-    "openTab": 16,
+    "openTab": 13,
     "projectFiles": [
         "data/cmql/cmql_path_value.dzn",
         "data/digraph/dg_13x26_internet_1.dzn",
@@ -31,6 +31,7 @@
         "data/icmap/icm_B_1_dg_3x2_chain_1.dzn",
         "data/icmap/icm_B_1_dg_3x3_acyclic_1.dzn",
         "data/icmap/icm_B_1_dg_4x3_chain_1.dzn",
+        "data/icmap/icm_R_1_dg_13x26_internet_1.dzn",
         "data/icmap/icm_R_1_dg_3x2_chain_1.dzn",
         "data/icmap/icm_R_1_dg_3x3_acyclic_1.dzn",
         "data/icmap/icm_R_1_dg_3x3_cyclic_1.dzn",
@@ -100,6 +101,7 @@
         "test/test_path_value.mzn",
         "test/test_value.mzn"
     ],
-    "selectedSolverConfigFile": "mzn4cm.mpc",
+    "selectedBuiltinConfigId": "com.google.ortools.sat",
+    "selectedBuiltinConfigVersion": "9.8.3296",
     "version": 106
 }
