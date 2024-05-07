@@ -19,8 +19,11 @@ include "./../cmap/cmap.mzn";
 
 
 
-% III.DEF.30
+
 % PathValue
+
+%
+function ann: cmql_path_value_search(var int: x_origin_node, var int: x_destination_node, var int: x_arc_path_length, array[int] of var opt int: x_arc_path, array[int] of var opt int: x_node_path, array[int, int] of var opt int: x_iblock_path, array[int, int] of var opt int: x_propagated_iblocks, var INFLUENCE: x_propagated_influence, var bool: x_cmql_path_value);
 
 % Determines a (possibly empty) dipath in a c-map such that:
 % - $cmap is the reference c-map
@@ -69,3 +72,6 @@ predicate cmql_arc_influence_path(CMAP: cmap, array[int] of var opt int: x_arc_p
 predicate cmql_arc_path(CMAP: cmap, var int: x_arc_path_length, array[int] of var opt int: x_arc_path)
 	:: "cmql_arc_path($cmap,$x_arc_path_length,$x_arc_path): determines a minimal consistent arc path $x_arc_path of length $x_arc_path_length wrt. cmap $cmap and path-minimality feature (var)"
 ;
+
+%
+function array[int] of string: cmql_path_value_output(CMAP: cmap, var int: x_arc_path_length, array[int] of var opt int: x_arc_path, array[int] of var opt int: x_node_path, array[int, int] of var opt int: x_iblock_path, array[int, int] of var opt int: x_propagated_iblocks, var INFLUENCE: x_propagated_influence);

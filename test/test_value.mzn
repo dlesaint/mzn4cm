@@ -134,25 +134,38 @@ var INFLUENCE: x_aggregated_influence
 var bool: x_cmql_value;
 
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% QUERY
+%% QUERY CONSTRAINT
 
 %
 constraint :: "constraint: path aggregation between origin and destination nodes"
-		% binds origin node if given
-		(occurs(origin_node) -> x_origin_node == origin_node)
-		% binds destination node if given
-	/\	(occurs(destination_node) -> x_destination_node == destination_node)
-		% searches for non-empty dipath
-	/\	cmql_value(cmap, x_origin_node, x_destination_node, x_nr_paths, x_arc_path_lengths, x_arc_paths, x_node_paths, x_iblock_paths, x_propagated_iblocks, x_iblocks, x_aggregated_iblocks, x_aggregated_influence)
-	/\	x_cmql_value == (x_nr_paths == 1)
-	/\	x_cmql_value
+	% binds origin node if given
+	(x_origin_node == origin_node) /\
+	% binds destination node if given
+	(x_destination_node == destination_node) /\
+	% searches for non-empty dipaths
+	cmql_value(cmap, x_origin_node, x_destination_node, x_nr_paths, x_arc_path_lengths, x_arc_paths, x_node_paths, x_iblock_paths, x_propagated_iblocks, x_iblocks, x_aggregated_iblocks, x_aggregated_influence) /\
+	% reifying satisfiability of query (to customize)
+	x_cmql_value == (x_nr_paths >= 1 /\ x_nr_paths >=1) /\
+	% forcing satisfiability
+	x_cmql_value /\
+	true
 ;
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% OUTPUT
+%% QUERY SEARCH STRATEGY
+
+solve
+	:: cmql_value_search(x_origin_node, x_destination_node, x_nr_paths, x_arc_path_lengths, x_arc_paths, x_node_paths, x_iblock_paths, x_propagated_iblocks, x_iblocks, x_aggregated_iblocks, x_aggregated_influence, x_cmql_value)
+	satisfy;
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% QUERY OUTPUT
 
 %
 output :: "o_instance"
@@ -173,58 +186,5 @@ output :: "o_query"
 ;
 
 %
-output :: "o_solution"
-let {
-	set of int: PATH_RANGE = 1..fix(x_nr_paths);
-	array[PATH_RANGE,IBLOCK_COMPONENT] of opt int: o_x_iblocks = array2d(PATH_RANGE, IBLOCK_COMPONENT, fix([deopt(x_iblocks[i,j]) | i in index_set_1of2(x_iblocks), j in index_set_2of2(x_iblocks) where occurs(x_iblocks[i,j])])); 
-	array[PATH_RANGE,IBLOCK_COMPONENT] of opt int: o_x_aggregated_iblocks = array2d(PATH_RANGE, IBLOCK_COMPONENT, fix([deopt(x_aggregated_iblocks[i,j]) | i in index_set_1of2(x_aggregated_iblocks), j in index_set_2of2(x_aggregated_iblocks) where occurs(x_aggregated_iblocks[i,j])])); 
-} in
-	["NODE_ID =\t\t"]
-++	[ show(NODE_ID)]
-++	["\n"]
-++	["NODE_PATH =\t\t"]
-++	[ show(NODE_PATH)]
-++	["\n"]
-++	["ARC_ID =\t\t"]
-++	[ show(ARC_ID)]
-++	["\n"]
-++	["ARC_PATH =\t\t"]
-++	[ show(ARC_PATH)]
-++	["\n"]
-++	["IBLOCK_COMPONENT =\t\t"]
-++	[ show(IBLOCK_COMPONENT)]
-++	["\n"]
-++	["PATH_ID =\t\t"]
-++	[ show(PATH_ID)]
-++	["\n"]
-++	["Number of paths =\t\t"]
-++	[ show(x_nr_paths)]
-% ++	["Path length =\t\t"]
-% ++	[ show(x_arc_path_lengths)]
-% ++	["\n"]
-% ++	["Node path =\t\t"]
-% % ++	[my_show1d_indexed(D_INT, (map2name(D_NODE_ID, [fix(o_x_node_paths[i]) | i in index_set(o_x_node_paths)])))]
-% ++	[cmap.node_labels[deopt(o_x_node_paths[i])].concept.name ++ if i < max(index_set(o_x_node_paths)) then " - " else "" endif | i in index_set(o_x_node_paths)]
-% ++	["\n"]
-% ++	["Arc path =\t\t"]
-% ++	[ "(" ++ show(cmap.arc_labels[deopt(o_x_arc_paths[i])].arc.t) ++ "," ++ show(cmap.arc_labels[deopt(o_x_arc_paths[i])].arc.h) ++ ")" ++ if i < max(index_set(o_x_arc_paths)) then " - " else "" endif | i in index_set(o_x_arc_paths)]
-% ++	["\n"]
-% ++	["Path arc influences=\t"]
-% ++	[ showInfluence((iblock: deopt(row(o_x_iblock_paths,i)))) ++ if i < max(index_set_1of2(o_x_iblock_paths)) then " " else "" endif | i in index_set_1of2(o_x_iblock_paths)]
-% ++	["\n"]
-% ++	["Propagated i-path=\t"]
-% ++	[ showInfluence((iblock: deopt(row(o_x_propagated_iblocks,i)))) ++ if i < max(index_set_1of2(o_x_propagated_iblocks)) then " " else "" endif | i in index_set_1of2(o_x_propagated_iblocks)]
-% ++	["\n"]
-% ++	["Propagated influence =\t"]
-% ++	[showInfluence(fix(x_propagated_influence)) ++ " == " ++ show(fix(x_propagated_influence))]
-% ++	["\n"]
-++	["Path propagated i-blocks=\t"]
-++	[ showInfluence((iblock: deopt(row(o_x_iblocks,i)))) ++ if i < max(index_set_1of2(o_x_iblocks)) then " " else "" endif | i in index_set_1of2(o_x_iblocks)]
-++	["\n"]
-++	["Aggregated i-blocks=\t"]
-++	[ showInfluence((iblock: deopt(row(o_x_aggregated_iblocks,i)))) ++ if i < max(index_set_1of2(o_x_aggregated_iblocks)) then " " else "" endif | i in index_set_1of2(o_x_aggregated_iblocks)]
-++	["\n"]
-++	["Aggregated influence =\t"]
-++	[showInfluence(fix(x_aggregated_influence)) ++ " == " ++ show(fix(x_aggregated_influence))]
-++	["\n"]
-;
+output :: "o_solution_cmql_value"
+	cmql_value_output(cmap, x_nr_paths, x_arc_path_lengths, x_arc_paths, x_node_paths, x_iblock_paths, x_propagated_iblocks, x_iblocks, x_aggregated_iblocks, x_aggregated_influence);

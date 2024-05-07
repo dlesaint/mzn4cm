@@ -302,7 +302,7 @@ function bool: isSingleSorted(ITYPE: it)	:: "function isSingleSorted($it): check
 %
 function bool: hasNoBuiltInSort(ITYPE: it)	:: "function hasNoBuiltInSort($it): checks whether i-type $it has a non built-in sort";
 
-% TODO rename isManySorted
+%
 function bool: isPolySort(ITYPE: it) :: "function isPolySort($it): checks whether i-type $it has different sorts";
 
 %
