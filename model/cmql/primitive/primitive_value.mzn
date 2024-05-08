@@ -66,6 +66,33 @@ function ann: cmql_value_search(
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% PREDICATES FOR MULTI-PATH COMPUTATION AND AGGREGATION
 
+% Determines a (possibly empty) set of dipaths in a c-map such that:
+% - $cmap is the reference c-map
+% - $x_origin_node is the origin node of every dipath
+% - $x_destination_node is the destination node of every dipath
+% - $x_nr_paths is the number of dipaths
+%	-- $x_nr_paths==0 is no dipath connecting origin and destination nodes exists in the c-map's digraph
+% - $x_arc_path_lengths[i] is the length of the i-th dipath
+%	-- $x_arc_path_lengths[i]==0 is the i-th dipath is empty
+% -- the dipaths are sorted by ascending length up the last non-empty dipath and empty dipaths occupy the last positions
+% -- dipaths of the same length are sorted lexicographically in ascending order of arc id sequences
+% - $x_arc_paths[i] is the sequence of arcs connecting the origin and destination nodes in the i-th dipath, completed with absent arcs to fill the opt array
+% -- the sequence is empty iff the length of the dipath is 0
+% -- the sequence forms a dipath in the digraph of the c-map 
+% -- the sequence is arc-minimal if required by the path-minimality feature
+% - $x_node_paths[i] is the sequence of nodes including and connecting the origin and destination nodes along the i-th dipath in the c-map digraph, completed with absent nodes to fill the opt array
+% -- the sequence is empty the length of the dipath is 0
+% -- the sequence forms a dipath in the digraph of the c-map 
+% -- the sequence is path-minimal if required by the path-minimality feature
+% - $x_iblock_paths[i] is the sequence of i-blocks encoding the influences labeling the arcs of the i-th dipath, completed with absent i-blocks to fill the opt array
+% -- the sequence is empty (ie. the array only contains absent i-blocks) iff the length of the dipath is 0
+% - $x_propagated_iblocks[i] is the series of i-blocks obtained by recursive influence propagation through the i-th sequence of i-blocks starting from the first i-block, finishing at the last, and completed with absent i-blocks to fill the opt array
+% -- the series is empty iff the length of the dipath is 0
+% - $x_iblocks[i] is the i-th value of $x_propagated_iblocks
+% - $x_aggregated_iblocks is the series of i-blocks obtained by recursive influence aggregation through the sequence x_iblocks starting from the first i-block, finishing at the last, and completed with absent i-blocks to fill the opt array
+% -- the series is empty iff no dipath exists between origin and destination nodes in the c-map digraph
+% - $x_aggregated_influence is the influence aggregated through the dipaths
+% -- it is equal to the null influence iff no dipath exists between origin and destination nodes in the c-map digraph
 predicate cmql_value (
 						CMAP: cmap,
 						var int: x_origin_node,
@@ -80,7 +107,7 @@ predicate cmql_value (
 						array[int,int] of var opt int: x_aggregated_iblocks,
 						var INFLUENCE: x_aggregated_influence
 		)
-		:: "cmql_value($cmap,$x_origin_node,$x_destination_node,$x_nr_paths,$x_arc_path_lengths,$x_arc_paths,$x_node_paths,$x_iblock_paths,$x_propagated_iblocks,$x_iblocks,$x_aggregated_iblocks,$x_aggregated_influence): (var)"
+		:: "cmql_value($cmap,$x_origin_node,$x_destination_node,$x_nr_paths,$x_arc_path_lengths,$x_arc_paths,$x_node_paths,$x_iblock_paths,$x_propagated_iblocks,$x_iblocks,$x_aggregated_iblocks,$x_aggregated_influence): determines and sorts a number of dipaths $x_nr_paths of lengths $x_arc_path_lengths connecting $x_origin_node to $x_destination_node in $cmap's digraph together with the associated arrays of arc sequences $x_arc_paths, node sequences $x_node_paths, arc i-block sequences $x_iblock_paths, path propagation series $x_propagated_iblocks, path propagation results $x_iblocks, path aggregation series of i-blocks $x_aggregated_iblocks, and aggregated influence $x_aggregated_influence( var)"
 	= 
 	let {
 		set of int: PATH_ID = index_set_1of2(x_arc_paths);
@@ -115,67 +142,78 @@ predicate cmql_value (
 		
 		% (3) the number of solution paths is the number of paths whose length is positive
 		count_eq(x_arc_path_lengths, 0, card(PATH_ID) - x_nr_paths) /\
-		
+				
 		% (4-1) determining solution paths and propagation results
 		forall(i in PATH_ID)(cmql_path_value(cmap, x_origin_node, x_destination_node, x_arc_path_lengths[i], x_arc_paths[i,ARC_PATH], x_node_paths[i,NODE_PATH], x_iblock_paths[i,ARC_PATH,IBLOCK_COMPONENT], x_propagated_iblocks[i,ARC_PATH,IBLOCK_COMPONENT], x_propagated_influences[i])) /\
- 		% (4-2) sorting solution paths lexicographically
-		lex_chain_less_opt(x_arc_path_lengths, x_node_paths) /\
+ 		% (4-2) sorting solution paths lexicographically by ascending path length first then ascending arc ids
+		lex_chain_less_opt(x_nr_paths, x_arc_path_lengths, x_arc_paths) /\
 
 		% (5) determining the propagated i-block of each path (x_iblocks)
-		forall(i in PATH_ID)(i > x_nr_paths <-> forall(j in IBLOCK_COMPONENT)(absent(x_iblocks[i,j]))) /\
-		forall(i in PATH_ID)(i <= x_nr_paths <-> forall(j in IBLOCK_COMPONENT)(occurs(x_iblocks[i,j]))) /\
-		forall(i in PATH_ID)(i <= x_nr_paths -> forall(j in IBLOCK_COMPONENT)(deopt(x_iblocks[i,j]) == deopt(element(i, x_arc_path_lengths[i],j, x_propagated_iblocks)))) /\
+% 		forall(i in PATH_ID)(i <= x_nr_paths <-> forall(j in IBLOCK_COMPONENT)(occurs(x_iblocks[i,j]))) /\ % entailed by next+1 constraint
+		forall(i in PATH_ID)(i > x_nr_paths -> forall(j in IBLOCK_COMPONENT)(absent(x_iblocks[i,j]))) /\
+		forall(i in PATH_ID)(i <= x_nr_paths -> forall(j in IBLOCK_COMPONENT)(deopt(x_iblocks[i,j]) == element(i, x_arc_path_lengths[i],j, x_propagated_iblocks))) /\ % !! keep deopt on x_iblocks !!
 
 		% (6-1) deopting aggregated i-block occurrences based on the number of solution paths
 		% - the i-th path occurs iff all the components of the i-th aggregated i-block occur
-		% - the i-th path is absent iff all the components of the i-th aggregated i-block are absent
+		% - the i-th path is absent only if all the components of the i-th aggregated i-block are absent
 		% NB. every row access to x_aggregated_iblocks below is within bounds since PATH_ID is the row index set of x_aggregated_iblocks
-		forall(i in PATH_ID)(i <= x_nr_paths <-> forall(j in IBLOCK_COMPONENT)(occurs(x_aggregated_iblocks[i,j]))) /\
-		forall(i in PATH_ID)(i > x_nr_paths <-> forall(j in IBLOCK_COMPONENT)(absent(x_aggregated_iblocks[i,j]))) /\
+% 		forall(i in PATH_ID)(i <= x_nr_paths <-> forall(j in IBLOCK_COMPONENT)(occurs(x_aggregated_iblocks[i,j]))) /\ % entailed by (6-2)
+		forall(i in PATH_ID)(i > x_nr_paths -> forall(j in IBLOCK_COMPONENT)(absent(x_aggregated_iblocks[i,j]))) /\
 
 		% (6-2) recursively computing the aggregated i-blocks by traversing the x_iblocks sequence
 		% - the first occurring aggregated i-block is the first i-block (encoding the propagated influence of the first solution path)
 		% - the i-th occurring aggregated i-block is the aggregation of the i-1-th aggregated block with the i-th i-block
 		% NB. every row access to x_aggregated_iblocks below is within bounds since PATH_ID is the row index set of x_aggregated_iblocks
-		((1 <= x_nr_paths) -> deopt(x_aggregated_iblocks[min(PATH_ID),IBLOCK_COMPONENT]) == deopt(x_iblocks[min(PATH_ID),IBLOCK_COMPONENT])) /\
+		(x_aggregated_iblocks[min(PATH_ID),IBLOCK_COMPONENT] == x_iblocks[min(PATH_ID),IBLOCK_COMPONENT]) /\
 		forall(i in min(PATH_ID)<..max(PATH_ID))
-			((i <= x_nr_paths) -> deopt(x_aggregated_iblocks[i,IBLOCK_COMPONENT]) == iAggregate(deopt(x_aggregated_iblocks[i-1,IBLOCK_COMPONENT]), deopt(x_iblocks[i,IBLOCK_COMPONENT]))) /\
+			((i <= x_nr_paths) -> x_aggregated_iblocks[i,IBLOCK_COMPONENT] == iAggregate(deopt(x_aggregated_iblocks[i-1,IBLOCK_COMPONENT]), deopt(x_iblocks[i,IBLOCK_COMPONENT]))) /\
 
 		% (7) determining the aggregated influence
 		% - there is no solution path only if x_aggregated_influence is the null influence (ie. neutral element for i-aggregation)
 		(x_nr_paths == 0 -> equals(x_aggregated_influence, getNullInfluence(cmap.itype))) /\ %(iblock: getAbsorbingElement(cmap.itype.ealgebra, ALGEBRAIC_OPERATION_2).value)) /\
 		% - there exists solution paths only if x_aggregated_influence is the last occurring aggregated i-block
-		(x_nr_paths > 0 -> x_aggregated_influence == (iblock: deopt([x_aggregated_iblocks[x_nr_paths,j] | j in IBLOCK_COMPONENT]))) /\
+		(x_nr_paths > 0 -> x_aggregated_influence == (iblock: [x_aggregated_iblocks[x_nr_paths,j] | j in IBLOCK_COMPONENT])) /\
 
 		true
     ;
 
 
 %
-predicate lex_chain_less_opt(array[int] of var int: x_length, array[int, int] of var opt int: x)
+predicate lex_chain_less_opt(var int: x_on, array[int] of var int: x_lengths, array[int, int] of var opt int: x)
 	=
-	assert(index_set(x_length) == index_set_1of2(x), "lex_chain_less_opt: the index set of $x_length  must be equal to the row index set of $x") /\
+	increasing_opt_lengths(x_on, x_lengths) /\
+	assert(index_set(x_lengths) == index_set_1of2(x), "lex_chain_less_opt: the index set of $x_lengths must be equal to the row index set of $x") /\
 	forall(i in min(index_set_1of2(x))..<max(index_set_1of2(x)))(
-		lex_less_opt(x_length[i], x_length[i+1], x[i,index_set_2of2(x)], x[i+1,index_set_2of2(x)])
+		lex_less_opt(x_lengths[i], x_lengths[i+1], x[i,index_set_2of2(x)], x[i+1,index_set_2of2(x)])
 	)
+;
+		
+%
+predicate increasing_opt_lengths(var int: y, array[int] of var int: x)
+	=
+	forall(i in index_set(x))(i <= y <-> x[i] != 0) /\
+	forall(i in min(index_set(x))..<max(index_set(x)))(i+1 <= y -> x[i] <= x[i+1])
 ;
 		
 %
 predicate lex_less_opt(var int: x_length, var int: y_length, array[int] of var opt int: x, array[int] of var opt int: y)
 	=
-	assert(card(index_set(x)) == card(index_set(y)), "lex_less_opt: the index sets of $x and $y must have the same cardinality") /\
+	assert(isProperRange(index_set(x)), "lex_less_opt: the index set of $x is a proper range") /\
+	assert(index_set(x) == index_set(y), "lex_less_opt: the index sets of $x and $y must be equal") /\
 	let {
-		int: lx = min(index_set(x));
-		int: ly = min(index_set(y));
-		int: size = card(index_set(x));
+		int: size = length(x);
 		array[0..size] of var bool: b :: is_defined_var;
 	} in
 	if y_length == 0
-	then forall(i in 0..size)(b[i])
-	else		x_length != 0
-			/\	b[size] = (x_length < y_length)  
-			/\	forall(i in 0..size-1)(b[i] = (occurs(x[lx + i]) /\ occurs(y[lx + i]) /\ x[lx + i] <= y[ly + i] /\ (x[lx + i] <  y[ly + i] \/ b[i+1])))
-			/\ b[0]
+	then
+		 	forall(i in 0..size)(b[i])
+	else	
+% 			x_length > 0 /\ % !! entailed by increasing_opt_lengths
+% 			x_length <= y_length /\ !! entailed by increasing_opt_lengths
+			b[size] = (x_length < y_length) /\
+			forall(i in 0..size-1)(b[i] = (x[1 + i] <= y[1 + i] /\ (x[1 + i] <  y[1 + i] \/ b[i+1]))) /\ % !! simplification of next constraint due to cmql_path_value/cmql_arc_path
+% 			forall(i in 0..size-1)(b[i] = (occurs(x[1 + i]) /\ occurs(y[1 + i])) -> (x[1 + i] <= y[1 + i] /\ (x[1 + i] <  y[1 + i] \/ b[i+1]))) /\
+			b[0]
   endif
   :: defines_var(b)
  ;

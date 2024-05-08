@@ -19,8 +19,40 @@ include "./../cmap/cmap.mzn";
 
 
 
+%% Value
+% Determines a (possibly empty) set of dipaths in a c-map such that:
+% - $cmap is the reference c-map
+% - $x_origin_node is the origin node of every dipath
+% - $x_destination_node is the destination node of every dipath
+% - $x_nr_paths is the number of dipaths
+%	-- $x_nr_paths==0 is no dipath connecting origin and destination nodes exists in the c-map's digraph
+% - $x_arc_path_lengths[i] is the length of the i-th dipath
+%	-- $x_arc_path_lengths[i]==0 is the i-th dipath is empty
+% -- the dipaths are sorted by ascending length up the last non-empty dipath and empty dipaths occupy the last positions
+% -- dipaths of the same length are sorted lexicographically in ascending order of arc id sequences
+% - $x_arc_paths[i] is the sequence of arcs connecting the origin and destination nodes in the i-th dipath, completed with absent arcs to fill the opt array
+% -- the sequence is empty iff the length of the dipath is 0
+% -- the sequence forms a dipath in the digraph of the c-map 
+% -- the sequence is arc-minimal if required by the path-minimality feature
+% - $x_node_paths[i] is the sequence of nodes including and connecting the origin and destination nodes along the i-th dipath in the c-map digraph, completed with absent nodes to fill the opt array
+% -- the sequence is empty the length of the dipath is 0
+% -- the sequence forms a dipath in the digraph of the c-map 
+% -- the sequence is path-minimal if required by the path-minimality feature
+% - $x_iblock_paths[i] is the sequence of i-blocks encoding the influences labeling the arcs of the i-th dipath, completed with absent i-blocks to fill the opt array
+% -- the sequence is empty (ie. the array only contains absent i-blocks) iff the length of the dipath is 0
+% - $x_propagated_iblocks[i] is the series of i-blocks obtained by recursive influence propagation through the i-th sequence of i-blocks starting from the first i-block, finishing at the last, and completed with absent i-blocks to fill the opt array
+% -- the series is empty iff the length of the dipath is 0
+% - $x_iblocks[i] is the i-th value of $x_propagated_iblocks
+% - $x_aggregated_iblocks is the series of i-blocks obtained by recursive influence aggregation through the sequence x_iblocks starting from the first i-block, finishing at the last, and completed with absent i-blocks to fill the opt array
+% -- the series is empty iff no dipath exists between origin and destination nodes in the c-map digraph
+% - $x_aggregated_influence is the influence aggregated through the dipaths
+% -- it is equal to the null influence iff no dipath exists between origin and destination nodes in the c-map digraph
+predicate cmql_value (CMAP: cmap, var int: x_origin_node, var int: x_destination_node, var int: x_nr_paths, array[int] of var int: x_arc_path_lengths, array[int,int] of var opt int: x_arc_paths, array[int,int] of var opt int: x_node_paths, array[int,int,int] of var opt int: x_iblock_paths, array[int,int,int] of var opt int: x_propagated_iblocks, array[int,int] of var opt int: x_iblocks, array[int,int] of var opt int: x_aggregated_iblocks, var INFLUENCE: x_aggregated_influence)
+		:: "cmql_value($cmap,$x_origin_node,$x_destination_node,$x_nr_paths,$x_arc_path_lengths,$x_arc_paths,$x_node_paths,$x_iblock_paths,$x_propagated_iblocks,$x_iblocks,$x_aggregated_iblocks,$x_aggregated_influence): determines and sorts a number of dipaths $x_nr_paths of lengths $x_arc_path_lengths connecting $x_origin_node to $x_destination_node in $cmap's digraph together with the associated arrays of arc sequences $x_arc_paths, node sequences $x_node_paths, arc i-block sequences $x_iblock_paths, path propagation series $x_propagated_iblocks, path propagation results $x_iblocks, path aggregation series of i-blocks $x_aggregated_iblocks, and aggregated influence $x_aggregated_influence( var)"
+;
 
-% PathValue
+
+%% PathValue
 
 %
 function ann: cmql_path_value_search(var int: x_origin_node, var int: x_destination_node, var int: x_arc_path_length, array[int] of var opt int: x_arc_path, array[int] of var opt int: x_node_path, array[int, int] of var opt int: x_iblock_path, array[int, int] of var opt int: x_propagated_iblocks, var INFLUENCE: x_propagated_influence, var bool: x_cmql_path_value);
@@ -41,12 +73,12 @@ function ann: cmql_path_value_search(var int: x_origin_node, var int: x_destinat
 % -- the sequence is path-minimal if required by the path-minimality feature
 % - $x_iblock_path is the sequence of i-blocks encoding the influences labeling the arcs of the dipath, completed with absent i-blocks to fill the opt array
 % -- the sequence is empty (ie. the array only contains absent i-blocks) iff no dipath exists between origin and destination nodes in the c-map digraph
-% - $x_propagated_iblocks is the series of i-blocks obtained by recursive influence propagation through the sequence of i-blocks starting from the first i-block, finishing at the last, and completed with absent i-blocks to fill the opt array
+% - $x_propagated_iblocks is the series of i-blocks obtained by recursive influence propagation through the sequence x_iblock_path starting from the first i-block, finishing at the last, and completed with absent i-blocks to fill the opt array
 % -- the series is empty iff no dipath exists between origin and destination nodes in the c-map digraph
 % - $x_propagated_influence is the influence propagated through the dipath
 % -- it is equal to the null influence iff no dipath exists between origin and destination nodes in the c-map digraph
 predicate cmql_path_value(CMAP: cmap, var int: x_origin_node, var int: x_destination_node, var int: x_arc_path_length, array[int] of var opt int: x_arc_path, array[int] of var opt int: x_node_path, array[int, int] of var opt int: x_iblock_path, array[int, int] of var opt int: x_propagated_iblocks, var INFLUENCE: x_propagated_influence)
-	:: "cmql_path_value($cmap,$x_origin_node,$x_destination_node,$x_arc_path,$x_node_path,$x_iblock_path,$x_propagated_iblocks,$x_propagated_influence): determines a dipath connecting $x_origin_node to $x_destination_node in $cmap's digraph and the associated sequence of arcs $x_arc_path, sequence of nodes $x_node_path, sequence of i-blocks $x_iblock_path, propagation series of i-blocks $x_propagated_iblocks and propagated influence $x_propagated_influence (var)"
+	:: "cmql_path_value($cmap,$x_origin_node,$x_destination_node,$x_arc_path,$x_node_path,$x_iblock_path,$x_propagated_iblocks,$x_propagated_influence): determines a dipath connecting $x_origin_node to $x_destination_node in $cmap's digraph and the associated arc sequence $x_arc_path, node sequence $x_node_path, i-block sequence $x_iblock_path, i-block propagation series $x_propagated_iblocks and propagated influence $x_propagated_influence (var)"
 ;
 
 % Determines minimal consistent arc path $x_arc_path and node path $x_node_path wrt. cmap $cmap and path-minimality feature:

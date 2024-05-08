@@ -73,7 +73,7 @@ predicate cmql_path_value(
 						array[int, int] of var opt int: x_propagated_iblocks,
 						var INFLUENCE: x_propagated_influence
 					)
-	:: "cmql_path_value($cmap,$x_origin_node,$x_destination_node,$x_arc_path,$x_node_path,$x_iblock_path,$x_propagated_iblocks,$x_propagated_influence): determines a dipath connecting $x_origin_node to $x_destination_node in $cmap's digraph and the associated sequence of arcs $x_arc_path, sequence of nodes $x_node_path, sequence of i-blocks $x_iblock_path, propagation series of i-blocks $x_propagated_iblocks and propagated influence $x_propagated_influence (var)"
+	:: "cmql_path_value($cmap,$x_origin_node,$x_destination_node,$x_arc_path,$x_node_path,$x_iblock_path,$x_propagated_iblocks,$x_propagated_influence): determines a dipath connecting $x_origin_node to $x_destination_node in $cmap's digraph and the associated arc sequence $x_arc_path, node sequence $x_node_path, i-block sequence $x_iblock_path, i-block propagation series $x_propagated_iblocks and propagated influence $x_propagated_influence (var)"
 	=
 	let {
 		set of int: NODE_PATH = index_set(x_node_path);
@@ -90,8 +90,8 @@ predicate cmql_path_value(
 		(x_arc_path_length <= max(ARC_PATH)) /\
 		
 		% (3) binding the first and last occuring nodes to origin and destination nodes
-		(occurs(x_node_path[min(NODE_PATH)]) <-> deopt(x_node_path[min(NODE_PATH)]) == x_origin_node) /\
-		(occurs(x_node_path[x_arc_path_length+1]) <-> deopt(x_node_path[x_arc_path_length+1]) == x_destination_node) /\
+		(x_node_path[min(NODE_PATH)] ~= x_origin_node) /\
+		(x_node_path[x_arc_path_length+1] ~= x_destination_node) /\
 
 		% (4-1) determining a sequence of arcs corresponding to a minimal dipath of the right length in the c-map
 		cmql_arc_path(cmap, x_arc_path_length, x_arc_path) /\
@@ -104,22 +104,22 @@ predicate cmql_path_value(
 		% - the i-th arc occurs iff all the components of the i-th propagated i-block occur
 		% - the i-th arc is absent iff all the components of the i-th propagated i-block are absent
 		% NB. every row access to x_propagated_iblocks below is within bounds since ARC_PATH is the row index set of x_propagated_iblocks
-		forall(i in ARC_PATH)(occurs(x_arc_path[i]) <-> forall(j in IBLOCK_COMPONENT)(occurs(x_propagated_iblocks[i,j]))) /\
-		forall(i in ARC_PATH)(absent(x_arc_path[i]) <-> forall(j in IBLOCK_COMPONENT)(absent(x_propagated_iblocks[i,j]))) /\
+% 		forall(i in ARC_PATH)(occurs(x_arc_path[i]) <-> forall(j in IBLOCK_COMPONENT)(occurs(x_propagated_iblocks[i,j]))) /\ % entailed by (6)
+		forall(i in ARC_PATH)(absent(x_arc_path[i]) -> forall(j in IBLOCK_COMPONENT)(absent(x_propagated_iblocks[i,j]))) /\
 
 		% (5-2) recursively computing the propagated i-blocks by traversing the i-block sequence
 		% - the first occurring propagated i-block is the first i-block (encoding the influence of the first occurring arc)
 		% - the i-th occurring propagated i-block is the propagation of the i-1-th propagated block with the i-th i-block
 		% NB. every row access to x_propagated_iblocks below is within bounds since ARC_PATH is the row index set of x_propagated_iblocks
-		(occurs(x_arc_path[min(ARC_PATH)]) -> deopt(x_propagated_iblocks[min(ARC_PATH),IBLOCK_COMPONENT]) == deopt(x_iblock_path[min(ARC_PATH),IBLOCK_COMPONENT])) /\
+		(x_propagated_iblocks[min(ARC_PATH),IBLOCK_COMPONENT] == x_iblock_path[min(ARC_PATH),IBLOCK_COMPONENT]) /\
 		forall(i in min(ARC_PATH)<..max(ARC_PATH))
-			(occurs(x_arc_path[i]) -> deopt(x_propagated_iblocks[i,IBLOCK_COMPONENT]) == iPropagate(deopt(x_propagated_iblocks[i-1,IBLOCK_COMPONENT]), deopt(x_iblock_path[i,IBLOCK_COMPONENT]))) /\
+			(occurs(x_arc_path[i]) -> x_propagated_iblocks[i,IBLOCK_COMPONENT] == iPropagate(deopt(x_propagated_iblocks[i-1,IBLOCK_COMPONENT]), deopt(x_iblock_path[i,IBLOCK_COMPONENT]))) /\
 
 		% (6) determining the propagated influence
 		% - the solution path is empty only if x_propagated_influence is the null influence (ie. absorbing element for i-propagation)
 		(x_arc_path_length == 0 -> equals(x_propagated_influence, getNullInfluence(cmap.itype))) /\ %(iblock: getAbsorbingElement(cmap.itype.ealgebra, ALGEBRAIC_OPERATION_2).value)) /\
 		% - the solution path is not empty only if x_propagated_influence is the last occurring propagated i-block
-		(x_arc_path_length > 0 -> x_propagated_influence == (iblock: deopt([x_propagated_iblocks[x_arc_path_length,j] | j in IBLOCK_COMPONENT]))) /\
+		(x_arc_path_length > 0 -> x_propagated_influence == (iblock: [x_propagated_iblocks[x_arc_path_length,j] | j in IBLOCK_COMPONENT])) /\
 
 		true
 	;
@@ -147,16 +147,18 @@ predicate cmql_arc_node_path(CMAP: cmap, array[int] of var opt int: x_arc_path, 
 		
 		% (2) matching arc and node occurrences
 		% - the i-th node occurs if the i+1-th node occurs
-		% - the i-th arc occurs iff the i-th and i+1-th nodes occur
+		% - the 1st arc is absent only if the first node is absent
+		% - the i-th arc is absent only if the i+1-th node is absent
 		% NB. every access to x_node_path below is within bounds since max(ARC_PATH)<max(NODE_PATH)
-		forall(i in min(NODE_PATH)<..max(NODE_PATH))(occurs(x_node_path[i-1]) <- occurs(x_node_path[i])) /\
-		forall(i in ARC_PATH)(occurs(x_arc_path[i]) <-> (occurs(x_node_path[i]) /\ occurs(x_node_path[i+1]))) /\
+% 		forall(i in min(NODE_PATH)<..max(NODE_PATH))(occurs(x_node_path[i-1]) <- occurs(x_node_path[i])) /\
+		(absent(x_arc_path[min(ARC_PATH)]) -> absent(x_node_path[min(NODE_PATH)])) /\
+		forall(i in ARC_PATH)(absent(x_arc_path[i]) -> absent(x_node_path[i+1])) /\
 		
 		% (3) matching nodes with arcs
 		% - the i-th occurring node is the tail of the i-th occurring arc
 		% - the last occurring node is the head of the last occurring arc
 		% NB. every access to x_node_path below is within bounds since max(ARC_PATH)<max(NODE_PATH)
-		forall(i in ARC_PATH)(occurs(x_arc_path[i]) -> (deopt(x_node_path[i]) == from[deopt(x_arc_path[i])] /\ deopt(x_node_path[i + 1]) == to[deopt(x_arc_path[i])])) /\
+		forall(i in ARC_PATH)(occurs(x_arc_path[i]) -> (x_node_path[i] == from[x_arc_path[i]] /\ x_node_path[i + 1] == to[x_arc_path[i]])) /\
 
 		true
 	;
@@ -179,15 +181,15 @@ predicate cmql_arc_influence_path(CMAP: cmap, array[int] of var opt int: x_arc_p
 
 		% (1) matching arc and i-block (row in i-block path array) occurrences
 		% - the i-th arc occurs iff all the components of the i-th i-block occur
-		% - the i-th arc is absent iff all the component elements of the i-th i-block are absent
+		% - the i-th arc is absent only if all the component elements of the i-th i-block are absent
 		% NB. every row access to x_iblock_path below is within bounds since ARC_PATH is the row index set of x_iblock_path
-		forall(i in ARC_PATH)(occurs(x_arc_path[i]) <-> forall(j in IBLOCK_COMPONENT)(occurs(x_iblock_path[i,j]))) /\
-		forall(i in ARC_PATH)(absent(x_arc_path[i]) <-> forall(j in IBLOCK_COMPONENT)(absent(x_iblock_path[i,j]))) /\
+% 		forall(i in ARC_PATH)(occurs(x_arc_path[i]) <-> forall(j in IBLOCK_COMPONENT)(occurs(x_iblock_path[i,j]))) /\ % !! entailed by (2)
+		forall(i in ARC_PATH)(absent(x_arc_path[i]) -> forall(j in IBLOCK_COMPONENT)(absent(x_iblock_path[i,j]))) /\
 		
 		% (2) matching i-blocks with arcs
 		% - the i-th occurring i-block is the i-block labeling the i-th ocurring arc in the c-map
 		% NB. every row access to x_iblock_path below is within bounds since ARC_PATH is the row index set of x_iblock_path
-		forall(i in ARC_PATH)(occurs(x_arc_path[i]) -> deopt(x_iblock_path[i,IBLOCK_COMPONENT]) == deopt([iblocks[x_arc_path[i],j] | j in IBLOCK_COMPONENT])) /\
+		forall(i in ARC_PATH)(occurs(x_arc_path[i]) -> x_iblock_path[i,IBLOCK_COMPONENT] == [iblocks[x_arc_path[i],j] | j in IBLOCK_COMPONENT]) /\
 
 		true
 	;
@@ -218,10 +220,10 @@ predicate cmql_arc_path(CMAP: cmap, var int: x_arc_path_length, array[int] of va
 		forall(i in ARC_PATH)(occurs(x_arc_path[i]) <-> i <= x_arc_path_length) /\
 
 		% (3) restricting occurring arcs to range over the arcs of the cmap
-		forall(i in ARC_PATH)(occurs(x_arc_path[i]) -> deopt(x_arc_path[i]) in ARC_ID) /\
+% 		forall(i in ARC_PATH)(occurs(x_arc_path[i]) -> x_arc_path[i] in ARC_ID) /\ % x in S false if x absent % entailed by (4)
 
 		% (4) matching heads and tails of successive occurring arcs
-		forall(i in min(ARC_PATH)<..max(ARC_PATH))(occurs(x_arc_path[i]) -> from[deopt(x_arc_path[i])] == to[deopt(x_arc_path[i-1])]) /\
+		forall(i in min(ARC_PATH)<..max(ARC_PATH))(occurs(x_arc_path[i]) -> from[x_arc_path[i]] == to[x_arc_path[i-1]]) /\
 
 		true
 	;
