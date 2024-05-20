@@ -57,8 +57,11 @@ opt NODE_ID: destination_node;
 constraint assert((occurs(origin_node) \/ occurs(destination_node)) -> deopt(origin_node )!= deopt(destination_node), "path origin and destination concepts must be different");
 
 % the range of paths of length <= max(NODE_ID), not necessarily node-minimal or arc-minimal
-set of int: PATH_ID = 1..nr_paths(transform_matrix(cmap.adigraph.a));
+%set of int: PATH_ID = 1..nr_paths(transform_matrix(cmap.adigraph.a));
+set of int: PATH_ID = 1..7;
 
+% set the path-minimality 
+F_PATH_MINIMALITY = F_PATH_MINIMALITY_NODE;
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

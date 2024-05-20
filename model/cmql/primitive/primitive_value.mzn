@@ -47,8 +47,9 @@ function ann: cmql_value_search(
 		)
 	=
 	seq_search([
+		
 		int_search([x_cmql_value], input_order, indomain_max),
-		int_search([x_origin_node, x_destination_node], input_order, indomain_min),
+		int_search([x_origin_node, x_destination_node], input_order, indomain_min),		
 		int_search([x_nr_paths], input_order, indomain_max),
 		int_search(x_arc_path_lengths, input_order, indomain_min),
 		int_search([x_arc_paths[i,j] | i in index_set_1of2(x_arc_paths), j in index_set_2of2(x_arc_paths)], input_order, indomain_min),		
@@ -181,7 +182,7 @@ predicate cmql_value (
 %
 predicate lex_chain_less_opt(var int: x_on, array[int] of var int: x_lengths, array[int, int] of var opt int: x)
 	=
-	%increasing_opt_lengths(x_on, x_lengths) /\
+	increasing_opt_lengths(x_on, x_lengths) /\
 	assert(index_set(x_lengths) == index_set_1of2(x), "lex_chain_less_opt: the index set of $x_lengths must be equal to the row index set of $x") /\
 	forall(i in min(index_set_1of2(x))..<max(index_set_1of2(x)))(
 		lex_less_opt(x_lengths[i], x_lengths[i+1], x[i,index_set_2of2(x)], x[i+1,index_set_2of2(x)])
@@ -204,7 +205,7 @@ predicate lex_less_opt(var int: x_length, var int: y_length, array[int] of var o
 		int: size = length(x)-1;
 		array[0..size] of var bool: b :: is_defined_var;
 	} in
-	if y_length == 0
+	if y_length == 0 \/ x_length != y_length
 	then
 		 	forall(i in 0..size)(b[i])
 	else	

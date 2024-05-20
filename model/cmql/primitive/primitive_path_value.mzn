@@ -121,6 +121,7 @@ predicate cmql_path_value(
 		% - the solution path is not empty only if x_propagated_influence is the last occurring propagated i-block
 		(x_arc_path_length > 0 -> x_propagated_influence == (iblock: [x_propagated_iblocks[x_arc_path_length,j] | j in IBLOCK_COMPONENT])) /\
 
+		
 		true
 	;
 
@@ -224,6 +225,8 @@ predicate cmql_arc_path(CMAP: cmap, var int: x_arc_path_length, array[int] of va
 
 		% (4) matching heads and tails of successive occurring arcs
 		forall(i in min(ARC_PATH)<..max(ARC_PATH))(occurs(x_arc_path[i]) -> from[x_arc_path[i]] == to[x_arc_path[i-1]]) /\
+
+		
 
 		true
 	;

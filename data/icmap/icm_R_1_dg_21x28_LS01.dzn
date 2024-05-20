@@ -1,0 +1,22 @@
+icmap = (
+    name:"icm_R_1_dg_21x28_LS01",
+    itype: itype,
+
+    node_labels: [
+        (node:1, concept:(name:"SaisonBentique")),
+        (node:2, concept:(name:"Thon")),
+        (node:3, concept:(name:"DiminutionChargesArmement")),
+        (node:4, concept:(name:"DiminutionChargesCommunes")),
+        (node:5, concept:(name:"Rentabilite")),
+        (node:6, concept:(name:"DiminutionAvaries")),
+    ],
+
+    arc_labels:[
+	(arc:(t:1, h:2), influence:(iblock:[4,1])),
+    (arc:(t:2, h:3), influence:(iblock:[4,1])),
+    (arc:(t:2, h:4), influence:(iblock:[2,1])),
+    (arc:(t:2, h:5), influence:(iblock:[4,1])),
+    (arc:(t:3, h:5), influence:(iblock:[4,1])),
+    (arc:(t:4, h:5), influence:(iblock:[4,1])),
+	],
+)

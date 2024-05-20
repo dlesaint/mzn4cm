@@ -60,7 +60,7 @@ opt NODE_ID: destination_node;
 % assertions
 constraint assert((occurs(origin_node) \/ occurs(destination_node)) -> deopt(origin_node )!= deopt(destination_node), "path origin and destination concepts must be different");
 
-
+F_PATH_MINIMALITY = F_PATH_MINIMALITY_NODE;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% QUERY VARIABLES
