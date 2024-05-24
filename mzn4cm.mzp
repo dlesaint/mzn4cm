@@ -1,6 +1,5 @@
 {
     "openFiles": [
-        "test/test_no_cmql.mzn",
         "model/include/include_cmql.mzn",
         "model/include/include_itype.mzn",
         "model/include/include_ioperations.mzn",
@@ -18,9 +17,11 @@
         "model/cmql/primitive_api.mzn",
         "data/cmql/cmql_path_value.dzn"
     ],
-    "openTab": 13,
+    "openTab": 11,
     "projectFiles": [
         "data/cmql/cmql_path_value.dzn",
+        "data/cmql/cmql_path_value_route.dzn",
+        "data/cmql/mzn4cm-gecode.mpc",
         "data/digraph/dg_13x26_internet_1.dzn",
         "data/digraph/dg_3x2_chain_1.dzn",
         "data/digraph/dg_3x3_acyclic_1.dzn",
@@ -101,7 +102,6 @@
         "test/test_path_value.mzn",
         "test/test_value.mzn"
     ],
-    "selectedBuiltinConfigId": "com.google.ortools.sat",
-    "selectedBuiltinConfigVersion": "9.8.3296",
+    "selectedSolverConfigFile": "data/cmql/mzn4cm-gecode.mpc",
     "version": 106
 }

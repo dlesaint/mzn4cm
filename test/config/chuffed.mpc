@@ -1,0 +1,12 @@
+{
+    "solver": "chuffed",
+    "parallel": 8,
+    "time-limit": 60000,
+    "output-mode": "json",
+    "json-stream": false,
+    "compiler-statistics": false,
+    "solver-statistics": false,
+    "no-intermediate": true,
+    "only-sections": "", 
+    "verbose-compilation": false
+}

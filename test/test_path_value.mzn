@@ -21,7 +21,7 @@ include "./../model/include/include_ioperations.mzn";
 include "./../model/include/include_cmql.mzn";
 
 % CMQL VISUALIZATION (optional)
-include "./../model/cmql/primitive/primitive_path_value_viz.mzn";
+% include "./../model/cmql/primitive/primitive_path_value_viz.mzn";
 
 
 
@@ -60,20 +60,16 @@ opt NODE_ID: destination_node;
 % assertions
 constraint assert((occurs(origin_node) \/ occurs(destination_node)) -> deopt(origin_node )!= deopt(destination_node), "path origin and destination concepts must be different");
 
-F_PATH_MINIMALITY = F_PATH_MINIMALITY_NODE;
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% QUERY VARIABLES
 
 % the origin node of the solution path
-var NODE_ID: x_origin_node
-	:: no_output
-;
+var NODE_ID: x_origin_node;
 	
 % the destination node of the solution path
-var NODE_ID: x_destination_node
-	:: no_output
-;
+var NODE_ID: x_destination_node;
 
 % the range for indexing any sequence of nodes corresponding to a solution path
 % - the upper-bound depends on the chosen path-minimality definition amongst the 2 variants
@@ -90,16 +86,12 @@ var 0..card(ARC_PATH): x_arc_path_length;
 % the arc sequence for the solution path completed with absent arcs
 % - x_arc_path[i] is the id of the i-th occurring arc in the arc sequence
 % - x_arc_path[i] is absent iff i is greater than the length of the arc sequence
-array[ARC_PATH] of var opt ARC_ID: x_arc_path
-	:: no_output
-;
+array[ARC_PATH] of var opt ARC_ID: x_arc_path;
 
 % the node sequence for the solution path completed with absent nodes
 % - x_node_path[i] is the id of the i-th occurring node in the node sequence
 % - x_node_path[i] is absent iff max(0, i-2) is greater than or equal to the length of the arc sequence
-array[NODE_PATH] of var opt NODE_ID: x_node_path
-	:: no_output
-;
+array[NODE_PATH] of var opt NODE_ID: x_node_path;
 
 % the sequence of i-blocks labeling the arcs in the solution path and completed with absent i-blocks
 % - x_iblock_path[i,IBLOCK_COMPONENT] is the i-block of the i-th occurring arc in the arc sequence
@@ -114,9 +106,7 @@ array[ARC_PATH, IBLOCK_COMPONENT] of var opt int: x_propagated_iblocks;
 % the influence propagated from the origin node to the destination node through the solution path and corresponding to the last term of the propagation series
 % - x_propagated_influence == (iblock: x_propagated_iblocks[x_arc_path_length,IBLOCK_COMPONENT]) iff x_arc_path_length!=0 (a solution path exists)
 % - x_propagated_influence == getNullInfluence(cmap.itype) iff x_arc_path_length==0 (no solution path exists)
-var INFLUENCE: x_propagated_influence
-	:: no_output
-;
+var INFLUENCE: x_propagated_influence;
 
 % optional boolean variable representing the satisfiability of the query
 var bool: x_cmql_path_value;
