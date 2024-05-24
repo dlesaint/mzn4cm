@@ -52,9 +52,7 @@ function ann: cmql_value_search(
 		int_search([x_origin_node, x_destination_node], input_order, indomain_min),		
 		int_search([x_nr_paths], input_order, indomain_max),
 		int_search(x_arc_path_lengths, input_order, indomain_min),
-		int_search([x_arc_paths[i,j] | i in index_set_1of2(x_arc_paths), j in index_set_2of2(x_arc_paths)], input_order, indomain_min),		
-% 		int_search(x_arc_path_lengths, input_order, indomain_max),
-% 		int_search([x_arc_paths[i,j] | i in index_set_1of2(x_arc_paths), j in index_set_2of2(x_arc_paths)], input_order, indomain_min),
+		int_search([x_arc_paths[i,j] | i in index_set_1of2(x_arc_paths), j in index_set_2of2(x_arc_paths)], input_order, indomain_min),
 		int_search([x_node_paths[i,j] | i in index_set_1of2(x_node_paths), j in index_set_2of2(x_node_paths)], input_order, indomain_min),
 		int_search([x_iblock_paths[i,j,k] | i in index_set_1of3(x_iblock_paths), j in index_set_2of3(x_iblock_paths), k in index_set_3of3(x_iblock_paths)], input_order, indomain_min),
 		int_search([x_propagated_iblocks[i,j,k] | i in index_set_1of3(x_propagated_iblocks), j in index_set_2of3(x_propagated_iblocks), k in index_set_3of3(x_propagated_iblocks)], input_order, indomain_min),
@@ -202,7 +200,7 @@ predicate lex_less_opt(var int: x_length, var int: y_length, array[int] of var o
 	assert(isProperRange(index_set(x)), "lex_less_opt: the index set of $x is a proper range") /\
 	assert(index_set(x) == index_set(y), "lex_less_opt: the index sets of $x and $y must be equal") /\
 	let {
-		int: size = length(x)-1;
+		int: size = length(x);
 		array[0..size] of var bool: b :: is_defined_var;
 	} in
 	if y_length == 0 \/ x_length != y_length
@@ -214,7 +212,7 @@ predicate lex_less_opt(var int: x_length, var int: y_length, array[int] of var o
 			b[size] = (x_length < y_length) /\
 			forall(i in 0..size-1)(b[i] = ((x[1 + i] <= y[1 + i]) /\ ((x[1 + i] <  y[1 + i] /\ (occurs(y[i+1]) \/ occurs(x[i+1])))\/ b[i+1]))) /\ % !! simplification of next constraint due to cmql_path_value/cmql_arc_path
 % 			forall(i in 0..size-1)(b[i] = (occurs(x[1 + i]) /\ occurs(y[1 + i])) -> (x[1 + i] <= y[1 + i] /\ (x[1 + i] <  y[1 + i] \/ b[i+1]))) /\
-			forall(i in 0..size-1) (b[i])
+			b[0]
   endif
   :: defines_var(b)
  ;
