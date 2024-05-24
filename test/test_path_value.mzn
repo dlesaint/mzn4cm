@@ -58,8 +58,7 @@ opt NODE_ID: origin_node;
 opt NODE_ID: destination_node;
 
 % assertions
-constraint assert((occurs(origin_node) \/ occurs(destination_node)) -> deopt(origin_node )!= deopt(destination_node), "path origin and destination concepts must be different");
-
+constraint assert((occurs(origin_node) /\ occurs(destination_node)) -> deopt(origin_node )!= deopt(destination_node), "path origin and destination concepts must be different");
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -119,9 +118,9 @@ var bool: x_cmql_path_value;
 %
 constraint :: "constraint: path propagation between origin and destination nodes"
 	% binds origin node if given
-	(x_origin_node == origin_node) /\ % !! see semantics of == over opt vars
+	(occurs(origin_node) -> (x_origin_node == deopt(origin_node))) /\ % !! see semantics of == over opt vars
 	% binds destination node if given
-	(x_destination_node == destination_node) /\ % !! see semantics of == over opt vars
+	(occurs(destination_node) -> (x_destination_node == deopt(destination_node))) /\ % !! see semantics of == over opt vars
 	% searches for non-empty dipath
 	cmql_path_value(cmap, x_origin_node, x_destination_node, x_arc_path_length, x_arc_path, x_node_path, x_iblock_path, x_propagated_iblocks, x_propagated_influence) /\
 	% reifying satisfiability of query (to customize)
