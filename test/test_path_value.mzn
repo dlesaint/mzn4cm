@@ -124,11 +124,13 @@ int: nb_paths;
 
 set of int: PATH_ID = if DEOPT_F_NB_PATH_COUNTING == F_PYTHON_COUNTING then 1..nb_paths else 1..nr_paths(transform_matrix(cmap.adigraph.a)) endif;
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% QUERY CONSTRAINT
 
 %
 constraint :: "constraint: path propagation between origin and destination nodes"
+	
 	% binds origin node if given
 	(occurs(origin_node) -> (x_origin_node == deopt(origin_node))) /\ % !! see semantics of == over opt vars
 	% binds destination node if given

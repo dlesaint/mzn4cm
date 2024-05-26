@@ -23,16 +23,15 @@ def parse_icmap_file(icmap_file):
     """Parse the ICMap file and extract the adjacency matrix."""
     with open(icmap_file, 'r') as file:
         content = file.read()
-
+    
     # Extract node count
     node_count = len(re.findall(r'\(node:\d+, concept:\(name:"[^"]+"\)\)', content))
-
+    
     # Initialize adjacency matrix
     adj_matrix = np.zeros((node_count, node_count), dtype=int)
-
     # Extract arc_labels and fill the adjacency matrix
-    arc_labels = re.findall(r'\(arc:\(t:(\d+), h:(\d+)\), influence:\(iblock:\[([PN])\]\)\)', content)
-    for t, h, influence in arc_labels:
+    arc_labels = re.findall(r'\(arc:\(t:(\d+), h:(\d+)\), influence:\(iblock:\[(.*?)\]\)\)', content)
+    for t, h, influence in arc_labels:        
         t, h = int(t) - 1, int(h) - 1  # Adjusting index to be zero-based
         adj_matrix[t][h] = 1
 

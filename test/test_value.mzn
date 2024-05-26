@@ -148,7 +148,11 @@ constraint :: "constraint: path aggregation between origin and destination nodes
 	% binds destination node if given
 	(occurs(destination_node) -> (x_destination_node == deopt(destination_node))) /\ % !! see semantics of == over opt vars
 	% searches for non-empty dipaths
-	cmql_value(cmap, x_origin_node, x_destination_node, x_nr_paths, x_arc_path_lengths, x_arc_paths, x_node_paths, x_iblock_paths, x_propagated_iblocks, x_iblocks, x_aggregated_iblocks, x_aggregated_influence) /\
+	if DEOPT_F_FIXED_NODE = F_UNFIXED then
+		cmql_value(cmap, x_origin_node, x_destination_node, x_nr_paths, x_arc_path_lengths, x_arc_paths, x_node_paths, x_iblock_paths, x_propagated_iblocks, x_iblocks, x_aggregated_iblocks, x_aggregated_influence) 
+	else
+		cmql_value_fixed(cmap, deopt(origin_node), deopt(destination_node), x_nr_paths, x_arc_path_lengths, x_arc_paths, x_node_paths, x_iblock_paths, x_propagated_iblocks, x_iblocks, x_aggregated_iblocks, x_aggregated_influence) 
+	endif /\
 	% reifying satisfiability of query (to customize)
 	x_cmql_value == (x_nr_paths >= 1) /\
 	% forcing satisfiability

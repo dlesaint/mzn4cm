@@ -38,7 +38,6 @@ function ann: cmql_path_value_search(var int: x_origin_node, var int: x_destinat
 ;
 
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% PREDICATES FOR PATH COMPUTATION AND PROPAGATION
 
