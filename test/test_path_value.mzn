@@ -120,7 +120,9 @@ var INFLUENCE: x_propagated_influence
 % optional boolean variable representing the satisfiability of the query
 var bool: x_cmql_path_value;
 
+int: nb_paths;
 
+set of int: PATH_ID = if DEOPT_F_NB_PATH_COUNTING == F_PYTHON_COUNTING then 1..nb_paths else 1..nr_paths(transform_matrix(cmap.adigraph.a)) endif;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% QUERY CONSTRAINT
@@ -132,7 +134,11 @@ constraint :: "constraint: path propagation between origin and destination nodes
 	% binds destination node if given
 	(occurs(destination_node) -> (x_destination_node == deopt(destination_node))) /\ % !! see semantics of == over opt vars
 	% searches for non-empty dipath
-	cmql_path_value(cmap, x_origin_node, x_destination_node, x_arc_path_length, x_arc_path, x_node_path, x_iblock_path, x_propagated_iblocks, x_propagated_influence) /\
+	if DEOPT_F_FIXED_NODE == F_UNFIXED then
+		cmql_path_value(cmap, x_origin_node, x_destination_node, x_arc_path_length, x_arc_path, x_node_path, x_iblock_path, x_propagated_iblocks, x_propagated_influence)
+	else 
+		cmql_path_value_fixed(cmap,deopt(origin_node),deopt(destination_node),x_arc_path_length,x_arc_path,x_node_path,x_iblock_path,x_propagated_iblocks,x_propagated_influence)
+	endif	 /\
 	% reifying satisfiability of query (to customize)
 	x_cmql_path_value == (x_arc_path_length > 0) /\
 	% forcing satisfiability

@@ -38,11 +38,13 @@ def parse_icmap_file(icmap_file):
 
     return adj_matrix
 
-def add_parameters_to_dzn(dzn_file, nb_paths, mini_calc):
+def add_parameters_to_dzn(dzn_file, nb_paths, args):
     with open(dzn_file,"w") as f:
         f.write(f"nb_paths={nb_paths};")
-        if mini_calc != None:
-            f.write(f"\nF_NB_PATH_COUNTING={mini_calc};")
+        if args.minizinc_calc != None:
+            f.write(f"\nF_NB_PATH_COUNTING={args.minizinc_calc};")
+        if args.fixed != None:
+            f.write(f"\nF_FIXED_NODE={args.fixed};")
 
 def run_minizinc_command(args, dzn_file):
     """Run a MiniZinc command after adding parameters to a .dzn file."""    
@@ -60,6 +62,7 @@ def main():
     parser.add_argument("-itype", type=str, required=True, help="Additional parameters to add to the .dzn file (key=value)")
     parser.add_argument("-data", type=str, required=False, help="Additional parameters to add to the .dzn file (key=value)")    
     parser.add_argument("-minizinc_calc", type=str, required=False, help="Additional parameters to add to the .dzn file (key=value)")    
+    parser.add_argument("-fixed", type=str, required=False, help="Additional parameters to add to the .dzn file (key=value)") 
     args = parser.parse_args()
 
     icmap_parameters = parse_icmap_file(args.icmap)
@@ -68,7 +71,7 @@ def main():
     print(nb_paths)
 
     dzn_file = "data.dzn"
-    add_parameters_to_dzn(dzn_file,nb_paths, args.minizinc_calc)
+    add_parameters_to_dzn(dzn_file,nb_paths, args)
     run_minizinc_command(args, dzn_file)
 
 if __name__ == "__main__":

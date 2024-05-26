@@ -126,6 +126,66 @@ predicate cmql_path_value(
 	;
 
 
+predicate cmql_path_value_fixed(
+						CMAP: cmap,
+						int: origin_node,
+						int: destination_node,
+						var int: x_arc_path_length,
+						array[int] of var opt int: x_arc_path,
+						array[int] of var opt int: x_node_path,
+						array[int, int] of var opt int: x_iblock_path,
+						array[int, int] of var opt int: x_propagated_iblocks,
+						var INFLUENCE: x_propagated_influence
+					)
+	:: "cmql_path_value_fixed($cmap,$origin_node,$destination_node,$x_arc_path,$x_node_path,$x_iblock_path,$x_propagated_iblocks,$x_propagated_influence): determines a dipath connecting $x_origin_node to $x_destination_node in $cmap's digraph and the associated arc sequence $x_arc_path, node sequence $x_node_path, i-block sequence $x_iblock_path, i-block propagation series $x_propagated_iblocks and propagated influence $x_propagated_influence (var)"
+	=
+	let {
+		set of int: NODE_PATH = index_set(x_node_path);
+		set of int: ARC_PATH = index_set(x_arc_path);
+	} in
+		assert(index_set_1of2(x_propagated_iblocks) == index_set(x_arc_path), "cmql_path_value: the row index set of $x_propagated_iblocks  must be equal to the index set of $x_arc_path") /\
+		assert(index_set_2of2(x_propagated_iblocks) == index_set(cmap.itype.iblock_type.sorts), "cmql_path_value: the column index set of $x_propagated_iblocks must be equal to the i-block-type encoding range of $cmap's i-type") /\
+
+			
+		% (2) bounding x_arc_path_length
+		(0 <= x_arc_path_length) /\
+		(x_arc_path_length <= max(ARC_PATH)) /\
+		
+		% (3) binding the first and last occuring nodes to origin and destination nodes
+		(x_node_path[min(NODE_PATH)] ~= origin_node) /\
+		(x_node_path[x_arc_path_length+1] ~= destination_node) /\
+
+		% (4-1) determining a sequence of arcs corresponding to a minimal dipath of the right length in the c-map
+		cmql_arc_path(cmap, x_arc_path_length, x_arc_path) /\
+		% (4-2) determining minimal consistent arc and node sequences
+		cmql_arc_node_path(cmap, x_arc_path, x_node_path) /\
+		% (4-3) determining consistent arc and i-block sequences	
+		cmql_arc_influence_path(cmap, x_arc_path, x_iblock_path) /\
+
+		% (5-1) matching arc and propagated i-block occurrences
+		% - the i-th arc occurs iff all the components of the i-th propagated i-block occur
+		% - the i-th arc is absent iff all the components of the i-th propagated i-block are absent
+		% NB. every row access to x_propagated_iblocks below is within bounds since ARC_PATH is the row index set of x_propagated_iblocks
+% 		forall(i in ARC_PATH)(occurs(x_arc_path[i]) <-> forall(j in IBLOCK_COMPONENT)(occurs(x_propagated_iblocks[i,j]))) /\ % entailed by (6)
+		forall(i in ARC_PATH)(absent(x_arc_path[i]) -> forall(j in IBLOCK_COMPONENT)(absent(x_propagated_iblocks[i,j]))) /\
+
+		% (5-2) recursively computing the propagated i-blocks by traversing the i-block sequence
+		% - the first occurring propagated i-block is the first i-block (encoding the influence of the first occurring arc)
+		% - the i-th occurring propagated i-block is the propagation of the i-1-th propagated block with the i-th i-block
+		% NB. every row access to x_propagated_iblocks below is within bounds since ARC_PATH is the row index set of x_propagated_iblocks
+		(x_propagated_iblocks[min(ARC_PATH),IBLOCK_COMPONENT] == x_iblock_path[min(ARC_PATH),IBLOCK_COMPONENT]) /\
+		forall(i in min(ARC_PATH)<..max(ARC_PATH))
+			(occurs(x_arc_path[i]) -> x_propagated_iblocks[i,IBLOCK_COMPONENT] == iPropagate(deopt(x_propagated_iblocks[i-1,IBLOCK_COMPONENT]), deopt(x_iblock_path[i,IBLOCK_COMPONENT]))) /\
+
+		% (6) determining the propagated influence
+		% - the solution path is empty only if x_propagated_influence is the null influence (ie. absorbing element for i-propagation)
+		(x_arc_path_length == 0 -> equals(x_propagated_influence, getNullInfluence(cmap.itype))) /\ %(iblock: getAbsorbingElement(cmap.itype.ealgebra, ALGEBRAIC_OPERATION_2).value)) /\
+		% - the solution path is not empty only if x_propagated_influence is the last occurring propagated i-block
+		(x_arc_path_length > 0 -> x_propagated_influence == (iblock: [x_propagated_iblocks[x_arc_path_length,j] | j in IBLOCK_COMPONENT])) /\
+		
+		true
+	;
+
 % Determines minimal consistent arc path $x_arc_path and node path $x_node_path wrt. cmap $cmap and path-minimality feature.
 predicate cmql_arc_node_path(CMAP: cmap, array[int] of var opt int: x_arc_path, array[int] of var opt int: x_node_path)
 	:: "cmql_arc_node_path($cmap,$x_arc_path,$x_node_path): determines minimal consistent arc path $x_arc_path and node path $x_node_path wrt. cmap $cmap and path-minimality feature (var)"
