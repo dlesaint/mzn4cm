@@ -25,7 +25,7 @@ bool: DEOPT_F_INFLUENCE_NULL = F_INFLUENCE_NULL default false;
 % De-opt path minimality feature
 FTYPE_PATH_MINIMALITY: DEOPT_F_PATH_MINIMALITY = F_PATH_MINIMALITY default F_PATH_MINIMALITY_NODE;
 
-
+FTYPE_NB_PATH_COUNTING: DEOPT_F_NB_PATH_COUNTING = F_NB_PATH_COUNTING default F_PYTHON_COUNTING;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% ASSERTIONS

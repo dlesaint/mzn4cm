@@ -29,7 +29,7 @@
 % Path minimality cases
 enum FTYPE_PATH_MINIMALITY = {F_PATH_MINIMALITY_ARC, F_PATH_MINIMALITY_NODE};
 
-
+enum FTYPE_NB_PATH_COUNTING = {F_MINIZINC_COUNTING, F_PYTHON_COUNTING};
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% DATA
@@ -55,8 +55,9 @@ opt bool: F_INFLUENCE_NULL;
 %	- otherwise (if the feature is not set) the default value is set to F_PATH_MINIMALITY_NODE
 opt FTYPE_PATH_MINIMALITY: F_PATH_MINIMALITY;
 
-
-
+% Number of paths for aggregation feature
+%  
+opt FTYPE_NB_PATH_COUNTING: F_NB_PATH_COUNTING;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% OUTPUT
 

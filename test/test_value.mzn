@@ -20,8 +20,6 @@ include "./../model/include/include_ioperations.mzn";
 % CMQL
 include "./../model/include/include_cmql.mzn";
 
-%Fichier python
-include "./../model/utils/utils.py";
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -55,12 +53,14 @@ opt NODE_ID: origin_node;
 % the optional fixed destination node
 opt NODE_ID: destination_node;
 
+int: nb_paths;
 % assertions
 constraint assert((occurs(origin_node) /\ occurs(destination_node)) -> deopt(origin_node )!= deopt(destination_node), "path origin and destination concepts must be different");
 
 % the range of paths of length <= max(NODE_ID), not necessarily node-minimal or arc-minimal
 %set of int: PATH_ID = 1..nr_paths(transform_matrix(cmap.adigraph.a));
-set of int: PATH_ID = nr_paths_py();
+%bool:  b = assert(false, show(F_NB_PATH_COUNTING));
+set of int: PATH_ID = if DEOPT_F_NB_PATH_COUNTING == F_PYTHON_COUNTING then 1..nb_paths else 1..nr_paths(transform_matrix(cmap.adigraph.a)) endif ;
 
 
 
