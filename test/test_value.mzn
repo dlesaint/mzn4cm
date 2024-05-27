@@ -194,3 +194,6 @@ output :: "o_query"
 %
 output :: "o_solution_cmql_value"
 	cmql_value_output(cmap, x_nr_paths, x_arc_path_lengths, x_arc_paths, x_node_paths, x_iblock_paths, x_propagated_iblocks, x_iblocks, x_aggregated_iblocks, x_aggregated_influence);
+
+output :: "o_json"
+	outputJSON();
