@@ -58,7 +58,7 @@ constraint assert((occurs(origin_node) /\ occurs(destination_node)) -> deopt(ori
 
 % the range of paths of length <= max(NODE_ID), not necessarily node-minimal or arc-minimal
 %set of int: PATH_ID = 1..nr_paths(transform_matrix(cmap.adigraph.a));
-set of int: PATH_ID = 1..1;
+set of int: PATH_ID = 1..5;
 
 
 
@@ -157,27 +157,27 @@ solve
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% QUERY OUTPUT
 
-%
-output :: "o_instance"
-	displayInstance(instance);
+% %
+% output :: "o_instance"
+% 	displayInstance(instance);
 
-%
-output :: "o_query"
-["****** TEST - Query cmql_path_value - Path influence propagation ***********"]
-++ ["\n"]
-++ ["Origin node =\t\t"]
-% ++ [show(cmap.node_labels[origin_node])]
-++ [show(cmap.node_labels[fix(x_origin_node)])]
-++ ["\n"]
-++ ["Destination node =\t"]
-% ++ [show(cmap.node_labels[destination_node])]
-++ [show(cmap.node_labels[fix(x_destination_node)])]
-++ ["\n"]
-;
+% %
+% output :: "o_query"
+% ["****** TEST - Query cmql_path_value - Path influence propagation ***********"]
+% ++ ["\n"]
+% ++ ["Origin node =\t\t"]
+% % ++ [show(cmap.node_labels[origin_node])]
+% ++ [show(cmap.node_labels[fix(x_origin_node)])]
+% ++ ["\n"]
+% ++ ["Destination node =\t"]
+% % ++ [show(cmap.node_labels[destination_node])]
+% ++ [show(cmap.node_labels[fix(x_destination_node)])]
+% ++ ["\n"]
+% ;
 
-%
-output :: "o_solution_cmql_value"
-	cmql_value_output(cmap, x_nr_paths, x_arc_path_lengths, x_arc_paths, x_node_paths, x_iblock_paths, x_propagated_iblocks, x_iblocks, x_aggregated_iblocks, x_aggregated_influence);
+% %
+% output :: "o_solution_cmql_value"
+% 	cmql_value_output(cmap, x_nr_paths, x_arc_path_lengths, x_arc_paths, x_node_paths, x_iblock_paths, x_propagated_iblocks, x_iblocks, x_aggregated_iblocks, x_aggregated_influence);
 
 output :: "o_json"
 	outputJSON();
