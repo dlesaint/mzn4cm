@@ -1,9 +1,62 @@
+from math import sqrt
 import os
 import subprocess
 import argparse
 import re
 import numpy as np
+# -------------- Calcul de la taille max des chemins ------------------
+from collections import defaultdict, deque
 
+def matrix_to_adjacency_list(matrix):
+    graph = defaultdict(list)
+    for u in range(len(matrix)):
+        for v in range(len(matrix[u])):
+            if matrix[u][v] != 0:  # Suppose que 0 signifie aucune connexion
+                graph[u].append((v, matrix[u][v]))
+    return graph
+
+def topological_sort(graph, V):
+    in_degree = [0] * V
+    for u in range(V):
+        for v, _ in graph[u]:
+            in_degree[v] += 1
+
+    queue = deque([i for i in range(V) if in_degree[i] == 0])
+    topo_order = []
+    while queue:
+        u = queue.popleft()
+        topo_order.append(u)
+        for v, _ in graph[u]:
+            in_degree[v] -= 1
+            if in_degree[v] == 0:
+                queue.append(v)
+    
+    return topo_order
+
+def longest_path_dag(matrix, start):
+    V = len(matrix)
+    graph = matrix_to_adjacency_list(matrix)
+    topo_order = topological_sort(graph, V)
+    dist = [-float('inf')] * V
+    dist[start] = 0
+
+    for u in topo_order:
+        if dist[u] != -float('inf'):
+            for v, weight in graph[u]:
+                if dist[v] < dist[u] + weight:
+                    dist[v] = dist[u] + weight
+    
+    return dist
+
+def max_legth (adj_matrix):
+    result = 0
+    for i in range(adj_matrix.shape[0]):
+        tmp = longest_path_dag(adj_matrix, i)
+        print(tmp)        
+        if result<max(tmp):
+            result = max(tmp)
+    print(result)
+    return(result)
 
 def adj_matrix_to_nb_path (adj_matrix):
     tmp_matrix = adj_matrix
@@ -17,8 +70,33 @@ def adj_matrix_to_nb_path (adj_matrix):
             if sum_matrix[i][j] > max:
                 max = sum_matrix[i][j]
     print(sum_matrix)
+    print(max)
     return max
+def count_paths_dfs(adj_matrix,start,end):
+    def dfs(current,end,visited):
+        if current == end:
+            return 1
+        visited[current] = True
+        count = 0
+        for neighbor in range(len(adj_matrix)):
+            if adj_matrix[current][neighbor] == 1 and not visited[neighbor]:
+                count += dfs(neighbor,end,visited)
+        visited[current] = False
+        return count
+    visited = [False] * len(adj_matrix)
+    return dfs(start,end,visited)
 
+def adj_matrix_to_nb_path_no_cycles (adj_matrix):
+    max = 0
+    array = []
+    for i in range(0,adj_matrix.shape[0]):
+        for j in range(0,adj_matrix.shape[0]):
+            tmp = count_paths_dfs(adj_matrix,i,j)
+            array.append(tmp)
+            if tmp > max:
+                max = tmp      
+    print(max)
+    return max,array
 def parse_icmap_file(icmap_file):
     """Parse the ICMap file and extract the adjacency matrix."""
     with open(icmap_file, 'r') as file:
@@ -37,9 +115,11 @@ def parse_icmap_file(icmap_file):
 
     return adj_matrix
 
-def add_parameters_to_dzn(dzn_file, nb_paths, args):
+def add_parameters_to_dzn(dzn_file, nb_paths, matrix, size_path, args):
     with open(dzn_file,"w") as f:
         f.write(f"nb_paths={nb_paths};")
+        f.write(f"\nmatrix=array2d(1..{int(sqrt(len(matrix)))},1..{int(sqrt(len(matrix)))},{matrix});")
+        f.write(f"size_path={size_path};")
         if args.minizinc_calc != None:
             f.write(f"\nF_NB_PATH_COUNTING={args.minizinc_calc};")
         if args.fixed != None:
@@ -47,10 +127,10 @@ def add_parameters_to_dzn(dzn_file, nb_paths, args):
 
 def run_minizinc_command(args, dzn_file):
     """Run a MiniZinc command after adding parameters to a .dzn file."""    
-    command = f"minizinc -s -v {args.model} -d {args.icmap} -d {args.itype} -d {dzn_file} "
+    command = f"minizinc {args.model} -d {args.icmap} -d {args.itype} -d {dzn_file}"
     if args.data != None:
-        command += f"-d {args.data}"
-    print(command)
+        command += f" -d {args.data}"
+    command += f" --json-stream -s -v --time-limit 60000"
     subprocess.run(command, shell=True)
     
 
@@ -65,13 +145,12 @@ def main():
     args = parser.parse_args()    
 
     icmap_parameters = parse_icmap_file(args.icmap)
-    print(icmap_parameters)
-    nb_paths = adj_matrix_to_nb_path(icmap_parameters)
-    print(nb_paths)
-
+    adj_matrix_to_nb_path(icmap_parameters)
+    nb_paths,matrix = adj_matrix_to_nb_path_no_cycles(icmap_parameters)    
+    size_path = max_legth(icmap_parameters)
     dzn_file = "data.dzn"
-    add_parameters_to_dzn(dzn_file,nb_paths, args)
+    add_parameters_to_dzn(dzn_file,nb_paths,matrix, size_path, args)
     run_minizinc_command(args, dzn_file)
 
-if __name__ == "__main__":
+if __name__ == "__main__":    
     main()

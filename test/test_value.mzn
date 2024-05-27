@@ -54,6 +54,8 @@ opt NODE_ID: origin_node;
 opt NODE_ID: destination_node;
 
 int: nb_paths;
+int: size_path;
+array[int,int] of var int: matrix;
 % assertions
 constraint assert((occurs(origin_node) /\ occurs(destination_node)) -> deopt(origin_node )!= deopt(destination_node), "path origin and destination concepts must be different");
 
@@ -79,8 +81,8 @@ var NODE_ID: x_destination_node
 
 % the range for indexing any sequence of nodes corresponding to a solution path
 % - the upper-bound depends on the chosen path-minimality definition amongst the 2 variants
-set of int: NODE_PATH = if F_PATH_MINIMALITY == F_PATH_MINIMALITY_NODE then 1..min(max(NODE_ID), max(ARC_ID)+1) else 1..max(ARC_ID)+1 endif;
-
+%set of int: NODE_PATH = if F_PATH_MINIMALITY == F_PATH_MINIMALITY_NODE then 1..min(max(NODE_ID), max(ARC_ID)+1) else 1..max(ARC_ID)+1 endif;
+set of int: NODE_PATH = 1..size_path+1;
 % the range for indexing any sequence of arcs corresponding to a solution path
 % - the upper-bound depends on the chosen path-minimality definition amongst the 2 variants
 set of int: ARC_PATH = 1..max(NODE_PATH)-1;
@@ -195,5 +197,5 @@ solve
 %output :: "o_solution_cmql_value"
 %	cmql_value_output(cmap, x_nr_paths, x_arc_path_lengths, x_arc_paths, x_node_paths, x_iblock_paths, x_propagated_iblocks, x_iblocks, x_aggregated_iblocks, x_aggregated_influence);
 
-% output :: "o_json"
-% 	outputJSON();
+output :: "o_json"
+ 	outputJSON();

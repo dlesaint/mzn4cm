@@ -2,11 +2,11 @@
 %%% PATH_VALUE QUERY DATA
 
 % origin node
-origin_node = 11;
+origin_node = 3;
 % 2 for route testing
 % 8 for internet
 
 % destination node
-destination_node = 15;
+destination_node = 2;
 % 8 for route testing
 % 3 for internet testing with max 20 solutions

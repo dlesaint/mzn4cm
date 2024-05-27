@@ -57,6 +57,11 @@ opt NODE_ID: origin_node;
 % the optional fixed destination node
 opt NODE_ID: destination_node;
 
+int: nb_paths;
+
+int: size_path;
+array[int,int] of var int: matrix;
+
 % assertions
 constraint assert((occurs(origin_node) /\ occurs(destination_node)) -> deopt(origin_node )!= deopt(destination_node), "path origin and destination concepts must be different");
 
@@ -76,8 +81,8 @@ var NODE_ID: x_destination_node
 
 % the range for indexing any sequence of nodes corresponding to a solution path
 % - the upper-bound depends on the chosen path-minimality definition amongst the 2 variants
-set of int: NODE_PATH = if F_PATH_MINIMALITY == F_PATH_MINIMALITY_NODE then 1..min(max(NODE_ID), max(ARC_ID)+1) else 1..max(ARC_ID)+1 endif;
-
+%set of int: NODE_PATH = if F_PATH_MINIMALITY == F_PATH_MINIMALITY_NODE then 1..min(max(NODE_ID), max(ARC_ID)+1) else 1..max(ARC_ID)+1 endif;
+set of int: NODE_PATH = 1..size_path+1;
 % the range for indexing any sequence of arcs corresponding to a solution path
 % - the upper-bound depends on the chosen path-minimality definition amongst the 2 variants
 set of int: ARC_PATH = 1..max(NODE_PATH)-1;
@@ -120,7 +125,7 @@ var INFLUENCE: x_propagated_influence
 % optional boolean variable representing the satisfiability of the query
 var bool: x_cmql_path_value;
 
-int: nb_paths;
+
 
 set of int: PATH_ID = if DEOPT_F_NB_PATH_COUNTING == F_PYTHON_COUNTING then 1..nb_paths else 1..nr_paths(transform_matrix(cmap.adigraph.a)) endif;
 
@@ -159,24 +164,27 @@ solve
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% QUERY OUTPUT
 
-%
-output :: "o_instance"
-	displayInstance(instance);
+% %
+% output :: "o_instance"
+% 	displayInstance(instance);
 
-%
-output :: "o_query"
-["****** TEST - Query cmql_path_value - Path influence propagation ***********"]
-++ ["\n"]
-++ ["Origin node =\t\t"]
-% ++ [show(cmap.node_labels[origin_node])]
-++ [show(cmap.node_labels[fix(x_origin_node)])]
-++ ["\n"]
-++ ["Destination node =\t"]
-% ++ [show(cmap.node_labels[destination_node])]
-++ [show(cmap.node_labels[fix(x_destination_node)])]
-++ ["\n"]
-;
+% %
+% output :: "o_query"
+% ["****** TEST - Query cmql_path_value - Path influence propagation ***********"]
+% ++ ["\n"]
+% ++ ["Origin node =\t\t"]
+% % ++ [show(cmap.node_labels[origin_node])]
+% ++ [show(cmap.node_labels[fix(x_origin_node)])]
+% ++ ["\n"]
+% ++ ["Destination node =\t"]
+% % ++ [show(cmap.node_labels[destination_node])]
+% ++ [show(cmap.node_labels[fix(x_destination_node)])]
+% ++ ["\n"]
+% ;
 
-%
-output :: "o_solution_cmql_path_value"
-	cmql_path_value_output(cmap, x_arc_path_length, x_arc_path, x_node_path, x_iblock_path, x_propagated_iblocks, x_propagated_influence);
+% %
+% output :: "o_solution_cmql_path_value"
+% 	cmql_path_value_output(cmap, x_arc_path_length, x_arc_path, x_node_path, x_iblock_path, x_propagated_iblocks, x_propagated_influence);
+
+output :: "o_json"
+	outputJSON();
