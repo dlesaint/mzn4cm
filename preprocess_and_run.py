@@ -62,7 +62,7 @@ def main():
     parser.add_argument("-data", type=str, required=False, help="Additional parameters to add to the .dzn file (key=value)")    
     parser.add_argument("-minizinc_calc", type=str, required=False, help="Additional parameters to add to the .dzn file (key=value)")    
     parser.add_argument("-fixed", type=str, required=False, help="Additional parameters to add to the .dzn file (key=value)") 
-    args = parser.parse_args()
+    args = parser.parse_args()    
 
     icmap_parameters = parse_icmap_file(args.icmap)
     print(icmap_parameters)

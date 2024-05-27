@@ -1,0 +1,20 @@
+
+    icmap =(
+    % icm_LC08 = (
+        % name
+        name:"LC08",
+
+        % i-type
+        itype: itype,
+        
+        % node-labeling concepts
+        node_labels:[
+            (node:1, concept:(name:"AdaptabiliteEspece")), (node:2, concept:(name:"NavirePolyvalent")), (node:3, concept:(name:"PrendreSoinProduction")), (node:4, concept:(name:"Rentabilite")), (node:5, concept:(name:"MareeJournaliere")), (node:6, concept:(name:"ZonePeuFrequentee")), (node:7, concept:(name:"Civelle")), (node:8, concept:(name:"ConflitAvecAutreChalutierPelagique")), (node:9, concept:(name:"ZoneEloignee")), (node:10, concept:(name:"ActiviteProspection")), (node:11, concept:(name:"ProductionEspecesNobles")), (node:12, concept:(name:"AugmentationQuantiteEngin")), (node:13, concept:(name:"RecrutementMatelot")), (node:14, concept:(name:"PatronConnaissantMetier")), (node:15, concept:(name:"AugmentationPerteMateriel")), (node:16, concept:(name:"QualiteProduction")), (node:17, concept:(name:"VolumeProductionImportant")), (node:18, concept:(name:"MauvaiseMeteo"))
+        ],
+        
+        % arc-labeling influence blocks
+        arc_labels:[
+            (arc:(t:3, h:16), influence:(iblock:[4,4])), (arc:(t:5, h:16), influence:(iblock:[4,4])), (arc:(t:15, h:4), influence:(iblock:[-4,4])), (arc:(t:2, h:11), influence:(iblock:[3,4])), (arc:(t:15, h:7), influence:(iblock:[4,4])), (arc:(t:10, h:6), influence:(iblock:[2,4])), (arc:(t:14, h:6), influence:(iblock:[2,4])), (arc:(t:13, h:12), influence:(iblock:[3,4])), (arc:(t:1, h:4), influence:(iblock:[3,4])), (arc:(t:11, h:4), influence:(iblock:[3,4])), (arc:(t:16, h:4), influence:(iblock:[3,4])), (arc:(t:17, h:4), influence:(iblock:[3,4])), (arc:(t:12, h:17), influence:(iblock:[1,4])), (arc:(t:2, h:1), influence:(iblock:[3,4])), (arc:(t:6, h:4), influence:(iblock:[4,4])), (arc:(t:7, h:4), influence:(iblock:[4,4])), (arc:(t:6, h:9), influence:(iblock:[3,4])), (arc:(t:18, h:15), influence:(iblock:[1,4])), (arc:(t:8, h:15), influence:(iblock:[4,4]))
+        ],
+    );
+    

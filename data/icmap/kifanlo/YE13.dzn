@@ -1,0 +1,20 @@
+
+    icmap =(
+    % icm_YE13 = (
+        % name
+        name:"YE13",
+
+        % i-type
+        itype: itype,
+        
+        % node-labeling concepts
+        node_labels:[
+            (node:1, concept:(name:"Investissement2eNavire")), (node:2, concept:(name:"ConfortEquipage")), (node:3, concept:(name:"QuotasSole")), (node:4, concept:(name:"Rentabilite")), (node:5, concept:(name:"VolonteDeVarierLesMétiers")), (node:6, concept:(name:"MareeJournaliere")), (node:7, concept:(name:"Lotte")), (node:8, concept:(name:"SecuriteTravail")), (node:9, concept:(name:"MatérielABord")), (node:10, concept:(name:"RecrutementMatelotDifficile")), (node:11, concept:(name:"ZoneEloignee")), (node:12, concept:(name:"FermetureRequinTaupe")), (node:13, concept:(name:"PasDEquipage")), (node:14, concept:(name:"VolonteDeVoirLaFamille")), (node:15, concept:(name:"AdhésionOP")), (node:16, concept:(name:"GrosNavire")), (node:17, concept:(name:"QualiteProduction")), (node:18, concept:(name:"InvestissementNouveauNavireModerne"))
+        ],
+        
+        % arc-labeling influence blocks
+        arc_labels:[
+            (arc:(t:9, h:17), influence:(iblock:[4,4])), (arc:(t:10, h:16), influence:(iblock:[-4,4])), (arc:(t:7, h:4), influence:(iblock:[3,4])), (arc:(t:15, h:7), influence:(iblock:[4,4])), (arc:(t:5, h:1), influence:(iblock:[4,4])), (arc:(t:4, h:1), influence:(iblock:[3,4])), (arc:(t:6, h:1), influence:(iblock:[3,4])), (arc:(t:13, h:1), influence:(iblock:[3,4])), (arc:(t:14, h:6), influence:(iblock:[4,4])), (arc:(t:3, h:7), influence:(iblock:[3,4])), (arc:(t:12, h:7), influence:(iblock:[3,4])), (arc:(t:11, h:16), influence:(iblock:[1,4])), (arc:(t:7, h:11), influence:(iblock:[3,4])), (arc:(t:18, h:16), influence:(iblock:[3,4])), (arc:(t:2, h:16), influence:(iblock:[4,4])), (arc:(t:8, h:16), influence:(iblock:[4,4])), (arc:(t:9, h:16), influence:(iblock:[4,4]))
+        ],
+    );
+    

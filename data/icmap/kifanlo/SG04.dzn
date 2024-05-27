@@ -1,0 +1,20 @@
+
+    icmap =(
+    % icm_SG04 = (
+        % name
+        name:"SG04",
+
+        % i-type
+        itype: itype,
+        
+        % node-labeling concepts
+        node_labels:[
+            (node:1, concept:(name:"InvestissementNouveauGrosChalutier")), (node:2, concept:(name:"TravailMauvaisTemps")), (node:3, concept:(name:"DemandeFaible")), (node:4, concept:(name:"AugmentationTempsEnPeche")), (node:5, concept:(name:"Rentabilite")), (node:6, concept:(name:"DiminutionProductionFlottille")), (node:7, concept:(name:"Ambition")), (node:8, concept:(name:"ZoneEloignee")), (node:9, concept:(name:"EspeceNoblePresente")), (node:10, concept:(name:"PrixFort")), (node:11, concept:(name:"MareeLongue")), (node:12, concept:(name:"ProductionVivante")), (node:13, concept:(name:"MareeCourte")), (node:14, concept:(name:"CompetitionPortuaire")), (node:15, concept:(name:"EntretienNavire")), (node:16, concept:(name:"BesoinDEtreActif")), (node:17, concept:(name:"AugmentationTravail")), (node:18, concept:(name:"VolumeProductionImportant")), (node:19, concept:(name:"MauvaiseMeteo"))
+        ],
+        
+        % arc-labeling influence blocks
+        arc_labels:[
+            (arc:(t:13, h:12), influence:(iblock:[3,4])), (arc:(t:4, h:5), influence:(iblock:[-2,4])), (arc:(t:14, h:1), influence:(iblock:[3,4])), (arc:(t:8, h:4), influence:(iblock:[1,4])), (arc:(t:2, h:17), influence:(iblock:[3,4])), (arc:(t:13, h:4), influence:(iblock:[3,4])), (arc:(t:7, h:17), influence:(iblock:[4,4])), (arc:(t:6, h:10), influence:(iblock:[3,4])), (arc:(t:16, h:1), influence:(iblock:[4,4])), (arc:(t:10, h:5), influence:(iblock:[3,4])), (arc:(t:1, h:11), influence:(iblock:[3,4])), (arc:(t:9, h:5), influence:(iblock:[4,4])), (arc:(t:11, h:18), influence:(iblock:[4,4])), (arc:(t:12, h:5), influence:(iblock:[4,4])), (arc:(t:17, h:18), influence:(iblock:[4,4])), (arc:(t:18, h:5), influence:(iblock:[4,4])), (arc:(t:1, h:2), influence:(iblock:[3,4])), (arc:(t:8, h:9), influence:(iblock:[4,4])), (arc:(t:19, h:2), influence:(iblock:[3,4])), (arc:(t:3, h:15), influence:(iblock:[3,4])), (arc:(t:19, h:6), influence:(iblock:[3,4])), (arc:(t:1, h:8), influence:(iblock:[4,4]))
+        ],
+    );
+    

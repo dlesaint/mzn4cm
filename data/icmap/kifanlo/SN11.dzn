@@ -1,0 +1,20 @@
+
+    icmap =(
+    % icm_SN11 = (
+        % name
+        name:"SN11",
+
+        % i-type
+        itype: itype,
+        
+        % node-labeling concepts
+        node_labels:[
+            (node:1, concept:(name:"MauvaiseMétéoOctobreNovembre")), (node:2, concept:(name:"VenteProductionCivelleRepeuplement")), (node:3, concept:(name:"Saisonnalite")), (node:4, concept:(name:"MareyeurUnique")), (node:5, concept:(name:"VolumeProductionCivelle")), (node:6, concept:(name:"EnginMoinsContraignant")), (node:7, concept:(name:"Rentabilite")), (node:8, concept:(name:"QuotasCivelle")), (node:9, concept:(name:"PrixMareyeur")), (node:10, concept:(name:"TailleNavire")), (node:11, concept:(name:"Civelle")), (node:12, concept:(name:"CrevetteGriseAuChalut")), (node:13, concept:(name:"TriViviers")), (node:14, concept:(name:"VenteProductionCivelleConsommation")), (node:15, concept:(name:"PatronConnaissantMetier")), (node:16, concept:(name:"AdhésionOP")), (node:17, concept:(name:"DiminutionChargesCarburant")), (node:18, concept:(name:"Plaisir")), (node:19, concept:(name:"DébutDeSaison")), (node:20, concept:(name:"QualiteProduction")), (node:21, concept:(name:"DiminutionVitesse"))
+        ],
+        
+        % arc-labeling influence blocks
+        arc_labels:[
+            (arc:(t:21, h:20), influence:(iblock:[4,4])), (arc:(t:19, h:2), influence:(iblock:[3,4])), (arc:(t:19, h:14), influence:(iblock:[4,4])), (arc:(t:8, h:21), influence:(iblock:[4,4])), (arc:(t:12, h:4), influence:(iblock:[4,4])), (arc:(t:14, h:4), influence:(iblock:[4,4])), (arc:(t:21, h:17), influence:(iblock:[4,4])), (arc:(t:15, h:11), influence:(iblock:[4,4])), (arc:(t:18, h:11), influence:(iblock:[4,4])), (arc:(t:3, h:5), influence:(iblock:[4,4])), (arc:(t:6, h:12), influence:(iblock:[3,4])), (arc:(t:8, h:5), influence:(iblock:[4,4])), (arc:(t:10, h:12), influence:(iblock:[3,4])), (arc:(t:13, h:9), influence:(iblock:[None,4])), (arc:(t:19, h:5), influence:(iblock:[4,4])), (arc:(t:3, h:12), influence:(iblock:[4,4])), (arc:(t:15, h:12), influence:(iblock:[4,4])), (arc:(t:1, h:5), influence:(iblock:[2,4])), (arc:(t:5, h:7), influence:(iblock:[3,4])), (arc:(t:11, h:7), influence:(iblock:[3,4])), (arc:(t:20, h:7), influence:(iblock:[3,4])), (arc:(t:2, h:7), influence:(iblock:[2,4])), (arc:(t:12, h:7), influence:(iblock:[2,4])), (arc:(t:17, h:7), influence:(iblock:[2,4])), (arc:(t:16, h:8), influence:(iblock:[1,4])), (arc:(t:9, h:7), influence:(iblock:[4,4])), (arc:(t:14, h:7), influence:(iblock:[4,4]))
+        ],
+    );
+    

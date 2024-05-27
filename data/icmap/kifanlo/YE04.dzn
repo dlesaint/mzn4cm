@@ -1,0 +1,20 @@
+
+    icmap =(
+    % icm_YE04 = (
+        % name
+        name:"YE04",
+
+        % i-type
+        itype: itype,
+        
+        % node-labeling concepts
+        node_labels:[
+            (node:1, concept:(name:"ZoneEloignee")), (node:2, concept:(name:"PatronConnaissantMetierDansPort")), (node:3, concept:(name:"EquipageCompetent")), (node:4, concept:(name:"MareeLongue")), (node:5, concept:(name:"AdaptabiliteDeplacementThon")), (node:6, concept:(name:"ModernisationNavire")), (node:7, concept:(name:"GestionProduction")), (node:8, concept:(name:"Criée")), (node:9, concept:(name:"QualiteProduction")), (node:10, concept:(name:"Rentabilite")), (node:11, concept:(name:"ReputationProductionQualite")), (node:12, concept:(name:"CommunicationEntrePatrons"))
+        ],
+        
+        % arc-labeling influence blocks
+        arc_labels:[
+            (arc:(t:7, h:9), influence:(iblock:[4,4])), (arc:(t:6, h:9), influence:(iblock:[3,4])), (arc:(t:1, h:10), influence:(iblock:[3,4])), (arc:(t:3, h:10), influence:(iblock:[3,4])), (arc:(t:4, h:10), influence:(iblock:[3,4])), (arc:(t:8, h:10), influence:(iblock:[2,4])), (arc:(t:9, h:10), influence:(iblock:[2,4])), (arc:(t:11, h:10), influence:(iblock:[1,4])), (arc:(t:6, h:4), influence:(iblock:[3,4])), (arc:(t:2, h:5), influence:(iblock:[4,4])), (arc:(t:12, h:5), influence:(iblock:[4,4])), (arc:(t:5, h:10), influence:(iblock:[4,4])), (arc:(t:3, h:7), influence:(iblock:[4,4])), (arc:(t:9, h:11), influence:(iblock:[4,4])), (arc:(t:6, h:1), influence:(iblock:[4,4]))
+        ],
+    );
+    

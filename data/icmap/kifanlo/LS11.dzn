@@ -1,0 +1,20 @@
+
+    icmap =(
+    % icm_LS11 = (
+        % name
+        name:"LS11",
+
+        % i-type
+        itype: itype,
+        
+        % node-labeling concepts
+        node_labels:[
+            (node:1, concept:(name:"VolumeProductionAppats")), (node:2, concept:(name:"AugmentationChargesCarburant")), (node:3, concept:(name:"PrixCriée")), (node:4, concept:(name:"TempsEnPeche")), (node:5, concept:(name:"QuotasAnchois")), (node:6, concept:(name:"Rentabilite")), (node:7, concept:(name:"PrixAppat")), (node:8, concept:(name:"EquipageCompetent")), (node:9, concept:(name:"PatronConnaissantMetier")), (node:10, concept:(name:"PatronConnaissantZone")), (node:11, concept:(name:"OrganisationDeLOP")), (node:12, concept:(name:"ConflitAvecSenneDanoise")), (node:13, concept:(name:"VolumeProductionPoisson")), (node:14, concept:(name:"QualiteProduction")), (node:15, concept:(name:"EtiquetteBarDeLigne")), (node:16, concept:(name:"QuotasMutualisés"))
+        ],
+        
+        % arc-labeling influence blocks
+        arc_labels:[
+            (arc:(t:7, h:1), influence:(iblock:[2,4])), (arc:(t:12, h:16), influence:(iblock:[-3,4])), (arc:(t:2, h:6), influence:(iblock:[-3,4])), (arc:(t:7, h:6), influence:(iblock:[-3,4])), (arc:(t:5, h:13), influence:(iblock:[4,4])), (arc:(t:8, h:14), influence:(iblock:[3,4])), (arc:(t:12, h:3), influence:(iblock:[3,4])), (arc:(t:11, h:16), influence:(iblock:[4,4])), (arc:(t:13, h:6), influence:(iblock:[3,4])), (arc:(t:14, h:15), influence:(iblock:[4,4])), (arc:(t:3, h:6), influence:(iblock:[4,4])), (arc:(t:9, h:6), influence:(iblock:[4,4])), (arc:(t:10, h:6), influence:(iblock:[4,4])), (arc:(t:14, h:6), influence:(iblock:[4,4])), (arc:(t:3, h:4), influence:(iblock:[4,4]))
+        ],
+    );
+    

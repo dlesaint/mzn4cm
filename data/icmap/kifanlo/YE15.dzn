@@ -1,0 +1,20 @@
+
+    icmap =(
+    % icm_YE15 = (
+        % name
+        name:"YE15",
+
+        % i-type
+        itype: itype,
+        
+        % node-labeling concepts
+        node_labels:[
+            (node:1, concept:(name:"PossibilitéVenteNavire")), (node:2, concept:(name:"MerluAuFilet")), (node:3, concept:(name:"TempsEnPeche")), (node:4, concept:(name:"Meteo")), (node:5, concept:(name:"Rentabilite")), (node:6, concept:(name:"MareeJournaliere")), (node:7, concept:(name:"RecrutementMatelotDifficile")), (node:8, concept:(name:"PatronConnaissantMetier")), (node:9, concept:(name:"PatronConnaissantZone")), (node:10, concept:(name:"ProblèmeSanté")), (node:11, concept:(name:"ChangementCompletDeMétier")), (node:12, concept:(name:"PasDEquipage")), (node:13, concept:(name:"VolonteDeVoirLaFamille")), (node:14, concept:(name:"SoleAuFilet")), (node:15, concept:(name:"ZoneProche")), (node:16, concept:(name:"NavireMoinsDe12m")), (node:17, concept:(name:"GrandCoefficient"))
+        ],
+        
+        % arc-labeling influence blocks
+        arc_labels:[
+            (arc:(t:4, h:15), influence:(iblock:[3,4])), (arc:(t:12, h:16), influence:(iblock:[4,4])), (arc:(t:15, h:14), influence:(iblock:[3,4])), (arc:(t:4, h:2), influence:(iblock:[4,4])), (arc:(t:3, h:2), influence:(iblock:[3,4])), (arc:(t:3, h:14), influence:(iblock:[4,4])), (arc:(t:6, h:16), influence:(iblock:[3,4])), (arc:(t:8, h:14), influence:(iblock:[4,4])), (arc:(t:9, h:14), influence:(iblock:[4,4])), (arc:(t:11, h:16), influence:(iblock:[3,4])), (arc:(t:12, h:10), influence:(iblock:[4,4])), (arc:(t:2, h:5), influence:(iblock:[2,4])), (arc:(t:1, h:11), influence:(iblock:[4,4])), (arc:(t:7, h:11), influence:(iblock:[4,4])), (arc:(t:17, h:2), influence:(iblock:[-4,4])), (arc:(t:8, h:11), influence:(iblock:[2,4])), (arc:(t:9, h:11), influence:(iblock:[2,4])), (arc:(t:6, h:11), influence:(iblock:[3,4])), (arc:(t:13, h:6), influence:(iblock:[4,4])), (arc:(t:8, h:5), influence:(iblock:[4,4])), (arc:(t:9, h:5), influence:(iblock:[4,4])), (arc:(t:14, h:5), influence:(iblock:[4,4])), (arc:(t:7, h:12), influence:(iblock:[4,4]))
+        ],
+    );
+    
