@@ -9,12 +9,51 @@
         
         % node-labeling concepts
         node_labels:[
-            (node:1, concept:(name:"QualiteDeVie")), (node:2, concept:(name:"EquipageStable")), (node:3, concept:(name:"Rentabilite")), (node:4, concept:(name:"MareeJournaliere")), (node:5, concept:(name:"RemunerationSure")), (node:6, concept:(name:"Casier")), (node:7, concept:(name:"ValeurProductionImportante")), (node:8, concept:(name:"PassagersNombreux")), (node:9, concept:(name:"ActiviteProspection")), (node:10, concept:(name:"PlaisirPatron")), (node:11, concept:(name:"EquipageCompetent")), (node:12, concept:(name:"DebarquementAvantLesAutres")), (node:13, concept:(name:"PatronConnaissantMetier")), (node:14, concept:(name:"ActivitePechePromenade")), (node:15, concept:(name:"QualiteProduction")), (node:16, concept:(name:"CommunicationEntrePatrons")), (node:17, concept:(name:"Zone")), (node:18, concept:(name:"VolumeProductionImportant")), (node:19, concept:(name:"MauvaiseMeteo"))
+            (node:1, concept:(name:"QualiteDeVie"))
+, (node:2, concept:(name:"EquipageStable"))
+, (node:3, concept:(name:"Rentabilite"))
+, (node:4, concept:(name:"MareeJournaliere"))
+, (node:5, concept:(name:"RemunerationSure"))
+, (node:6, concept:(name:"Casier"))
+, (node:7, concept:(name:"ValeurProductionImportante"))
+, (node:8, concept:(name:"PassagersNombreux"))
+, (node:9, concept:(name:"ActiviteProspection"))
+, (node:10, concept:(name:"PlaisirPatron"))
+, (node:11, concept:(name:"EquipageCompetent"))
+, (node:12, concept:(name:"DebarquementAvantLesAutres"))
+, (node:13, concept:(name:"PatronConnaissantMetier"))
+, (node:14, concept:(name:"ActivitePechePromenade"))
+, (node:15, concept:(name:"QualiteProduction"))
+, (node:16, concept:(name:"CommunicationEntrePatrons"))
+, (node:17, concept:(name:"Zone"))
+, (node:18, concept:(name:"VolumeProductionImportant"))
+, (node:19, concept:(name:"MauvaiseMeteo"))
+
         ],
         
         % arc-labeling influence blocks
         arc_labels:[
-            (arc:(t:4, h:15), influence:(iblock:[4,4])), (arc:(t:6, h:15), influence:(iblock:[4,4])), (arc:(t:14, h:10), influence:(iblock:[4,4])), (arc:(t:15, h:7), influence:(iblock:[4,4])), (arc:(t:14, h:8), influence:(iblock:[4,4])), (arc:(t:17, h:8), influence:(iblock:[4,4])), (arc:(t:4, h:1), influence:(iblock:[4,4])), (arc:(t:12, h:7), influence:(iblock:[2,4])), (arc:(t:14, h:5), influence:(iblock:[4,4])), (arc:(t:2, h:17), influence:(iblock:[4,4])), (arc:(t:9, h:17), influence:(iblock:[4,4])), (arc:(t:11, h:17), influence:(iblock:[4,4])), (arc:(t:13, h:17), influence:(iblock:[4,4])), (arc:(t:16, h:17), influence:(iblock:[4,4])), (arc:(t:6, h:18), influence:(iblock:[4,4])), (arc:(t:7, h:3), influence:(iblock:[4,4])), (arc:(t:8, h:3), influence:(iblock:[4,4])), (arc:(t:17, h:18), influence:(iblock:[4,4])), (arc:(t:18, h:3), influence:(iblock:[4,4])), (arc:(t:19, h:18), influence:(iblock:[4,4]))
+            (arc:(t:2, h:17), influence:(iblock:[4,4]))
+, (arc:(t:4, h:1), influence:(iblock:[4,4]))
+, (arc:(t:4, h:15), influence:(iblock:[4,4]))
+, (arc:(t:6, h:15), influence:(iblock:[4,4]))
+, (arc:(t:6, h:18), influence:(iblock:[4,4]))
+, (arc:(t:7, h:3), influence:(iblock:[4,4]))
+, (arc:(t:8, h:3), influence:(iblock:[4,4]))
+, (arc:(t:9, h:17), influence:(iblock:[4,4]))
+, (arc:(t:11, h:17), influence:(iblock:[4,4]))
+, (arc:(t:12, h:7), influence:(iblock:[2,4]))
+, (arc:(t:13, h:17), influence:(iblock:[4,4]))
+, (arc:(t:14, h:5), influence:(iblock:[4,4]))
+, (arc:(t:14, h:8), influence:(iblock:[4,4]))
+, (arc:(t:14, h:10), influence:(iblock:[4,4]))
+, (arc:(t:15, h:7), influence:(iblock:[4,4]))
+, (arc:(t:16, h:17), influence:(iblock:[4,4]))
+, (arc:(t:17, h:8), influence:(iblock:[4,4]))
+, (arc:(t:17, h:18), influence:(iblock:[4,4]))
+, (arc:(t:18, h:3), influence:(iblock:[4,4]))
+, (arc:(t:19, h:18), influence:(iblock:[4,4]))
+
         ],
     );
     

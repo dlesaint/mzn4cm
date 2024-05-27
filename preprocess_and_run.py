@@ -47,7 +47,7 @@ def add_parameters_to_dzn(dzn_file, nb_paths, args):
 
 def run_minizinc_command(args, dzn_file):
     """Run a MiniZinc command after adding parameters to a .dzn file."""    
-    command = f"minizinc {args.model} -d {args.icmap} -d {args.itype} -d {dzn_file} "
+    command = f"minizinc -s -v {args.model} -d {args.icmap} -d {args.itype} -d {dzn_file} "
     if args.data != None:
         command += f"-d {args.data}"
     print(command)

@@ -9,12 +9,53 @@
         
         % node-labeling concepts
         node_labels:[
-            (node:1, concept:(name:"Benefices")), (node:2, concept:(name:"TraitCourt")), (node:3, concept:(name:"SardinePresente")), (node:4, concept:(name:"Engin")), (node:5, concept:(name:"GoutPelagique")), (node:6, concept:(name:"NavireGrosseCale")), (node:7, concept:(name:"ValeurProductionImportante")), (node:8, concept:(name:"ActiviteProspection")), (node:9, concept:(name:"VenteNavireForte")), (node:10, concept:(name:"Inflation")), (node:11, concept:(name:"AmeliorationVieDeFamille")), (node:12, concept:(name:"MareeCourte")), (node:13, concept:(name:"NavireModerne")), (node:14, concept:(name:"InvestissementNouveauNavire")), (node:15, concept:(name:"DiminutionChargesCarburant")), (node:16, concept:(name:"ZoneProche")), (node:17, concept:(name:"Plaisir")), (node:18, concept:(name:"QualiteProduction")), (node:19, concept:(name:"AugmentationProductionFlottillePelagique"))
+            (node:1, concept:(name:"Benefices"))
+, (node:2, concept:(name:"TraitCourt"))
+, (node:3, concept:(name:"SardinePresente"))
+, (node:4, concept:(name:"Engin"))
+, (node:5, concept:(name:"GoutPelagique"))
+, (node:6, concept:(name:"NavireGrosseCale"))
+, (node:7, concept:(name:"ValeurProductionImportante"))
+, (node:8, concept:(name:"ActiviteProspection"))
+, (node:9, concept:(name:"VenteNavireForte"))
+, (node:10, concept:(name:"Inflation"))
+, (node:11, concept:(name:"AmeliorationVieDeFamille"))
+, (node:12, concept:(name:"MareeCourte"))
+, (node:13, concept:(name:"NavireModerne"))
+, (node:14, concept:(name:"InvestissementNouveauNavire"))
+, (node:15, concept:(name:"DiminutionChargesCarburant"))
+, (node:16, concept:(name:"ZoneProche"))
+, (node:17, concept:(name:"Plaisir"))
+, (node:18, concept:(name:"QualiteProduction"))
+, (node:19, concept:(name:"AugmentationProductionFlottillePelagique"))
+
         ],
         
         % arc-labeling influence blocks
         arc_labels:[
-            (arc:(t:2, h:18), influence:(iblock:[4,4])), (arc:(t:4, h:11), influence:(iblock:[-4,4])), (arc:(t:5, h:14), influence:(iblock:[4,4])), (arc:(t:9, h:14), influence:(iblock:[4,4])), (arc:(t:18, h:7), influence:(iblock:[4,4])), (arc:(t:5, h:4), influence:(iblock:[4,4])), (arc:(t:10, h:9), influence:(iblock:[3,4])), (arc:(t:12, h:15), influence:(iblock:[2,4])), (arc:(t:3, h:14), influence:(iblock:[2,4])), (arc:(t:1, h:14), influence:(iblock:[3,4])), (arc:(t:6, h:18), influence:(iblock:[2,4])), (arc:(t:8, h:5), influence:(iblock:[4,4])), (arc:(t:12, h:18), influence:(iblock:[2,4])), (arc:(t:14, h:1), influence:(iblock:[None,4])), (arc:(t:13, h:6), influence:(iblock:[3,4])), (arc:(t:7, h:1), influence:(iblock:[3,4])), (arc:(t:15, h:1), influence:(iblock:[3,4])), (arc:(t:19, h:7), influence:(iblock:[-4,4])), (arc:(t:4, h:17), influence:(iblock:[4,4])), (arc:(t:8, h:17), influence:(iblock:[4,4])), (arc:(t:16, h:12), influence:(iblock:[2,4])), (arc:(t:14, h:13), influence:(iblock:[4,4]))
+            (arc:(t:1, h:14), influence:(iblock:[3,4]))
+, (arc:(t:2, h:18), influence:(iblock:[4,4]))
+, (arc:(t:3, h:14), influence:(iblock:[2,4]))
+, (arc:(t:4, h:11), influence:(iblock:[-4,4]))
+, (arc:(t:4, h:17), influence:(iblock:[4,4]))
+, (arc:(t:5, h:4), influence:(iblock:[4,4]))
+, (arc:(t:5, h:14), influence:(iblock:[4,4]))
+, (arc:(t:6, h:18), influence:(iblock:[2,4]))
+, (arc:(t:7, h:1), influence:(iblock:[3,4]))
+, (arc:(t:8, h:5), influence:(iblock:[4,4]))
+, (arc:(t:8, h:17), influence:(iblock:[4,4]))
+, (arc:(t:9, h:14), influence:(iblock:[4,4]))
+, (arc:(t:10, h:9), influence:(iblock:[3,4]))
+, (arc:(t:12, h:15), influence:(iblock:[2,4]))
+, (arc:(t:12, h:18), influence:(iblock:[2,4]))
+, (arc:(t:13, h:6), influence:(iblock:[3,4]))
+, (arc:(t:14, h:1), influence:(iblock:[None,4]))
+, (arc:(t:14, h:13), influence:(iblock:[4,4]))
+, (arc:(t:15, h:1), influence:(iblock:[3,4]))
+, (arc:(t:16, h:12), influence:(iblock:[2,4]))
+, (arc:(t:18, h:7), influence:(iblock:[4,4]))
+, (arc:(t:19, h:7), influence:(iblock:[-4,4]))
+
         ],
     );
     

@@ -9,12 +9,32 @@
         
         % node-labeling concepts
         node_labels:[
-            (node:1, concept:(name:"ValeurProductionImportante")), (node:2, concept:(name:"VenteDirecte")), (node:3, concept:(name:"ProductionDiverse")), (node:4, concept:(name:"UtilisationVivier")), (node:5, concept:(name:"ProductionVivante")), (node:6, concept:(name:"QualiteProduction")), (node:7, concept:(name:"Rentabilite")), (node:8, concept:(name:"Chalut")), (node:9, concept:(name:"MareeJournaliere")), (node:10, concept:(name:"Epouse"))
+            (node:1, concept:(name:"ValeurProductionImportante"))
+, (node:2, concept:(name:"VenteDirecte"))
+, (node:3, concept:(name:"ProductionDiverse"))
+, (node:4, concept:(name:"UtilisationVivier"))
+, (node:5, concept:(name:"ProductionVivante"))
+, (node:6, concept:(name:"QualiteProduction"))
+, (node:7, concept:(name:"Rentabilite"))
+, (node:8, concept:(name:"Chalut"))
+, (node:9, concept:(name:"MareeJournaliere"))
+, (node:10, concept:(name:"Epouse"))
+
         ],
         
         % arc-labeling influence blocks
         arc_labels:[
-            (arc:(t:2, h:6), influence:(iblock:[4,4])), (arc:(t:5, h:6), influence:(iblock:[4,4])), (arc:(t:9, h:6), influence:(iblock:[4,4])), (arc:(t:6, h:1), influence:(iblock:[4,4])), (arc:(t:3, h:2), influence:(iblock:[4,4])), (arc:(t:10, h:2), influence:(iblock:[4,4])), (arc:(t:4, h:5), influence:(iblock:[4,4])), (arc:(t:1, h:7), influence:(iblock:[4,4])), (arc:(t:2, h:7), influence:(iblock:[4,4])), (arc:(t:8, h:3), influence:(iblock:[4,4]))
+            (arc:(t:1, h:7), influence:(iblock:[4,4]))
+, (arc:(t:2, h:6), influence:(iblock:[4,4]))
+, (arc:(t:2, h:7), influence:(iblock:[4,4]))
+, (arc:(t:3, h:2), influence:(iblock:[4,4]))
+, (arc:(t:4, h:5), influence:(iblock:[4,4]))
+, (arc:(t:5, h:6), influence:(iblock:[4,4]))
+, (arc:(t:6, h:1), influence:(iblock:[4,4]))
+, (arc:(t:8, h:3), influence:(iblock:[4,4]))
+, (arc:(t:9, h:6), influence:(iblock:[4,4]))
+, (arc:(t:10, h:2), influence:(iblock:[4,4]))
+
         ],
     );
     

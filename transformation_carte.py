@@ -1,4 +1,6 @@
+from signal import pause
 import xml.etree.ElementTree as ET
+from functools import cmp_to_key
 
 def parse_concepts(concept_element):
     concepts = []
@@ -57,18 +59,37 @@ def transform_xml_to_cmap(xml_string):
         cartes.append(carte_data)
     
     return cartes, concepts_dict
+def compare(a,b):
+    if (a[0] < b[0] and a[1] < b[1]):
+        return -1
+    else:
+        return 1
 
 def format_cmap(carte, concepts_dict):
     node_labels = [
-        f'(node:{i+1}, concept:(name:"{concepts_dict[concept]}"))'
+        f'(node:{i+1}, concept:(name:"{concepts_dict[concept]}"))\n'
         for i, concept in enumerate(carte['node_labels'])
     ]
-    sorted_arc_labels = sorted(
-        carte['arc_labels']
-    )
-    arc_labels = [
-        f'(arc:(t:{carte["node_labels"].index(from_concept)+1}, h:{carte["node_labels"].index(to_concept)+1}), influence:(iblock:[{valeur},4]))'
+    
+     # Construire une liste des arcs avec les indices des nœuds
+    arc_with_indices = [
+        (
+            carte["node_labels"].index(from_concept) + 1,
+            carte["node_labels"].index(to_concept) + 1,
+            valeur
+        )
         for from_concept, to_concept, valeur in carte['arc_labels']
+    ]
+    
+    # Trier les arcs par ordre lexicographique
+    sorted_arc_with_indices = sorted(
+        arc_with_indices,
+        key=lambda x: (x[0], x[1])
+    )
+
+    arc_labels = [
+        f'(arc:(t:{t}, h:{h}), influence:(iblock:[{valeur},4]))\n'
+        for t, h, valeur in sorted_arc_with_indices
     ]
     
     cmap_string = f"""

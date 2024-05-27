@@ -9,12 +9,47 @@
         
         % node-labeling concepts
         node_labels:[
-            (node:1, concept:(name:"ConflitAvecChalutierEspagnol")), (node:2, concept:(name:"EntretienEnginEtEquipement")), (node:3, concept:(name:"Confort")), (node:4, concept:(name:"Rentabilite")), (node:5, concept:(name:"DiminutionChargesEquipementEtEngin")), (node:6, concept:(name:"Filet")), (node:7, concept:(name:"OptimisationTemps")), (node:8, concept:(name:"EquipeMaintenanceATerre")), (node:9, concept:(name:"AugmentationChargesNavire")), (node:10, concept:(name:"PasDeSortieGrandCoefficient")), (node:11, concept:(name:"EquipageCompetent")), (node:12, concept:(name:"ModernisationNavire")), (node:13, concept:(name:"DiminutionChargesCarburant")), (node:14, concept:(name:"EntretienNavire")), (node:15, concept:(name:"DiminutionAvariesFilet")), (node:16, concept:(name:"TempsDeTravailEquipagePrevuALAvance"))
+            (node:1, concept:(name:"ConflitAvecChalutierEspagnol"))
+, (node:2, concept:(name:"EntretienEnginEtEquipement"))
+, (node:3, concept:(name:"Confort"))
+, (node:4, concept:(name:"Rentabilite"))
+, (node:5, concept:(name:"DiminutionChargesEquipementEtEngin"))
+, (node:6, concept:(name:"Filet"))
+, (node:7, concept:(name:"OptimisationTemps"))
+, (node:8, concept:(name:"EquipeMaintenanceATerre"))
+, (node:9, concept:(name:"AugmentationChargesNavire"))
+, (node:10, concept:(name:"PasDeSortieGrandCoefficient"))
+, (node:11, concept:(name:"EquipageCompetent"))
+, (node:12, concept:(name:"ModernisationNavire"))
+, (node:13, concept:(name:"DiminutionChargesCarburant"))
+, (node:14, concept:(name:"EntretienNavire"))
+, (node:15, concept:(name:"DiminutionAvariesFilet"))
+, (node:16, concept:(name:"TempsDeTravailEquipagePrevuALAvance"))
+
         ],
         
         % arc-labeling influence blocks
         arc_labels:[
-            (arc:(t:8, h:2), influence:(iblock:[4,4])), (arc:(t:6, h:13), influence:(iblock:[3,4])), (arc:(t:8, h:7), influence:(iblock:[4,4])), (arc:(t:1, h:4), influence:(iblock:[-4,4])), (arc:(t:6, h:3), influence:(iblock:[4,4])), (arc:(t:6, h:9), influence:(iblock:[2,4])), (arc:(t:12, h:9), influence:(iblock:[2,4])), (arc:(t:6, h:10), influence:(iblock:[4,4])), (arc:(t:8, h:9), influence:(iblock:[4,4])), (arc:(t:15, h:4), influence:(iblock:[3,4])), (arc:(t:10, h:15), influence:(iblock:[3,4])), (arc:(t:5, h:4), influence:(iblock:[4,4])), (arc:(t:7, h:4), influence:(iblock:[4,4])), (arc:(t:9, h:4), influence:(iblock:[4,4])), (arc:(t:11, h:4), influence:(iblock:[4,4])), (arc:(t:14, h:4), influence:(iblock:[4,4])), (arc:(t:13, h:4), influence:(iblock:[4,4])), (arc:(t:16, h:4), influence:(iblock:[4,4])), (arc:(t:6, h:5), influence:(iblock:[3,4]))
+            (arc:(t:1, h:4), influence:(iblock:[-4,4]))
+, (arc:(t:5, h:4), influence:(iblock:[4,4]))
+, (arc:(t:6, h:3), influence:(iblock:[4,4]))
+, (arc:(t:6, h:5), influence:(iblock:[3,4]))
+, (arc:(t:6, h:9), influence:(iblock:[2,4]))
+, (arc:(t:6, h:10), influence:(iblock:[4,4]))
+, (arc:(t:6, h:13), influence:(iblock:[3,4]))
+, (arc:(t:7, h:4), influence:(iblock:[4,4]))
+, (arc:(t:8, h:2), influence:(iblock:[4,4]))
+, (arc:(t:8, h:7), influence:(iblock:[4,4]))
+, (arc:(t:8, h:9), influence:(iblock:[4,4]))
+, (arc:(t:9, h:4), influence:(iblock:[4,4]))
+, (arc:(t:10, h:15), influence:(iblock:[3,4]))
+, (arc:(t:11, h:4), influence:(iblock:[4,4]))
+, (arc:(t:12, h:9), influence:(iblock:[2,4]))
+, (arc:(t:13, h:4), influence:(iblock:[4,4]))
+, (arc:(t:14, h:4), influence:(iblock:[4,4]))
+, (arc:(t:15, h:4), influence:(iblock:[3,4]))
+, (arc:(t:16, h:4), influence:(iblock:[4,4]))
+
         ],
     );
     

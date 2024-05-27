@@ -9,12 +9,51 @@
         
         % node-labeling concepts
         node_labels:[
-            (node:1, concept:(name:"Geolocalisation")), (node:2, concept:(name:"QualiteDeVie")), (node:3, concept:(name:"AdaptabiliteMeteo")), (node:4, concept:(name:"AdaptabiliteEspece")), (node:5, concept:(name:"EntretienMateriel")), (node:6, concept:(name:"NavirePolyvalent")), (node:7, concept:(name:"Confort")), (node:8, concept:(name:"AmeliorationAmenagementEquipement")), (node:9, concept:(name:"Rentabilite")), (node:10, concept:(name:"MareeJournaliere")), (node:11, concept:(name:"VolonteDInnover")), (node:12, concept:(name:"ArriveeEnPremierSurZone")), (node:13, concept:(name:"ConflitAvecAutreChalutierPelagique")), (node:14, concept:(name:"PrixMarche")), (node:15, concept:(name:"ModernisationNavire")), (node:16, concept:(name:"AdaptabiliteSaison")), (node:17, concept:(name:"Criée")), (node:18, concept:(name:"AugmentationPerteMateriel")), (node:19, concept:(name:"QualiteProduction")), (node:20, concept:(name:"VolumeProductionImportant"))
+            (node:1, concept:(name:"Geolocalisation"))
+, (node:2, concept:(name:"QualiteDeVie"))
+, (node:3, concept:(name:"AdaptabiliteMeteo"))
+, (node:4, concept:(name:"AdaptabiliteEspece"))
+, (node:5, concept:(name:"EntretienMateriel"))
+, (node:6, concept:(name:"NavirePolyvalent"))
+, (node:7, concept:(name:"Confort"))
+, (node:8, concept:(name:"AmeliorationAmenagementEquipement"))
+, (node:9, concept:(name:"Rentabilite"))
+, (node:10, concept:(name:"MareeJournaliere"))
+, (node:11, concept:(name:"VolonteDInnover"))
+, (node:12, concept:(name:"ArriveeEnPremierSurZone"))
+, (node:13, concept:(name:"ConflitAvecAutreChalutierPelagique"))
+, (node:14, concept:(name:"PrixMarche"))
+, (node:15, concept:(name:"ModernisationNavire"))
+, (node:16, concept:(name:"AdaptabiliteSaison"))
+, (node:17, concept:(name:"Criée"))
+, (node:18, concept:(name:"AugmentationPerteMateriel"))
+, (node:19, concept:(name:"QualiteProduction"))
+, (node:20, concept:(name:"VolumeProductionImportant"))
+
         ],
         
         % arc-labeling influence blocks
         arc_labels:[
-            (arc:(t:10, h:19), influence:(iblock:[4,4])), (arc:(t:10, h:2), influence:(iblock:[4,4])), (arc:(t:8, h:5), influence:(iblock:[-3,4])), (arc:(t:15, h:7), influence:(iblock:[4,4])), (arc:(t:11, h:8), influence:(iblock:[3,4])), (arc:(t:6, h:3), influence:(iblock:[4,4])), (arc:(t:18, h:9), influence:(iblock:[3,4])), (arc:(t:17, h:9), influence:(iblock:[2,4])), (arc:(t:6, h:16), influence:(iblock:[4,4])), (arc:(t:6, h:4), influence:(iblock:[4,4])), (arc:(t:14, h:17), influence:(iblock:[3,4])), (arc:(t:1, h:20), influence:(iblock:[4,4])), (arc:(t:6, h:9), influence:(iblock:[4,4])), (arc:(t:8, h:20), influence:(iblock:[4,4])), (arc:(t:12, h:9), influence:(iblock:[4,4])), (arc:(t:19, h:9), influence:(iblock:[4,4])), (arc:(t:20, h:9), influence:(iblock:[4,4])), (arc:(t:11, h:15), influence:(iblock:[3,4])), (arc:(t:13, h:18), influence:(iblock:[4,4]))
+            (arc:(t:1, h:20), influence:(iblock:[4,4]))
+, (arc:(t:6, h:3), influence:(iblock:[4,4]))
+, (arc:(t:6, h:4), influence:(iblock:[4,4]))
+, (arc:(t:6, h:9), influence:(iblock:[4,4]))
+, (arc:(t:6, h:16), influence:(iblock:[4,4]))
+, (arc:(t:8, h:5), influence:(iblock:[-3,4]))
+, (arc:(t:8, h:20), influence:(iblock:[4,4]))
+, (arc:(t:10, h:2), influence:(iblock:[4,4]))
+, (arc:(t:10, h:19), influence:(iblock:[4,4]))
+, (arc:(t:11, h:8), influence:(iblock:[3,4]))
+, (arc:(t:11, h:15), influence:(iblock:[3,4]))
+, (arc:(t:12, h:9), influence:(iblock:[4,4]))
+, (arc:(t:13, h:18), influence:(iblock:[4,4]))
+, (arc:(t:14, h:17), influence:(iblock:[3,4]))
+, (arc:(t:15, h:7), influence:(iblock:[4,4]))
+, (arc:(t:17, h:9), influence:(iblock:[2,4]))
+, (arc:(t:18, h:9), influence:(iblock:[3,4]))
+, (arc:(t:19, h:9), influence:(iblock:[4,4]))
+, (arc:(t:20, h:9), influence:(iblock:[4,4]))
+
         ],
     );
     
