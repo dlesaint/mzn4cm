@@ -85,6 +85,8 @@ try:
         i, j = od(matrix)
         i = i + 1
         j = j + 1
+        print(matrix)
+        print(i, " ",j)
         with open("data/cmql/cmql_test.dzn", "w") as f:
             f.write(f"origin_node = {i+1};")
             f.write(f"destination_node = {j+1};")

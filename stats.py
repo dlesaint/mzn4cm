@@ -1,55 +1,141 @@
 import json
-import pandas as pd
+import csv
 
-{name=LS02.dzn, path_value, première solution{"type": "trace", "section": "mzn_vis_0", "message": {"url": "std/ide/vis_network.html", "userData": {"edgeLabels": ["3/4", "-2/4", "3/4", "4/4", "3/4", "3/4", "4/4", "-3/4", "3/4", "2/4", "4/4", "4/4"], "from": ["1", "2", "3", "3", "3", "4", "4", "5", "6", "7", "8", "11"], "highlight": true, "nodeLabels": ["ChalutLateral", "AugmentationChargesArmement", "EquipageCompetent", "PatronConnaissantMetier", "AugmentationChargesCommunes", "EntretienMateriel", "ModificationChalutSelonSaison", "QualiteProduction", "Rentabilite", "Fatigue", "VolumeProductionImportant"], "nodes": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"], "to": ["10", "9", "4", "8", "11", "6", "11", "9", "11", "11", "9", "9"], "type": "digraph"}}}
-MiniZinc error: Memory violation detected (segmentation fault).
-This is a bug. Please file a bug report using the MiniZinc bug tracker.
-Aborted
-}
-{name=LS02.dzn, value, première solution{"type": "statistics", "statistics": {"paths": 0, "flatBoolVars": 22769, "flatIntVars": 9975, "flatBoolConstraints": 19239, "flatIntConstraints": 22707, "evaluatedReifiedConstraints": 12139, "evaluatedHalfReifiedConstraints": 13316, "eliminatedImplications": 8058, "method": "satisfy", "flatTime": 3.10726}}
-{"type": "solution", "output": {"o_json": "{\n  \"matrix\" : [[1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0], [0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0], [0, 0, 1, 1, 0, 1, 0, 1, 4, 0, 3], [0, 0, 0, 1, 0, 1, 0, 0, 2, 0, 2], [0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1], [0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1], [0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0], [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1]],\n  \"x_nr_paths\" : 1,\n  \"x_arc_path_lengths\" : [1, 0, 0, 0],\n  \"x_iblock_paths\" : [[[3, 4], [null, null], [null, null], [null, null]], [[null, null], [null, null], [null, null], [null, null]], [[null, null], [null, null], [null, null], [null, null]], [[null, null], [null, null], [null, null], [null, null]]],\n  \"x_propagated_iblocks\" : [[[3, 4], [null, null], [null, null], [null, null]], [[null, null], [null, null], [null, null], [null, null]], [[null, null], [null, null], [null, null], [null, null]], [[null, null], [null, null], [null, null], [null, null]]],\n  \"x_iblocks\" : [[3, 4], [null, null], [null, null], [null, null]],\n  \"x_aggregated_iblocks\" : [[3, 4], [null, null], [null, null], [null, null]],\n  \"x_cmql_value\" : true\n}\n", "raw": "{\n  \"matrix\" : [[1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0], [0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0], [0, 0, 1, 1, 0, 1, 0, 1, 4, 0, 3], [0, 0, 0, 1, 0, 1, 0, 0, 2, 0, 2], [0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1], [0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1], [0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0], [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1]],\n  \"x_nr_paths\" : 1,\n  \"x_arc_path_lengths\" : [1, 0, 0, 0],\n  \"x_iblock_paths\" : [[[3, 4], [null, null], [null, null], [null, null]], [[null, null], [null, null], [null, null], [null, null]], [[null, null], [null, null], [null, null], [null, null]], [[null, null], [null, null], [null, null], [null, null]]],\n  \"x_propagated_iblocks\" : [[[3, 4], [null, null], [null, null], [null, null]], [[null, null], [null, null], [null, null], [null, null]], [[null, null], [null, null], [null, null], [null, null]], [[null, null], [null, null], [null, null], [null, null]]],\n  \"x_iblocks\" : [[3, 4], [null, null], [null, null], [null, null]],\n  \"x_aggregated_iblocks\" : [[3, 4], [null, null], [null, null], [null, null]],\n  \"x_cmql_value\" : true\n}\n"}, "sections": ["o_json", "raw"]}
-{"type": "statistics", "statistics": {"initTime": 0.438244, "solveTime": 1.187, "solutions": 1, "variables": 32745, "propagators": 44670, "propagations": 241004, "nodes": 151, "failures": 73, "restarts": 0, "peakDepth": 7}}
-{"type": "statistics", "statistics": {"nSolutions": 1}}
-}
-{name=LS02.dzn, path_value, Plus grand nombre de chemin{"type": "trace", "section": "mzn_vis_0", "message": {"url": "std/ide/vis_network.html", "userData": {"edgeLabels": ["3/4", "-2/4", "3/4", "4/4", "3/4", "3/4", "4/4", "-3/4", "3/4", "2/4", "4/4", "4/4"], "from": ["1", "2", "3", "3", "3", "4", "4", "5", "6", "7", "8", "11"], "highlight": true, "nodeLabels": ["ChalutLateral", "AugmentationChargesArmement", "EquipageCompetent", "PatronConnaissantMetier", "AugmentationChargesCommunes", "EntretienMateriel", "ModificationChalutSelonSaison", "QualiteProduction", "Rentabilite", "Fatigue", "VolumeProductionImportant"], "nodes": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"], "to": ["10", "9", "4", "8", "11", "6", "11", "9", "11", "11", "9", "9"], "type": "digraph"}}}
-MiniZinc error: Memory violation detected (segmentation fault).
-This is a bug. Please file a bug report using the MiniZinc bug tracker.
-{"type": "statistics", "statistics": {"paths": 0, "flatBoolVars": 4565, "flatIntVars": 1916, "flatBoolConstraints": 3888, "flatIntConstraints": 4468, "evaluatedReifiedConstraints": 2517, "evaluatedHalfReifiedConstraints": 2512, "eliminatedImplications": 1608, "method": "satisfy", "flatTime": 0.934052}}
-{"type": "status", "status": "UNKNOWN"}
-{"type": "statistics", "statistics": {"nSolutions": 0}}
-}
-{name=LS02.dzn, value, Plus grand nombre de chemin{"type": "statistics", "statistics": {"paths": 0, "flatBoolVars": 22769, "flatIntVars": 9973, "flatBoolConstraints": 19239, "flatIntConstraints": 22704, "evaluatedReifiedConstraints": 12139, "evaluatedHalfReifiedConstraints": 13316, "eliminatedImplications": 8058, "method": "satisfy", "flatTime": 3.212}}
-{"type": "solution", "output": {"o_json": "{\n  \"matrix\" : [[1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0], [0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0], [0, 0, 1, 1, 0, 1, 0, 1, 4, 0, 3], [0, 0, 0, 1, 0, 1, 0, 0, 2, 0, 2], [0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1], [0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1], [0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0], [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1]],\n  \"x_nr_paths\" : 4,\n  \"x_arc_path_lengths\" : [2, 2, 3, 4],\n  \"x_iblock_paths\" : [[[4, 4], [4, 4], [null, null], [null, null]], [[3, 4], [4, 4], [null, null], [null, null]], [[3, 4], [4, 4], [4, 4], [null, null]], [[3, 4], [3, 4], [3, 4], [4, 4]]],\n  \"x_propagated_iblocks\" : [[[4, 4], [1, 1], [null, null], [null, null]], [[3, 4], [3, 4], [null, null], [null, null]], [[3, 4], [3, 4], [3, 4], [null, null]], [[3, 4], [9, 16], [27, 64], [27, 64]]],\n  \"x_iblocks\" : [[1, 1], [3, 4], [3, 4], [27, 64]],\n  \"x_aggregated_iblocks\" : [[1, 1], [7, 4], [5, 2], [187, 64]],\n  \"x_cmql_value\" : true\n}\n", "raw": "{\n  \"matrix\" : [[1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0], [0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0], [0, 0, 1, 1, 0, 1, 0, 1, 4, 0, 3], [0, 0, 0, 1, 0, 1, 0, 0, 2, 0, 2], [0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1], [0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1], [0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0], [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1]],\n  \"x_nr_paths\" : 4,\n  \"x_arc_path_lengths\" : [2, 2, 3, 4],\n  \"x_iblock_paths\" : [[[4, 4], [4, 4], [null, null], [null, null]], [[3, 4], [4, 4], [null, null], [null, null]], [[3, 4], [4, 4], [4, 4], [null, null]], [[3, 4], [3, 4], [3, 4], [4, 4]]],\n  \"x_propagated_iblocks\" : [[[4, 4], [1, 1], [null, null], [null, null]], [[3, 4], [3, 4], [null, null], [null, null]], [[3, 4], [3, 4], [3, 4], [null, null]], [[3, 4], [9, 16], [27, 64], [27, 64]]],\n  \"x_iblocks\" : [[1, 1], [3, 4], [3, 4], [27, 64]],\n  \"x_aggregated_iblocks\" : [[1, 1], [7, 4], [5, 2], [187, 64]],\n  \"x_cmql_value\" : true\n}\n"}, "sections": ["o_json", "raw"]}
-{"type": "statistics", "statistics": {"initTime": 0.162904, "solveTime": 0.166315, "solutions": 1, "variables": 32745, "propagators": 44660, "propagations": 230289, "nodes": 77, "failures": 35, "restarts": 0, "peakDepth": 15}}
-{"type": "statistics", "statistics": {"nSolutions": 1}}
-}
-{name=LS02.dzn, path_value, noeuds aléatoires{"type": "trace", "section": "mzn_vis_0", "message": {"url": "std/ide/vis_network.html", "userData": {"edgeLabels": ["3/4", "-2/4", "3/4", "4/4", "3/4", "3/4", "4/4", "-3/4", "3/4", "2/4", "4/4", "4/4"], "from": ["1", "2", "3", "3", "3", "4", "4", "5", "6", "7", "8", "11"], "highlight": true, "nodeLabels": ["ChalutLateral", "AugmentationChargesArmement", "EquipageCompetent", "PatronConnaissantMetier", "AugmentationChargesCommunes", "EntretienMateriel", "ModificationChalutSelonSaison", "QualiteProduction", "Rentabilite", "Fatigue", "VolumeProductionImportant"], "nodes": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"], "to": ["10", "9", "4", "8", "11", "6", "11", "9", "11", "11", "9", "9"], "type": "digraph"}}}
-{"type": "statistics", "statistics": {"paths": 0, "flatBoolVars": 4565, "flatIntVars": 1916, "flatBoolConstraints": 3888, "flatIntConstraints": 4468, "evaluatedReifiedConstraints": 2517, "evaluatedHalfReifiedConstraints": 2512, "eliminatedImplications": 1608, "method": "satisfy", "flatTime": 0.790403}}
-{"type": "status", "status": "UNSATISFIABLE"}
-{"type": "statistics", "statistics": {"initTime": 0.0691132, "solveTime": 0.00123914, "solutions": 0, "variables": 6488, "propagators": 8848, "propagations": 13913, "nodes": 7, "failures": 4, "restarts": 0, "peakDepth": 1}}
-{"type": "statistics", "statistics": {"nSolutions": 0}}
-}
-{name=LS02.dzn, value, noeuds aléatoires{"type": "statistics", "statistics": {"paths": 0, "flatBoolVars": 22769, "flatIntVars": 9973, "flatBoolConstraints": 19239, "flatIntConstraints": 22704, "evaluatedReifiedConstraints": 12139, "evaluatedHalfReifiedConstraints": 13316, "eliminatedImplications": 8058, "method": "satisfy", "flatTime": 2.39574}}
-{"type": "status", "status": "UNSATISFIABLE"}
-{"type": "statistics", "statistics": {"initTime": 0.302244, "solveTime": 0.0185076, "solutions": 0, "variables": 32745, "propagators": 44638, "propagations": 108400, "nodes": 23, "failures": 12, "restarts": 0, "peakDepth": 3}}
-{"type": "statistics", "statistics": {"nSolutions": 0}}
-}
+def parse_multiple_json(json_string):
+    # Split the JSON string by newlines and then filter out any empty strings
+    json_parts = [part.strip() for part in json_string.split('\n') if part.strip()]
+    return [json.loads(part) for part in json_parts]
 
-data = json.loads(json_data)
+def parse_multiple_json2(json_string):
+    # Split the JSON string by newlines and then filter out any empty strings
+    json_parts = [part.strip() for part in json_string.split('\n') if part.strip()]
+    json_parts2 = []
+    for i in range(1, len(json_parts)-1) :
+        json_parts2.append(json_parts[i])
+    return [ json.loads(part) for part in  json_parts2]
 
-rows = []
-for item in data:
-        if entry["type"] == "statistics":
-            statistics = entry["statistics"]
-            row = {
-                "number_of_vertices": 17,  # Valeur fictive, doit être extraite si disponible
-                "density": 0.25,  # Valeur fictive, doit être calculée si nécessaire
-                "path_length_number_of_paths": statistics.get("paths", 0),
-                "number_of_vars": statistics.get("variables", 0),
-                "number_of_propagation": statistics.get("propagations", 0),
-                "flattening_time": statistics.get("flatTime", 0),
-                "solving_time": statistics.get("solveTime", 0)
-            }
-            rows.append(row)
+# Fonction pour extraire la valeur de "x_arc_path_length"
+def extract_x_arc_path_length(path_value_output):
+    if 'o_json' in path_value_output:
+        try:
+            # Récupérer la chaîne JSON brute
+            o_json_raw = path_value_output['o_json']
+            
+            # Trouver la position de la fin de la première partie JSON
+            end_of_json = o_json_raw.find('}') + 1
+            o_json_cleaned = o_json_raw[:end_of_json]
+            
+            # Parse the JSON string into a dictionary
+            o_json_objects = json.loads(o_json_cleaned)
+            
+            # Extract the 'x_arc_path_length' value, with a default of 0 if not present
+            return o_json_objects.get('x_arc_path_length', 0)
+        
+        except json.JSONDecodeError:
+            print("Error decoding o_json")
+            return None
+        
+# Fonction pour extraire la valeur de "x_arc_path_length"
+def extract_x_nr_paths(path_value_output):
+    if 'o_json' in path_value_output:
+        try:
+            # Récupérer la chaîne JSON brute
+            o_json_raw = path_value_output['o_json']
+            
+            # Trouver la position de la fin de la première partie JSON
+            end_of_json = o_json_raw.find('}') + 1
+            o_json_cleaned = o_json_raw[:end_of_json]
+            
+            # Parse the JSON string into a dictionary
+            o_json_objects = json.loads(o_json_cleaned)
+            
+            # Extract the 'x_arc_path_length' value, with a default of 0 if not present
+            return o_json_objects.get('x_nr_paths', 0)
+        
+        except json.JSONDecodeError:
+            print("Error decoding o_json")
+            return None
+        
+def update_stats(stats_dict, new_data):
+    
+    for key, value in new_data.items():
+        if key in stats_dict:
+            if isinstance(stats_dict[key], (int, float)) and isinstance(value, (int, float)):
+                stats_dict[key] += value
+        else:
+            
+            stats_dict[key] = value
 
-df = pd.D
+# Charger les données JSON depuis un fichier
+with open('output2.json', 'r', encoding='utf-8') as file:
+    data = json.load(file)
+
+# Ouvrir le fichier CSV pour écriture
+with open('stats.csv', 'w', newline='', encoding='utf-8') as csvfile:
+    # Définir les noms des colonnes
+    fieldnames = [
+        'name', 'number of vertices', 'density', 'number of paths', 'number of vars (value)',
+        'number of propagation (value)', 'flatening time (value)', 'solving time (value)',
+        'path length', 'number of vars (path_value)', 'number of propagation (path_value)',
+        'flatening time (path_value)', 'solving time (path_value)'
+    ]
+    
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+    writer.writeheader()
+    
+    for entry in data:
+        name = entry['name']
+        for solution in entry['data']:
+            row = {'name': name}
+            path_value_stats = {}
+            value_stats = {}
+            path_value_output = {}
+            value_output = {}
+            trace_data = None
+            
+           # Extraire les données de "path_value" et "value"
+            if 'path_value' in solution and solution['path_value']:
+                try:
+                    path_value_objects = parse_multiple_json(solution['path_value'])
+                    for obj in path_value_objects:
+                        if obj.get('type') == 'trace':
+                            trace_data = obj['message']['userData']
+                        elif obj.get('type') == 'statistics':
+                            update_stats(path_value_stats, obj['statistics'])
+                        elif obj.get('type') == 'solution':
+                            update_stats(path_value_output, obj['output'])
+                except json.JSONDecodeError:
+                    print(f"Error decoding JSON for path_value in {name}")
+
+            if 'value' in solution and solution['value']:
+                try:
+                    value_objects = parse_multiple_json(solution['value'])
+                    for obj in value_objects:
+                        if obj.get('type') == 'statistics':
+                            update_stats(value_stats, obj['statistics'])
+                        elif obj.get('type') == 'solution':
+                            update_stats(value_output, obj['output'])
+                except json.JSONDecodeError:
+                    print(f"Error decoding JSON for value in {name}")
+            
+            # Remplir les champs pour le CSV
+            if trace_data:
+                row['number of vertices'] = len(trace_data['nodes'])
+                row['density'] = len(trace_data['edgeLabels']) / (len(trace_data['nodes']) * (len(trace_data['nodes']) - 1))
+                
+                
+            
+            if value_stats:
+                row['number of vars (value)'] = value_stats.get('variables', 0)
+                row['number of propagation (value)'] = value_stats.get('propagations', 0)
+                row['flatening time (value)'] = value_stats.get('flatTime', 0)
+                row['solving time (value)'] = value_stats.get('solveTime', 0)
+            
+            if path_value_stats:
+                row['number of vars (path_value)'] = path_value_stats.get('flatBoolVars', 0)
+                row['number of propagation (path_value)'] = path_value_stats.get('propagations', 0)
+                row['flatening time (path_value)'] = path_value_stats.get('flatTime', 0)
+                row['solving time (path_value)'] = path_value_stats.get('solveTime', 0)
+            row['path length'] = extract_x_arc_path_length(path_value_output)             
+            row['number of paths'] = extract_x_nr_paths(value_output)
+            writer.writerow(row)
