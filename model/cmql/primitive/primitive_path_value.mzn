@@ -144,7 +144,7 @@ predicate cmql_arc_node_path(CMAP: cmap, array[int] of var opt int: x_arc_path, 
 
 		% (1) path minimality based on the path-minimality feature configuration
 		% - if node-wise path minimality, all nodes must be different in the path
-		(F_PATH_MINIMALITY == F_PATH_MINIMALITY_NODE -> all_different(x_node_path)) /\ % all_different on optional array is supported and relaxed wrt. opt values - see fzn_all_different_int_opt
+		(DEOPT_F_PATH_MINIMALITY == F_PATH_MINIMALITY_NODE -> all_different(x_node_path)) /\ % all_different on optional array is supported and relaxed wrt. opt values - see fzn_all_different_int_opt
 		
 		% (2) matching arc and node occurrences
 		% - the i-th node occurs if the i+1-th node occurs

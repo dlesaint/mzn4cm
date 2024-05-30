@@ -72,7 +72,8 @@ var NODE_ID: x_destination_node;
 
 % the range for indexing any sequence of nodes corresponding to a solution path
 % - the upper-bound depends on the chosen path-minimality definition amongst the 2 variants
-set of int: NODE_PATH = if F_PATH_MINIMALITY == F_PATH_MINIMALITY_NODE then 1..min(max(NODE_ID), max(ARC_ID)+1) else 1..max(ARC_ID)+1 endif;
+
+set of int: NODE_PATH = if DEOPT_F_PATH_MINIMALITY == F_PATH_MINIMALITY_NODE then 1..min(max(NODE_ID), max(ARC_ID)+1) else 1..max(ARC_ID)+1 endif;
 
 % the range for indexing any sequence of arcs corresponding to a solution path
 % - the upper-bound depends on the chosen path-minimality definition amongst the 2 variants
