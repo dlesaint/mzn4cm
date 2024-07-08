@@ -57,10 +57,10 @@ opt NODE_ID: origin_node;
 % the optional fixed destination node
 opt NODE_ID: destination_node;
 
-int: nb_paths;
+int: nb_paths = 4;
 
-int: size_path;
-array[int,int] of var int: matrix;
+int: size_path = 5;
+%array[int,int] of var int: matrix;
 
 % assertions
 constraint assert((occurs(origin_node) /\ occurs(destination_node)) -> deopt(origin_node )!= deopt(destination_node), "path origin and destination concepts must be different");
@@ -147,7 +147,7 @@ constraint :: "constraint: path propagation between origin and destination nodes
 		cmql_path_value_fixed(cmap,deopt(origin_node),deopt(destination_node),x_arc_path_length,x_arc_path,x_node_path,x_iblock_path,x_propagated_iblocks,x_propagated_influence)
 	endif	 /\
 	% reifying satisfiability of query (to customize)
-	x_cmql_path_value == (x_arc_path_length > 0) /\
+	x_cmql_path_value == (x_arc_path_length > 3) /\
 	% forcing satisfiability
 	x_cmql_path_value
 ;
@@ -164,27 +164,27 @@ solve
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% QUERY OUTPUT
 
-% %
-% output :: "o_instance"
-% 	displayInstance(instance);
+%
+output :: "o_instance"
+	displayInstance(instance);
 
-% %
-% output :: "o_query"
-% ["****** TEST - Query cmql_path_value - Path influence propagation ***********"]
-% ++ ["\n"]
-% ++ ["Origin node =\t\t"]
-% % ++ [show(cmap.node_labels[origin_node])]
-% ++ [show(cmap.node_labels[fix(x_origin_node)])]
-% ++ ["\n"]
-% ++ ["Destination node =\t"]
-% % ++ [show(cmap.node_labels[destination_node])]
-% ++ [show(cmap.node_labels[fix(x_destination_node)])]
-% ++ ["\n"]
-% ;
+%
+output :: "o_query"
+["****** TEST - Query cmql_path_value - Path influence propagation ***********"]
+++ ["\n"]
+++ ["Origin node =\t\t"]
+% ++ [show(cmap.node_labels[origin_node])]
+++ [show(cmap.node_labels[fix(x_origin_node)])]
+++ ["\n"]
+++ ["Destination node =\t"]
+% ++ [show(cmap.node_labels[destination_node])]
+++ [show(cmap.node_labels[fix(x_destination_node)])]
+++ ["\n"]
+;
 
-% %
-% output :: "o_solution_cmql_path_value"
-% 	cmql_path_value_output(cmap, x_arc_path_length, x_arc_path, x_node_path, x_iblock_path, x_propagated_iblocks, x_propagated_influence);
+%
+output :: "o_solution_cmql_path_value"
+	cmql_path_value_output(cmap, x_arc_path_length, x_arc_path, x_node_path, x_iblock_path, x_propagated_iblocks, x_propagated_influence);
 
-output :: "o_json"
-	outputJSON();
+% output :: "o_json"
+% 	outputJSON();
