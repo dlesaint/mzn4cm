@@ -51,24 +51,9 @@ set of int: NODE_ID = index_set(cmap.node_labels);
 % the range of arc ids in the c-map's digraph
 set of int: ARC_ID = index_set(cmap.arc_labels);
 
-% the optional fixed origin node
-opt NODE_ID: origin_node;
-
-% the optional fixed destination node
-opt NODE_ID: destination_node;
-
-% assertions
-constraint assert((occurs(origin_node) /\ occurs(destination_node)) -> deopt(origin_node )!= deopt(destination_node), "path origin and destination concepts must be different");
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% QUERY VARIABLES
-
-% the origin node of the solution path
-var NODE_ID: x_origin_node;
-	
-% the destination node of the solution path
-var NODE_ID: x_destination_node;
 
 % the range for indexing any sequence of nodes corresponding to a solution path
 % - the upper-bound depends on the chosen path-minimality definition amongst the 2 variants
@@ -111,19 +96,16 @@ var INFLUENCE: x_propagated_influence;
 % optional boolean variable representing the satisfiability of the query
 var bool: x_cmql_path_value;
 
-
+var NODE_ID: node;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% QUERY CONSTRAINT
 
 %
 constraint :: "constraint: path propagation between origin and destination nodes"
-	% binds origin node if given
-	(occurs(origin_node) -> (x_origin_node == deopt(origin_node))) /\ % !! see semantics of == over opt vars
-	% binds destination node if given
-	(occurs(destination_node) -> (x_destination_node == deopt(destination_node))) /\ % !! see semantics of == over opt vars
 	% searches for non-empty dipath
-	cmql_path_value(cmap, x_origin_node, x_destination_node, x_arc_path_length, x_arc_path, x_node_path, x_iblock_path, x_propagated_iblocks, x_propagated_influence) /\
+	cmql_path_value_classic(cmap, x_arc_path_length, x_arc_path, x_node_path, x_iblock_path, x_propagated_iblocks, x_propagated_influence) /\
+	%cmql_is_in_map(cmap,"manifestations",node ) /\
 	% reifying satisfiability of query (to customize)
 	x_cmql_path_value == (x_arc_path_length > 0) /\
 	% forcing satisfiability
@@ -134,35 +116,20 @@ constraint :: "constraint: path propagation between origin and destination nodes
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% QUERY SEARCH STRATEGY
 
-solve
-	:: cmql_path_value_search(x_origin_node, x_destination_node, x_arc_path_length, x_arc_path, x_node_path, x_iblock_path, x_propagated_iblocks, x_propagated_influence, x_cmql_path_value)
-	satisfy;
+solve	satisfy;
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% QUERY OUTPUT
 
 %
-%output :: "o_instance"
-%	displayInstance(instance);
+output :: "o_instance"
+	displayInstance(instance);
 
-%
-output :: "o_query"
-["****** TEST - Query cmql_path_value - Path influence propagation ***********"]
-++ ["\n"]
-++ ["Origin node =\t\t"]
-% ++ [show(cmap.node_labels[origin_node])]
-++ [show(cmap.node_labels[fix(x_origin_node)])]
-++ ["\n"]
-++ ["Destination node =\t"]
-% ++ [show(cmap.node_labels[destination_node])]
-++ [show(cmap.node_labels[fix(x_destination_node)])]
-++ ["\n"]
-;
 
 %
 output :: "o_solution_cmql_path_value"
-	cmql_path_value_output(cmap, x_arc_path_length, x_arc_path, x_node_path, x_iblock_path, x_propagated_iblocks, x_propagated_influence);
+	cmql_path_value_output_classic(cmap, x_arc_path_length, x_arc_path, x_node_path, x_iblock_path, x_propagated_iblocks, x_propagated_influence);
 
-%output :: "o_json"
-	%outputJSON();
+output :: "o_json"
+	outputJSON();
