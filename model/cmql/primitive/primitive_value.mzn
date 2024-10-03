@@ -134,7 +134,7 @@ predicate cmql_value (
 
 		% (1) origin and destination nodes must be different
 		(x_origin_node != x_destination_node) /\
-				
+
 		% (2) bounding the number of solution paths
 		(0 <= x_nr_paths) /\
 		(x_nr_paths <= max(PATH_ID)) /\
@@ -143,10 +143,11 @@ predicate cmql_value (
 		count_eq(x_arc_path_lengths, 0, card(PATH_ID) - x_nr_paths) /\
 				
 		% (4-1) determining solution paths and propagation results
-		forall(i in PATH_ID)(cmql_path_value(cmap, x_origin_node, x_destination_node, x_arc_path_lengths[i], x_arc_paths[i,ARC_PATH], x_node_paths[i,NODE_PATH], x_iblock_paths[i,ARC_PATH,IBLOCK_COMPONENT], x_propagated_iblocks[i,ARC_PATH,IBLOCK_COMPONENT], x_propagated_influences[i])) /\
+		forall(i in PATH_ID)(cmql_path_value(cmap, x_origin_node,x_destination_node,x_arc_path_lengths[i], x_arc_paths[i,ARC_PATH], x_node_paths[i,NODE_PATH], x_iblock_paths[i,ARC_PATH,IBLOCK_COMPONENT], x_propagated_iblocks[i,ARC_PATH,IBLOCK_COMPONENT], x_propagated_influences[i])) /\
  		% (4-2) sorting solution paths lexicographically by ascending path length first then ascending arc ids
 		lex_chain_less_opt(x_nr_paths, x_arc_path_lengths, x_arc_paths) /\
-
+		% (4-3) check that all path begin with the origin node and end with destination node
+		forall (i in PATH_ID)(i <= x_nr_paths -> (x_origin_node == x_node_paths[i,min(NODE_PATH)] /\ x_destination_node = x_node_paths[i,x_arc_path_lengths[i]+1])) /\
 		% (5) determining the propagated i-block of each path (x_iblocks)
 % 		forall(i in PATH_ID)(i <= x_nr_paths <-> forall(j in IBLOCK_COMPONENT)(occurs(x_iblocks[i,j]))) /\ % entailed by next+1 constraint
 		forall(i in PATH_ID)(i > x_nr_paths -> forall(j in IBLOCK_COMPONENT)(absent(x_iblocks[i,j]))) /\
@@ -276,7 +277,6 @@ function array[int] of string: cmql_value_output(
 	++	["Path lengths\t\t"]
 	++	[ show(x_arc_path_lengths)]
 	++	["\n"]
-
 	++	["Node paths\t\t"]
 	++	[if j==min(index_set_2of2(x_node_paths)) then "path " ++ show(i) ++ ":\t" endif ++ if occurs(fix(x_node_paths[i,j])) then cmap.node_labels[fix(deopt(x_node_paths[i,j]))].concept.name else NO_NODE endif ++ if j < max(index_set_2of2(x_node_paths)) then PATH_SEPARATOR else NEXT_NODE_PATH endif | i in index_set_1of2(x_node_paths), j in index_set_2of2(x_node_paths)]
 	++	["\n"]

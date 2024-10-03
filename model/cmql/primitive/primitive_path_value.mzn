@@ -213,7 +213,7 @@ predicate cmql_arc_path(CMAP: cmap, var int: x_arc_path_length, array[int] of va
 
 		% (1) path minimality based on the path-minimality feature configuration
 		% - if arc-wise path minimality, all arcs must be different in the path
-		(F_PATH_MINIMALITY == F_PATH_MINIMALITY_ARC -> all_different(x_arc_path)) /\ % all_different on optional array is supported and relaxed wrt. opt values - see fzn_all_different_int_opt
+		 % all_different on optional array is supported and relaxed wrt. opt values - see fzn_all_different_int_opt
 		
 		% (2) the length of the path is the number of occurring arcs in the arc path array and their maximum index
 		% - every arc is absent if the length is 0
