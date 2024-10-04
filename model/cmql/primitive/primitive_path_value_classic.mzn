@@ -33,7 +33,7 @@ let {
 	% (1) determining a path
 	cmql_path(cmap, c1,c2,x_arc_path, x_node_path) /\
 	% (2) determining the length of the path
-	forall(i in ARC_PATH)(occurs(x_arc_path[i]) <-> i <= x_arc_path_length)  /\
+	cmql_length(cmap, x_arc_path, x_node_path,x_arc_path_length) /\
     % (4-1) determining a sequence of arcs corresponding to a minimal dipath of the right length in the c-map
 		%cmql_arc_path(cmap, x_arc_path_length, x_arc_path) /\
 		% (4-2) determining minimal consistent arc and node sequences

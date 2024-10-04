@@ -1,6 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% OPT SIGNED ENUMERATION I-TYPE
-
 % I-type non-virtual domain elements
 I_DOMAIN = {
 	A,	% ambiguous

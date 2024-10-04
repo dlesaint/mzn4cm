@@ -11,6 +11,14 @@ include "./../../ranges/ranges.mzn";
 
 include "alldifferent.mzn";
 
+function ann: cmql_path_search(var bool: x_cmql_path, var int: x_origin_node, var int: x_destination_node)
+	=
+	seq_search([
+		int_search([x_cmql_path], input_order, indomain_max),
+		int_search([x_origin_node, x_destination_node], input_order, indomain_min)
+	])
+;
+
 predicate cmql_path (
     CMAP: cmap,
     var opt int: x_origin_node,
@@ -53,7 +61,7 @@ let {
 		% (5) the length of the path is the number of occurring arcs in the arc path array and their maximum index
 		% - every arc is absent if the length is 0
 		% - every arc occurs if the next arc occurs
-		forall(i in ARC_PATH)(occurs(x_arc_path[i]) <-> i <= path_length) /\
+		cmql_length(cmap, x_arc_path,x_node_path, path_length) /\
 		% (6) matching heads and tails of successive occurring arcs
 		forall(i in min(ARC_PATH)<..max(ARC_PATH))(occurs(x_arc_path[i]) -> from[x_arc_path[i]] == to[x_arc_path[i-1]]) /\
 		true

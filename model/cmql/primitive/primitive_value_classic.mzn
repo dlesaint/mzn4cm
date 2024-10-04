@@ -106,9 +106,7 @@ predicate cmql_value_classic (
         ) /\
         % (3) checks the lengths of the paths
         forall(i in PATH_ID)(
-           forall(j in ARC_PATH)(
-            occurs(x_arc_paths[i,j]) <-> j <= x_arc_path_lengths[i]
-            ) 
+           cmql_length(cmap, x_arc_paths[i],  x_node_paths[i], x_arc_path_lengths[i])
         ) /\
         % (4) checks that the paths begin and end with the origin and destination nodes
         forall(i in PATH_ID)( (i <= x_nr_paths) -> 

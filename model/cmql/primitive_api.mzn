@@ -154,6 +154,8 @@ predicate cmql_arc_path(CMAP: cmap, var int: x_arc_path_length, array[int] of va
 	:: "cmql_arc_path($cmap,$x_arc_path_length,$x_arc_path): determines a minimal consistent arc path $x_arc_path of length $x_arc_path_length wrt. cmap $cmap and path-minimality feature (var)"
 ;
 
+% cmql Length
+predicate cmql_length (CMAP: cmap,array[int] of var opt int: x_arc_path,array[int] of var opt int: x_node_path,var int: x_length);
 %
 function array[int] of string: cmql_path_value_output(CMAP: cmap, var int: x_arc_path_length, array[int] of var opt int: x_arc_path, array[int] of var opt int: x_node_path, array[int, int] of var opt int: x_iblock_path, array[int, int] of var opt int: x_propagated_iblocks, var INFLUENCE: x_propagated_influence);
 
@@ -171,4 +173,5 @@ function array[int] of string: cmql_value_output_classic(
                         var int: x_nr_paths
 						)
 	;
-	
+
+function array[int] of string: cmql_length_output (CMAP: cmap,array[int] of var opt int: x_arc_path,array[int] of var opt int: x_node_path,var int: x_length);

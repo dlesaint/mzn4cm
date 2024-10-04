@@ -79,18 +79,26 @@ array[ARC_PATH] of var opt ARC_ID: x_arc_path;
 
 array[NODE_PATH] of var opt NODE_ID: x_node_path;
 
+array[IBLOCK_COMPONENT] of var opt int: x_propagated_iblock;
+
 var INFLUENCE: x_propagated_influence;
+
+var bool: x_result; 
+
+var int: x_length;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% SOLVING STRATEGY
 constraint 
 %cmql_path(cmap,x_origin_node, x_destination_node,x_arc_path, x_node_path) %/\
-%cmql_path_value_classic(cmap, x_arc_path,x_node_path,x_propagated_influence)
-cmql_value_classic(cmap, x_origin_node, x_destination_node, x_aggregated_influence, x_arc_paths, x_node_paths, x_iblocks, x_arc_path_lengths, x_nr_paths)
-
+%cmql_path_value_classic(cmap, x_arc_path,x_node_path,x_propagated_iblock,x_propagated_influence)
+cmql_path(cmap, x_origin_node, x_destination_node,x_arc_path, x_node_path) /\
+cmql_length(cmap, x_arc_path, x_node_path, x_length) /\
+x_result == occurs(x_arc_path[1]) /\
+x_result
 ;
 % 
-solve :: cmql_value_search_classic(x_nr_paths) 
+solve %:: cmql_path_search(x_result, x_origin_node, x_destination_node) 
 satisfy;
 
 
@@ -104,4 +112,6 @@ satisfy;
 
 %output cmql_path_value_output_classic(cmap, x_arc_path,x_node_path,x_propagated_influence);
 
-output cmql_value_output_classic(cmap,x_destination_node, x_origin_node, x_aggregated_influence, x_arc_paths, x_node_paths, x_iblocks, x_arc_path_lengths, x_nr_paths);
+%output cmql_value_output_classic(cmap,x_destination_node, x_origin_node, x_aggregated_influence, x_arc_paths, x_node_paths, x_iblocks, x_arc_path_lengths, x_nr_paths);
+
+output cmql_length_output(cmap, x_arc_path, x_node_path, x_length);

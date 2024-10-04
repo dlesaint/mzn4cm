@@ -14,3 +14,4 @@ include "./../cmql/primitive/primitive_value.mzn";
 include "./../cmql/primitive/primitive_path_value_classic.mzn";
 include "./../cmql/primitive/primitive_path.mzn";
 include "./../cmql/primitive/primitive_value_classic.mzn";
+include "./../cmql/primitive/primitive_length.mzn";
