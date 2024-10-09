@@ -33,28 +33,39 @@ def topological_sort(graph, V):
     
     return topo_order
 
-def longest_path_dag(matrix, start):
+def longest_path_with_cycles(matrix, start):
+    def dfs(graph, node, visited, memo):
+        if node in visited:
+            return -float('inf')  # Ignorer ce chemin si le nœud est déjà visité dans cette branche
+        if memo[node] != -1:
+            return memo[node]  # Si on a déjà calculé le chemin max pour ce nœud, on retourne le résultat mémorisé
+
+        visited.add(node)  # Marquer le nœud comme visité
+        max_dist = 0  # Initialiser la distance maximale pour ce nœud
+
+        for neighbor, weight in graph[node]:
+            # Calculer la distance pour chaque voisin en évitant les boucles
+            max_dist = max(max_dist, weight + dfs(graph, neighbor, visited, memo))
+        
+        visited.remove(node)  # Retirer le nœud du chemin actuel pour explorer d'autres chemins
+        memo[node] = max_dist  # Mémoriser la distance maximale depuis ce nœud
+        return max_dist
+
     V = len(matrix)
     graph = matrix_to_adjacency_list(matrix)
-    topo_order = topological_sort(graph, V)
-    dist = [-float('inf')] * V
-    dist[start] = 0
+    memo = [-1] * V  # Mémo pour stocker les résultats intermédiaires
+    visited = set()  # Ensemble pour suivre les nœuds visités
 
-    for u in topo_order:
-        if dist[u] != -float('inf'):
-            for v, weight in graph[u]:
-                if dist[v] < dist[u] + weight:
-                    dist[v] = dist[u] + weight
-    
-    return dist
+    # Calculer la distance maximale à partir du nœud de départ
+    return dfs(graph, start, visited, memo)
 
 def max_legth (adj_matrix):
     result = 0
     for i in range(adj_matrix.shape[0]):
-        tmp = longest_path_dag(adj_matrix, i)
+        tmp =  longest_path_with_cycles(adj_matrix,i)
         #print(tmp)        
-        if result<max(tmp):
-            result = max(tmp)
+        if result<tmp:
+            result = tmp
     #print(result)
     return(result)
 
@@ -83,7 +94,8 @@ def count_paths_dfs(adj_matrix,start,end):
                 count += dfs(neighbor,end,visited)
         visited[current] = False
         return count
-    visited = [False] * len(adj_matrix)
+    visited = [False] * len(adj_matrix)    
+        
     return dfs(start,end,visited)
 
 def adj_matrix_to_nb_path_no_cycles (adj_matrix):
@@ -94,9 +106,9 @@ def adj_matrix_to_nb_path_no_cycles (adj_matrix):
             tmp = count_paths_dfs(adj_matrix,i,j)
             array.append(tmp)
             if tmp > max:
-                max = tmp      
-    #print(max)
+                max = tmp 
     return max,array
+
 def parse_icmap_file(icmap_file):
     """Parse the ICMap file and extract the adjacency matrix."""
     with open(icmap_file, 'r') as file:
@@ -130,7 +142,8 @@ def run_minizinc_command(args, dzn_file):
     command = f"minizinc {args.model} -d {args.icmap} -d {args.itype} -d {dzn_file}"
     if args.data != None:
         command += f" -d {args.data}"
-    command += f" --json-stream -s --time-limit 60000"
+    #command += f" --json-stream -s --time-limit 60000"
+    
     subprocess.run(command, shell=True)
     
 
@@ -147,7 +160,10 @@ def main():
     icmap_parameters = parse_icmap_file(args.icmap)
     adj_matrix_to_nb_path(icmap_parameters)
     nb_paths,matrix = adj_matrix_to_nb_path_no_cycles(icmap_parameters)    
+    print(nb_paths)
+    print(matrix)    
     size_path = max_legth(icmap_parameters)
+    print(size_path)
     dzn_file = "data.dzn"
     add_parameters_to_dzn(dzn_file,nb_paths,matrix, size_path, args)
     run_minizinc_command(args, dzn_file)
