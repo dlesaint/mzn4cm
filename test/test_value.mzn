@@ -158,7 +158,7 @@ constraint :: "constraint: path aggregation between origin and destination nodes
 	% reifying satisfiability of query (to customize)
 	x_cmql_value == (x_nr_paths >= 1) /\
 	% forcing satisfiability
-	x_cmql_value /\
+	%x_cmql_value /\
 	true
 ;
 
@@ -197,5 +197,5 @@ solve
 %output :: "o_solution_cmql_value"
 %	cmql_value_output(cmap, x_nr_paths, x_arc_path_lengths, x_arc_paths, x_node_paths, x_iblock_paths, x_propagated_iblocks, x_iblocks, x_aggregated_iblocks, x_aggregated_influence);
 
-output :: "o_json"
- 	outputJSON();
+%output :: "o_json"
+ %	outputJSON();

@@ -52,10 +52,10 @@ def max_legth (adj_matrix):
     result = 0
     for i in range(adj_matrix.shape[0]):
         tmp = longest_path_dag(adj_matrix, i)
-        print(tmp)        
+        #print(tmp)        
         if result<max(tmp):
             result = max(tmp)
-    print(result)
+    #print(result)
     return(result)
 
 def adj_matrix_to_nb_path (adj_matrix):
@@ -69,8 +69,8 @@ def adj_matrix_to_nb_path (adj_matrix):
         for j in range(adj_matrix.shape[0]):
             if sum_matrix[i][j] > max:
                 max = sum_matrix[i][j]
-    print(sum_matrix)
-    print(max)
+    #print(sum_matrix)
+    #print(max)
     return max
 def count_paths_dfs(adj_matrix,start,end):
     def dfs(current,end,visited):
@@ -95,7 +95,7 @@ def adj_matrix_to_nb_path_no_cycles (adj_matrix):
             array.append(tmp)
             if tmp > max:
                 max = tmp      
-    print(max)
+    #print(max)
     return max,array
 def parse_icmap_file(icmap_file):
     """Parse the ICMap file and extract the adjacency matrix."""

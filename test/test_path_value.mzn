@@ -147,9 +147,9 @@ constraint :: "constraint: path propagation between origin and destination nodes
 		cmql_path_value_fixed(cmap,deopt(origin_node),deopt(destination_node),x_arc_path_length,x_arc_path,x_node_path,x_iblock_path,x_propagated_iblocks,x_propagated_influence)
 	endif	 /\
 	% reifying satisfiability of query (to customize)
-	x_cmql_path_value == (x_arc_path_length > 0) /\
+	x_cmql_path_value == (x_arc_path_length > 0) %/\
 	% forcing satisfiability
-	x_cmql_path_value
+	%x_cmql_path_value
 ;
 
 
@@ -186,6 +186,6 @@ solve
 % output :: "o_solution_cmql_path_value"
 % 	cmql_path_value_output(cmap, x_arc_path_length, x_arc_path, x_node_path, x_iblock_path, x_propagated_iblocks, x_propagated_influence);
 
-output :: "o_json"
-	outputJSON() ++ [show(x_propagated_influence)]
-	;
+%output :: "o_json"
+	%outputJSON() ++ [show(x_propagated_influence)]
+%	;
