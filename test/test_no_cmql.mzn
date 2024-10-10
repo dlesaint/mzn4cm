@@ -44,12 +44,17 @@ set of int: NODE_ID = index_set(cmap.node_labels);
 % the range of arc ids in the c-map's digraph
 set of int: ARC_ID = index_set(cmap.arc_labels);
 
-set of int: NODE_PATH = if DEOPT_F_PATH_MINIMALITY == F_PATH_MINIMALITY_NODE then 1..min(max(NODE_ID), max(ARC_ID)+1) else 1..max(ARC_ID)+1 endif;
+%set of int: NODE_PATH = if DEOPT_F_PATH_MINIMALITY == F_PATH_MINIMALITY_NODE then 1..min(max(NODE_ID), max(ARC_ID)+1) else 1..max(ARC_ID)+1 endif;
 
-set of int: PATH_ID = 1..10;
-% the range for indexing any sequence of arcs corresponding to a solution path
-% - the upper-bound depends on the chosen path-minimality definition amongst the 2 variants
-set of int: ARC_PATH = 1..max(NODE_PATH)-1;
+int: nb_paths;
+int: size_path;
+array[int,int] of var int: matrix;
+
+set of int: PATH_ID = if DEOPT_F_NB_PATH_COUNTING == F_PYTHON_COUNTING then 1..nb_paths else 1..nr_paths(transform_matrix(cmap.adigraph.a)) endif;
+
+set of int: NODE_PATH = if DEOPT_F_NB_PATH_COUNTING == F_PYTHON_COUNTING then 1..size_path else 1..min(max(NODE_ID), max(ARC_ID)+1)  endif;
+
+set of int: ARC_PATH = 1..(max(NODE_PATH)-1);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% QUERY VARIABLES
 

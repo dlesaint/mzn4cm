@@ -227,7 +227,7 @@ predicate cmql_value_fixed (
 		count_eq(x_arc_path_lengths, 0, card(PATH_ID) - x_nr_paths) /\
 				
 		% (4-1) determining solution paths and propagation results
-		forall(i in PATH_ID)(cmql_path_value_fixed(cmap, deopt(origin_node), deopt(destination_node), x_arc_path_lengths[i], x_arc_paths[i,ARC_PATH], x_node_paths[i,NODE_PATH], x_iblock_paths[i,ARC_PATH,IBLOCK_COMPONENT], x_propagated_iblocks[i,ARC_PATH,IBLOCK_COMPONENT], x_propagated_influences[i])) /\
+		forall(i in PATH_ID)(cmql_path_value_fixed(cmap, deopt(x_origin_node), deopt(x_destination_node), x_arc_path_lengths[i], x_arc_paths[i,ARC_PATH], x_node_paths[i,NODE_PATH], x_iblock_paths[i,ARC_PATH,IBLOCK_COMPONENT], x_propagated_iblocks[i,ARC_PATH,IBLOCK_COMPONENT], x_propagated_influences[i])) /\
  		% (4-2) sorting solution paths lexicographically by ascending path length first then ascending arc ids
 		lex_chain_less_opt(x_nr_paths, x_arc_path_lengths, x_arc_paths) /\
 
