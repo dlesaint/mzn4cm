@@ -49,7 +49,7 @@ function ann: cmql_value_search(
 	seq_search([
 		
 		int_search([x_cmql_value], input_order, indomain_max),
-		int_search([x_origin_node, x_destination_node], input_order, indomain_min),		
+		%int_search([x_origin_node, x_destination_node], input_order, indomain_min),		
 		int_search([x_nr_paths], input_order, indomain_max),
 		int_search(x_arc_path_lengths, input_order, indomain_min),
 		int_search([x_arc_paths[i,j] | i in index_set_1of2(x_arc_paths), j in index_set_2of2(x_arc_paths)], input_order, indomain_min),

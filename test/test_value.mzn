@@ -158,7 +158,7 @@ constraint :: "constraint: path aggregation between origin and destination nodes
 	% reifying satisfiability of query (to customize)
 	x_cmql_value == (x_nr_paths >= 1) /\
 	% forcing satisfiability
-	x_cmql_value /\
+	%x_cmql_value /\
 	true
 ;
 
@@ -174,6 +174,7 @@ solve
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% QUERY OUTPUT
+
 
 %
 output :: "o_instance"
