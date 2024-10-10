@@ -53,12 +53,16 @@ opt NODE_ID: origin_node;
 % the optional fixed destination node
 opt NODE_ID: destination_node;
 
+int: nb_paths = 4;
+int: size_path = 5;
+%array[int,int] of var int: matrix;
 % assertions
 constraint assert((occurs(origin_node) /\ occurs(destination_node)) -> deopt(origin_node )!= deopt(destination_node), "path origin and destination concepts must be different");
 
 % the range of paths of length <= max(NODE_ID), not necessarily node-minimal or arc-minimal
 %set of int: PATH_ID = 1..nr_paths(transform_matrix(cmap.adigraph.a));
-set of int: PATH_ID = 1..10;
+%bool:  b = assert(false, show(F_NB_PATH_COUNTING));
+set of int: PATH_ID = if DEOPT_F_NB_PATH_COUNTING == F_PYTHON_COUNTING then 1..nb_paths else 1..nr_paths(transform_matrix(cmap.adigraph.a)) endif ;
 
 
 
@@ -136,11 +140,15 @@ constraint :: "constraint: path aggregation between origin and destination nodes
 	% binds destination node if given
 	(occurs(destination_node) -> (x_destination_node == deopt(destination_node))) /\ % !! see semantics of == over opt vars
 	% searches for non-empty dipaths
-	cmql_value(cmap, x_origin_node, x_destination_node, x_nr_paths, x_arc_path_lengths, x_arc_paths, x_node_paths, x_iblock_paths, x_propagated_iblocks, x_iblocks, x_aggregated_iblocks, x_aggregated_influence) /\
+	if DEOPT_F_FIXED_NODE = F_UNFIXED then
+		cmql_value(cmap, x_origin_node, x_destination_node, x_nr_paths, x_arc_path_lengths, x_arc_paths, x_node_paths, x_iblock_paths, x_propagated_iblocks, x_iblocks, x_aggregated_iblocks, x_aggregated_influence) 
+	else
+		cmql_value_fixed(cmap, deopt(origin_node), deopt(destination_node), x_nr_paths, x_arc_path_lengths, x_arc_paths, x_node_paths, x_iblock_paths, x_propagated_iblocks, x_iblocks, x_aggregated_iblocks, x_aggregated_influence) 
+	endif /\
 	% reifying satisfiability of query (to customize)
 	x_cmql_value == (x_nr_paths >= 1) /\
 	% forcing satisfiability
-	x_cmql_value /\
+	%x_cmql_value /\
 	true
 ;
 
@@ -156,6 +164,7 @@ solve
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % QUERY OUTPUT
+
 
 %
 output :: "o_instance"
@@ -175,9 +184,6 @@ output :: "o_query"
 ++ ["\n"]
 ;
 
-%
+
 output :: "o_solution_cmql_value"
 	cmql_value_output(cmap, x_nr_paths, x_arc_path_lengths, x_arc_paths, x_node_paths, x_iblock_paths, x_propagated_iblocks, x_iblocks, x_aggregated_iblocks, x_aggregated_influence);
-
-output :: "o_json"
-	outputJSON();

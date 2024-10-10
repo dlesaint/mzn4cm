@@ -1,0 +1,84 @@
+
+    icmap =(
+    % icm_PB11 = (
+        % name
+        name:"PB11",
+
+        % i-type
+        itype: itype,
+        
+        % node-labeling concepts
+        node_labels:[
+            (node:1, concept:(name:"NonRespectRéglementation"))
+, (node:2, concept:(name:"PechePlaisancière"))
+, (node:3, concept:(name:"FermetureBarEnManche"))
+, (node:4, concept:(name:"RessourceAbondante"))
+, (node:5, concept:(name:"DoradeRoyale"))
+, (node:6, concept:(name:"FiletDeFond"))
+, (node:7, concept:(name:"RéchauffementClimatique"))
+, (node:8, concept:(name:"Filet_maillant_derivant"))
+, (node:9, concept:(name:"ForteConcurrence"))
+, (node:10, concept:(name:"Seiche"))
+, (node:11, concept:(name:"QualiteProduction"))
+, (node:12, concept:(name:"RéussiteDansMétierDifficile"))
+, (node:13, concept:(name:"AugmentationTempsEnPeche"))
+, (node:14, concept:(name:"ChangerDeZoneDePeche"))
+, (node:15, concept:(name:"AmeliorationAmenagementEquipement"))
+, (node:16, concept:(name:"ZoneSansConcurrence"))
+, (node:17, concept:(name:"PeuDEntretien"))
+, (node:18, concept:(name:"Rentabilite"))
+, (node:19, concept:(name:"MareeJournaliere"))
+, (node:20, concept:(name:"Surpêche"))
+, (node:21, concept:(name:"Civelle"))
+, (node:22, concept:(name:"ProductionDiverse"))
+, (node:23, concept:(name:"ArretCrevette"))
+, (node:24, concept:(name:"PatronConnaissantMetier"))
+, (node:25, concept:(name:"LiberteDeChoix"))
+, (node:26, concept:(name:"PasDEquipage"))
+, (node:27, concept:(name:"NavireMoinsDe12m"))
+, (node:28, concept:(name:"BarAuFilet"))
+, (node:29, concept:(name:"ConcurrencePélagique"))
+
+        ],
+        
+        % arc-labeling influence blocks
+        arc_labels:[
+            (arc:(t:1, h:9), influence:(iblock:[4,4]))
+, (arc:(t:3, h:29), influence:(iblock:[4,4]))
+, (arc:(t:4, h:5), influence:(iblock:[3,4]))
+, (arc:(t:5, h:18), influence:(iblock:[4,4]))
+, (arc:(t:7, h:4), influence:(iblock:[4,4]))
+, (arc:(t:7, h:23), influence:(iblock:[4,4]))
+, (arc:(t:8, h:5), influence:(iblock:[4,4]))
+, (arc:(t:8, h:16), influence:(iblock:[4,4]))
+, (arc:(t:8, h:17), influence:(iblock:[3,4]))
+, (arc:(t:8, h:28), influence:(iblock:[4,4]))
+, (arc:(t:9, h:14), influence:(iblock:[4,4]))
+, (arc:(t:9, h:21), influence:(iblock:[-4,4]))
+, (arc:(t:10, h:6), influence:(iblock:[4,4]))
+, (arc:(t:10, h:18), influence:(iblock:[1,4]))
+, (arc:(t:11, h:8), influence:(iblock:[3,4]))
+, (arc:(t:12, h:8), influence:(iblock:[3,4]))
+, (arc:(t:13, h:18), influence:(iblock:[-3,4]))
+, (arc:(t:14, h:13), influence:(iblock:[4,4]))
+, (arc:(t:14, h:21), influence:(iblock:[1,4]))
+, (arc:(t:19, h:26), influence:(iblock:[4,4]))
+, (arc:(t:19, h:27), influence:(iblock:[4,4]))
+, (arc:(t:20, h:10), influence:(iblock:[-3,4]))
+, (arc:(t:21, h:18), influence:(iblock:[3,4]))
+, (arc:(t:22, h:5), influence:(iblock:[3,4]))
+, (arc:(t:22, h:10), influence:(iblock:[3,4]))
+, (arc:(t:22, h:21), influence:(iblock:[3,4]))
+, (arc:(t:22, h:28), influence:(iblock:[3,4]))
+, (arc:(t:23, h:5), influence:(iblock:[3,4]))
+, (arc:(t:24, h:8), influence:(iblock:[4,4]))
+, (arc:(t:25, h:26), influence:(iblock:[4,4]))
+, (arc:(t:26, h:15), influence:(iblock:[4,4]))
+, (arc:(t:26, h:27), influence:(iblock:[4,4]))
+, (arc:(t:27, h:22), influence:(iblock:[4,4]))
+, (arc:(t:28, h:18), influence:(iblock:[3,4]))
+, (arc:(t:29, h:28), influence:(iblock:[-3,4]))
+
+        ],
+    );
+    

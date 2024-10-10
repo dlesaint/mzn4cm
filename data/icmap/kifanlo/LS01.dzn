@@ -1,0 +1,69 @@
+
+    icmap =(
+    % icm_LS01 = (
+        % name
+        name:"LS01",
+
+        % i-type
+        itype: itype,
+        
+        % node-labeling concepts
+        node_labels:[
+            (node:1, concept:(name:"AugmentationProductionFlottille"))
+, (node:2, concept:(name:"DiminutionChargesCommunes"))
+, (node:3, concept:(name:"ZoneSansRisque"))
+, (node:4, concept:(name:"Confort"))
+, (node:5, concept:(name:"SaisonBenthique"))
+, (node:6, concept:(name:"Rentabilite"))
+, (node:7, concept:(name:"DebarquementCeJour"))
+, (node:8, concept:(name:"RythmeDeTravailRegulier"))
+, (node:9, concept:(name:"MareeHebdomadaire"))
+, (node:10, concept:(name:"DiminutionChargesArmement"))
+, (node:11, concept:(name:"Thon"))
+, (node:12, concept:(name:"DiminutionAvaries"))
+, (node:13, concept:(name:"PatronConnaissantMetierDansPort"))
+, (node:14, concept:(name:"PrixFort"))
+, (node:15, concept:(name:"PlaisirDePecher"))
+, (node:16, concept:(name:"EspeceAForteValeur"))
+, (node:17, concept:(name:"MareeCourte"))
+, (node:18, concept:(name:"ZoneProche"))
+, (node:19, concept:(name:"PatronConnaissantMetierParHeritage"))
+, (node:20, concept:(name:"Chalut"))
+, (node:21, concept:(name:"MauvaiseMeteo"))
+
+        ],
+        
+        % arc-labeling influence blocks
+        arc_labels:[
+            (arc:(t:1, h:7), influence:(iblock:[3,4]))
+, (arc:(t:1, h:14), influence:(iblock:[-2,4]))
+, (arc:(t:2, h:6), influence:(iblock:[4,4]))
+, (arc:(t:3, h:12), influence:(iblock:[2,4]))
+, (arc:(t:5, h:11), influence:(iblock:[4,4]))
+, (arc:(t:8, h:4), influence:(iblock:[3,4]))
+, (arc:(t:9, h:2), influence:(iblock:[-2,4]))
+, (arc:(t:9, h:8), influence:(iblock:[2,4]))
+, (arc:(t:10, h:6), influence:(iblock:[4,4]))
+, (arc:(t:11, h:2), influence:(iblock:[2,4]))
+, (arc:(t:11, h:6), influence:(iblock:[4,4]))
+, (arc:(t:11, h:10), influence:(iblock:[4,4]))
+, (arc:(t:12, h:4), influence:(iblock:[4,4]))
+, (arc:(t:12, h:6), influence:(iblock:[4,4]))
+, (arc:(t:12, h:10), influence:(iblock:[4,4]))
+, (arc:(t:13, h:3), influence:(iblock:[4,4]))
+, (arc:(t:14, h:6), influence:(iblock:[4,4]))
+, (arc:(t:16, h:6), influence:(iblock:[2,4]))
+, (arc:(t:17, h:7), influence:(iblock:[4,4]))
+, (arc:(t:18, h:2), influence:(iblock:[-2,4]))
+, (arc:(t:19, h:13), influence:(iblock:[1,4]))
+, (arc:(t:19, h:20), influence:(iblock:[2,4]))
+, (arc:(t:20, h:4), influence:(iblock:[4,4]))
+, (arc:(t:20, h:9), influence:(iblock:[4,4]))
+, (arc:(t:20, h:15), influence:(iblock:[2,4]))
+, (arc:(t:20, h:16), influence:(iblock:[4,4]))
+, (arc:(t:21, h:4), influence:(iblock:[-4,4]))
+, (arc:(t:21, h:17), influence:(iblock:[2,4]))
+
+        ],
+    );
+    

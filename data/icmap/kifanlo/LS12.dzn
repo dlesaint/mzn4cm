@@ -1,0 +1,43 @@
+
+    icmap =(
+    % icm_LS12 = (
+        % name
+        name:"LS12",
+
+        % i-type
+        itype: itype,
+        
+        % node-labeling concepts
+        node_labels:[
+            (node:1, concept:(name:"EspeceRecherchée"))
+, (node:2, concept:(name:"Saisonnalite"))
+, (node:3, concept:(name:"PatronConnaissantMetier"))
+, (node:4, concept:(name:"PatronConnaissantZone"))
+, (node:5, concept:(name:"ZoneDes1,5M"))
+, (node:6, concept:(name:"EquipageCompétentEnManutention"))
+, (node:7, concept:(name:"Remuneration"))
+, (node:8, concept:(name:"DiminutionTempsDesTraits"))
+, (node:9, concept:(name:"NavireMoinsDe12m"))
+, (node:10, concept:(name:"QualiteProduction"))
+, (node:11, concept:(name:"Rentabilite"))
+, (node:12, concept:(name:"MareeJournaliere"))
+
+        ],
+        
+        % arc-labeling influence blocks
+        arc_labels:[
+            (arc:(t:1, h:11), influence:(iblock:[3,4]))
+, (arc:(t:2, h:1), influence:(iblock:[3,4]))
+, (arc:(t:3, h:9), influence:(iblock:[3,4]))
+, (arc:(t:3, h:11), influence:(iblock:[2,4]))
+, (arc:(t:4, h:11), influence:(iblock:[2,4]))
+, (arc:(t:5, h:9), influence:(iblock:[3,4]))
+, (arc:(t:6, h:10), influence:(iblock:[3,4]))
+, (arc:(t:8, h:10), influence:(iblock:[3,4]))
+, (arc:(t:10, h:11), influence:(iblock:[4,4]))
+, (arc:(t:11, h:7), influence:(iblock:[4,4]))
+, (arc:(t:12, h:9), influence:(iblock:[4,4]))
+
+        ],
+    );
+    

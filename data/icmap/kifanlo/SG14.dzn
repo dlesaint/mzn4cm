@@ -1,0 +1,69 @@
+
+    icmap =(
+    % icm_SG14 = (
+        % name
+        name:"SG14",
+
+        % i-type
+        itype: itype,
+        
+        % node-labeling concepts
+        node_labels:[
+            (node:1, concept:(name:"VolumeProductionAppats"))
+, (node:2, concept:(name:"VenteDirecte"))
+, (node:3, concept:(name:"AppatsCasier"))
+, (node:4, concept:(name:"Gout"))
+, (node:5, concept:(name:"PêcheHiver"))
+, (node:6, concept:(name:"ClientèleFidélisée"))
+, (node:7, concept:(name:"Rentabilite"))
+, (node:8, concept:(name:"QuotasCivelle"))
+, (node:9, concept:(name:"VenteAppats"))
+, (node:10, concept:(name:"AugmentationTempsPecheEnMer"))
+, (node:11, concept:(name:"Civelle"))
+, (node:12, concept:(name:"ActiviteProspection"))
+, (node:13, concept:(name:"ProductionDiverse"))
+, (node:14, concept:(name:"VolontéDeGarderDesPrixCorrects"))
+, (node:15, concept:(name:"FaibleConcurrence"))
+, (node:16, concept:(name:"BarDeLigne"))
+, (node:17, concept:(name:"PatronConnaissantMetier"))
+, (node:18, concept:(name:"ChalutDeFond"))
+, (node:19, concept:(name:"Criée"))
+, (node:20, concept:(name:"HomardCasier"))
+, (node:21, concept:(name:"VolumeProductionPoisson"))
+, (node:22, concept:(name:"CrevetteRoseCasier"))
+
+        ],
+        
+        % arc-labeling influence blocks
+        arc_labels:[
+            (arc:(t:1, h:3), influence:(iblock:[1,4]))
+, (arc:(t:1, h:9), influence:(iblock:[1,4]))
+, (arc:(t:2, h:7), influence:(iblock:[3,4]))
+, (arc:(t:2, h:14), influence:(iblock:[4,4]))
+, (arc:(t:4, h:16), influence:(iblock:[4,4]))
+, (arc:(t:4, h:20), influence:(iblock:[4,4]))
+, (arc:(t:4, h:22), influence:(iblock:[3,4]))
+, (arc:(t:5, h:22), influence:(iblock:[2,4]))
+, (arc:(t:6, h:2), influence:(iblock:[4,4]))
+, (arc:(t:6, h:16), influence:(iblock:[3,4]))
+, (arc:(t:6, h:18), influence:(iblock:[3,4]))
+, (arc:(t:8, h:10), influence:(iblock:[-2,4]))
+, (arc:(t:8, h:11), influence:(iblock:[-3,4]))
+, (arc:(t:9, h:7), influence:(iblock:[1,4]))
+, (arc:(t:11, h:7), influence:(iblock:[3,4]))
+, (arc:(t:12, h:20), influence:(iblock:[4,4]))
+, (arc:(t:12, h:22), influence:(iblock:[3,4]))
+, (arc:(t:15, h:20), influence:(iblock:[3,4]))
+, (arc:(t:16, h:7), influence:(iblock:[2,4]))
+, (arc:(t:17, h:16), influence:(iblock:[3,4]))
+, (arc:(t:18, h:1), influence:(iblock:[2,4]))
+, (arc:(t:18, h:13), influence:(iblock:[3,4]))
+, (arc:(t:19, h:7), influence:(iblock:[2,4]))
+, (arc:(t:20, h:7), influence:(iblock:[3,4]))
+, (arc:(t:21, h:2), influence:(iblock:[3,4]))
+, (arc:(t:21, h:19), influence:(iblock:[3,4]))
+, (arc:(t:22, h:7), influence:(iblock:[2,4]))
+
+        ],
+    );
+    

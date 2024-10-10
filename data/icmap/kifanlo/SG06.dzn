@@ -1,0 +1,46 @@
+
+    icmap =(
+    % icm_SG06 = (
+        % name
+        name:"SG06",
+
+        % i-type
+        itype: itype,
+        
+        % node-labeling concepts
+        node_labels:[
+            (node:1, concept:(name:"AdaptationNavire"))
+, (node:2, concept:(name:"NavirePolyvalent"))
+, (node:3, concept:(name:"PetitNavire"))
+, (node:4, concept:(name:"Rentabilite"))
+, (node:5, concept:(name:"Fatigue"))
+, (node:6, concept:(name:"SecuriteTravail"))
+, (node:7, concept:(name:"PatronConnaissantMetierDansPort"))
+, (node:8, concept:(name:"RecrutementMatelot"))
+, (node:9, concept:(name:"AdaptabiliteSaison"))
+, (node:10, concept:(name:"ZoneProche"))
+, (node:11, concept:(name:"PossibiliteFinancementSansBanque"))
+, (node:12, concept:(name:"QualiteProduction"))
+, (node:13, concept:(name:"PatronConnaissantMetierParHeritage"))
+
+        ],
+        
+        % arc-labeling influence blocks
+        arc_labels:[
+            (arc:(t:1, h:4), influence:(iblock:[3,4]))
+, (arc:(t:1, h:5), influence:(iblock:[-2,4]))
+, (arc:(t:2, h:9), influence:(iblock:[2,4]))
+, (arc:(t:3, h:10), influence:(iblock:[4,4]))
+, (arc:(t:7, h:3), influence:(iblock:[4,4]))
+, (arc:(t:8, h:4), influence:(iblock:[3,4]))
+, (arc:(t:8, h:5), influence:(iblock:[-3,4]))
+, (arc:(t:8, h:6), influence:(iblock:[3,4]))
+, (arc:(t:9, h:4), influence:(iblock:[4,4]))
+, (arc:(t:10, h:6), influence:(iblock:[4,4]))
+, (arc:(t:11, h:3), influence:(iblock:[2,4]))
+, (arc:(t:12, h:4), influence:(iblock:[2,4]))
+, (arc:(t:13, h:3), influence:(iblock:[4,4]))
+
+        ],
+    );
+    

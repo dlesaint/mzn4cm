@@ -49,7 +49,7 @@ function ann: cmql_value_search(
 	seq_search([
 		
 		int_search([x_cmql_value], input_order, indomain_max),
-		int_search([x_origin_node, x_destination_node], input_order, indomain_min),		
+		%int_search([x_origin_node, x_destination_node], input_order, indomain_min),		
 		int_search([x_nr_paths], input_order, indomain_max),
 		int_search(x_arc_path_lengths, input_order, indomain_min),
 		int_search([x_arc_paths[i,j] | i in index_set_1of2(x_arc_paths), j in index_set_2of2(x_arc_paths)], input_order, indomain_min),
@@ -177,6 +177,88 @@ predicate cmql_value (
 		true
     ;
 
+
+predicate cmql_value_fixed (
+						CMAP: cmap,
+						int: x_origin_node,
+						int: x_destination_node,
+						var int: x_nr_paths,
+						array[int] of var int: x_arc_path_lengths,
+						array[int,int] of var opt int: x_arc_paths,
+						array[int,int] of var opt int: x_node_paths,
+						array[int,int,int] of var opt int: x_iblock_paths,
+						array[int,int,int] of var opt int: x_propagated_iblocks,
+						array[int,int] of var opt int: x_iblocks,
+						array[int,int] of var opt int: x_aggregated_iblocks,
+						var INFLUENCE: x_aggregated_influence
+		)
+		:: "cmql_value($cmap,$x_origin_node,$x_destination_node,$x_nr_paths,$x_arc_path_lengths,$x_arc_paths,$x_node_paths,$x_iblock_paths,$x_propagated_iblocks,$x_iblocks,$x_aggregated_iblocks,$x_aggregated_influence): determines and sorts a number of dipaths $x_nr_paths of lengths $x_arc_path_lengths connecting $x_origin_node to $x_destination_node in $cmap's digraph together with the associated arrays of arc sequences $x_arc_paths, node sequences $x_node_paths, arc i-block sequences $x_iblock_paths, path propagation series $x_propagated_iblocks, path propagation results $x_iblocks, path aggregation series of i-blocks $x_aggregated_iblocks, and aggregated influence $x_aggregated_influence( var)"
+	= 
+	let {
+		set of int: PATH_ID = index_set_1of2(x_arc_paths);
+		set of int: ARC_PATH = index_set_2of2(x_arc_paths);
+		set of int: NODE_PATH = index_set_2of2(x_node_paths);
+		set of int: IBLOCK_COMPONENT = index_set(cmap.itype.iblock_type.sorts);
+		array[PATH_ID] of var INFLUENCE: x_propagated_influences
+	} in
+		assert(index_set(x_arc_path_lengths) == PATH_ID, "cmql_value: the index set of $x_arc_path_lengths must be equal to the range of possible paths in the c-map between 2 nodes") /\
+		assert(index_set_2of2(x_arc_paths) == ARC_PATH, "cmql_value: the column index set of $x_arc_paths must be equal to the range of possible arc sequences in the c-map between 2 nodes") /\
+		assert(index_set_3of3(x_iblock_paths) == IBLOCK_COMPONENT, "cmql_value: the 3rd index set of $x_iblock_paths must be equal to the i-block-type encoding range of $cmap's i-type") /\
+		assert(isProperRange(index_set(x_arc_path_lengths)), "cmql_value: the index set of $x_arc_path_lengths must be a proper range") /\
+		assert(index_set(x_arc_path_lengths) == index_set_1of2(x_arc_paths), "cmql_value: the index set of $x_arc_path_lengths must be equal to the row index set of $x_arc_paths") /\
+		assert(index_set(x_arc_path_lengths) == index_set_1of2(x_node_paths), "cmql_value: the index set of $x_arc_path_lengths must be equal to the row index set of $x_node_paths") /\
+		assert(index_set(x_arc_path_lengths) == index_set_1of3(x_iblock_paths), "cmql_value: the index set of $x_arc_path_lengths must be equal to the row index set of $x_iblock_paths") /\
+		assert(index_set(x_arc_path_lengths) == index_set_1of3(x_propagated_iblocks), "cmql_value: the index set of $x_arc_path_lengths must be equal to the row index set of $x_propagated_iblocks") /\
+		assert(index_set(x_arc_path_lengths) == index_set_1of2(x_iblocks), "cmql_value: the index set of $x_arc_path_lengths must be equal to the row index set of $x_iblocks") /\
+		assert(index_set(x_arc_path_lengths) == index_set_1of2(x_aggregated_iblocks), "cmql_value: the index set of $x_arc_path_lengths must be equal to the row index set of $x_aggregated_iblocks") /\
+		assert(isProperRange(index_set_2of2(x_arc_paths)), "cmql_value: the column index set of $x_arc_paths must be a proper range") /\
+		assert(index_set_2of2(x_arc_paths) == index_set_2of3(x_iblock_paths), "cmql_arc_influence_path: the column index set of $x_arc_paths must be equal to the column index set of $x_iblock_paths") /\
+		assert(isProperRange(index_set_3of3(x_iblock_paths)), "cmql_value: the 3rd index set of $x_iblock_paths must be a proper range") /\
+		assert(index_set_3of3(x_iblock_paths) == index_set_3of3(x_propagated_iblocks), "cmql_arc_influence_path: the 3rd index set of $x_iblock_paths must be equal to the 3rd index set of $x_propagated_iblocks") /\
+		assert(index_set_3of3(x_iblock_paths) == index_set_2of2(x_iblocks), "cmql_arc_influence_path: the 3rd index set of $x_iblock_paths must be equal to the column index set of $x_iblocks") /\
+		assert(index_set_3of3(x_iblock_paths) == index_set_2of2(x_aggregated_iblocks), "cmql_arc_influence_path: the 3rd index set of $x_iblock_paths must be equal to the column index set of $x_aggregated_iblocks") /\
+
+					
+		% (2) bounding the number of solution paths
+		(0 <= x_nr_paths) /\
+		(x_nr_paths <= max(PATH_ID)) /\
+		
+		% (3) the number of solution paths is the number of paths whose length is positive
+		count_eq(x_arc_path_lengths, 0, card(PATH_ID) - x_nr_paths) /\
+				
+		% (4-1) determining solution paths and propagation results
+		forall(i in PATH_ID)(cmql_path_value_fixed(cmap, deopt(origin_node), deopt(destination_node), x_arc_path_lengths[i], x_arc_paths[i,ARC_PATH], x_node_paths[i,NODE_PATH], x_iblock_paths[i,ARC_PATH,IBLOCK_COMPONENT], x_propagated_iblocks[i,ARC_PATH,IBLOCK_COMPONENT], x_propagated_influences[i])) /\
+ 		% (4-2) sorting solution paths lexicographically by ascending path length first then ascending arc ids
+		lex_chain_less_opt(x_nr_paths, x_arc_path_lengths, x_arc_paths) /\
+
+		% (5) determining the propagated i-block of each path (x_iblocks)
+% 		forall(i in PATH_ID)(i <= x_nr_paths <-> forall(j in IBLOCK_COMPONENT)(occurs(x_iblocks[i,j]))) /\ % entailed by next+1 constraint
+		forall(i in PATH_ID)(i > x_nr_paths -> forall(j in IBLOCK_COMPONENT)(absent(x_iblocks[i,j]))) /\
+		forall(i in PATH_ID)(i <= x_nr_paths -> forall(j in IBLOCK_COMPONENT)(deopt(x_iblocks[i,j]) == element(i, x_arc_path_lengths[i],j, x_propagated_iblocks))) /\ % !! keep deopt on x_iblocks !!
+
+		% (6-1) deopting aggregated i-block occurrences based on the number of solution paths
+		% - the i-th path occurs iff all the components of the i-th aggregated i-block occur
+		% - the i-th path is absent only if all the components of the i-th aggregated i-block are absent
+		% NB. every row access to x_aggregated_iblocks below is within bounds since PATH_ID is the row index set of x_aggregated_iblocks
+% 		forall(i in PATH_ID)(i <= x_nr_paths <-> forall(j in IBLOCK_COMPONENT)(occurs(x_aggregated_iblocks[i,j]))) /\ % entailed by (6-2)
+		forall(i in PATH_ID)(i > x_nr_paths -> forall(j in IBLOCK_COMPONENT)(absent(x_aggregated_iblocks[i,j]))) /\
+
+		% (6-2) recursively computing the aggregated i-blocks by traversing the x_iblocks sequence
+		% - the first occurring aggregated i-block is the first i-block (encoding the propagated influence of the first solution path)
+		% - the i-th occurring aggregated i-block is the aggregation of the i-1-th aggregated block with the i-th i-block
+		% NB. every row access to x_aggregated_iblocks below is within bounds since PATH_ID is the row index set of x_aggregated_iblocks
+		(x_aggregated_iblocks[min(PATH_ID),IBLOCK_COMPONENT] == x_iblocks[min(PATH_ID),IBLOCK_COMPONENT]) /\
+		forall(i in min(PATH_ID)<..max(PATH_ID))
+			((i <= x_nr_paths) -> x_aggregated_iblocks[i,IBLOCK_COMPONENT] == iAggregate(deopt(x_aggregated_iblocks[i-1,IBLOCK_COMPONENT]), deopt(x_iblocks[i,IBLOCK_COMPONENT]))) /\
+
+		% (7) determining the aggregated influence
+		% - there is no solution path only if x_aggregated_influence is the null influence (ie. neutral element for i-aggregation)
+		(x_nr_paths == 0 -> equals(x_aggregated_influence, getNullInfluence(cmap.itype))) /\ %(iblock: getAbsorbingElement(cmap.itype.ealgebra, ALGEBRAIC_OPERATION_2).value)) /\
+		% - there exists solution paths only if x_aggregated_influence is the last occurring aggregated i-block
+		(x_nr_paths > 0 -> x_aggregated_influence == (iblock: [x_aggregated_iblocks[x_nr_paths,j] | j in IBLOCK_COMPONENT])) /\
+
+		true
+    ;
 
 %
 predicate lex_chain_less_opt(var int: x_on, array[int] of var int: x_lengths, array[int, int] of var opt int: x)
