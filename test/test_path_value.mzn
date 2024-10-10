@@ -57,10 +57,10 @@ opt NODE_ID: origin_node;
 % the optional fixed destination node
 opt NODE_ID: destination_node;
 
-int: nb_paths = 4;
+int: nb_paths;
 
-int: size_path = 5;
-%array[int,int] of var int: matrix;
+int: size_path;
+array[int,int] of var int: matrix;
 
 % assertions
 constraint assert((occurs(origin_node) /\ occurs(destination_node)) -> deopt(origin_node )!= deopt(destination_node), "path origin and destination concepts must be different");

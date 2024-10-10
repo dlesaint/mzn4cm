@@ -131,7 +131,7 @@ def add_parameters_to_dzn(dzn_file, nb_paths, matrix, size_path, args):
     with open(dzn_file,"w") as f:
         f.write(f"nb_paths={nb_paths};")
         f.write(f"\nmatrix=array2d(1..{int(sqrt(len(matrix)))},1..{int(sqrt(len(matrix)))},{matrix});")
-        f.write(f"size_path={size_path};")
+        f.write(f"\nsize_path={size_path};")
         if args.minizinc_calc != None:
             f.write(f"\nF_NB_PATH_COUNTING={args.minizinc_calc};")
         if args.fixed != None:
@@ -143,7 +143,7 @@ def run_minizinc_command(args, dzn_file):
     if args.data != None:
         command += f" -d {args.data}"
     #command += f" --json-stream -s --time-limit 60000"
-    
+    print(command)
     subprocess.run(command, shell=True)
     
 
