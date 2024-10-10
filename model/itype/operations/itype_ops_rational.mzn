@@ -216,8 +216,8 @@ function array[IBLOCK_COMPONENT] of var int: iRationalPlus(array[IBLOCK_COMPONEN
 			:: defines_var(z)
 			;
 	} in
-		%iRationalReduce(z)
-		z
+		iRationalReduce(z)
+		%z
 ;
 
 %

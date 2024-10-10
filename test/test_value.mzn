@@ -53,9 +53,9 @@ opt NODE_ID: origin_node;
 % the optional fixed destination node
 opt NODE_ID: destination_node;
 
-int: nb_paths;
-int: size_path;
-array[int,int] of var int: matrix;
+int: nb_paths = 4;
+int: size_path = 5;
+%array[int,int] of var int: matrix;
 % assertions
 constraint assert((occurs(origin_node) /\ occurs(destination_node)) -> deopt(origin_node )!= deopt(destination_node), "path origin and destination concepts must be different");
 
@@ -175,27 +175,28 @@ solve
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% QUERY OUTPUT
 
-% %
-output :: "o_instance"
- 	displayInstance(instance);
-
-% %
- output :: "o_query"
- ["****** TEST - Query cmql_path_value - Path influence propagation ***********"]
- ++ ["\n"]
- ++ ["Origin node =\t\t"]
- %++ [show(cmap.node_labels[origin_node])]
- ++ [show(cmap.node_labels[fix(x_origin_node)])]
- ++ ["\n"]
- ++ ["Destination node =\t"]
- %++ [show(cmap.node_labels[destination_node])]
- ++ [show(cmap.node_labels[fix(x_destination_node)])]
- ++ ["\n"]
- ;
 
 %
-output :: "o_solution_cmql_value"
-	cmql_value_output(cmap, x_nr_paths, x_arc_path_lengths, x_arc_paths, x_node_paths, x_iblock_paths, x_propagated_iblocks, x_iblocks, x_aggregated_iblocks, x_aggregated_influence);
+output :: "o_instance"
+	displayInstance(instance);
 
-%output :: "o_json"
- %	outputJSON();
+%
+output :: "o_query"
+["****** TEST - Query cmql_path_value - Path influence propagation ***********"]
+++ ["\n"]
+++ ["Origin node =\t\t"]
+% ++ [show(cmap.node_labels[origin_node])]
+++ [show(cmap.node_labels[fix(x_origin_node)])]
+++ ["\n"]
+++ ["Destination node =\t"]
+% ++ [show(cmap.node_labels[destination_node])]
+++ [show(cmap.node_labels[fix(x_destination_node)])]
+++ ["\n"]
+;
+
+
+output :: "o_solution_cmql_value"
+cmql_value_output(cmap, x_nr_paths, x_arc_path_lengths, x_arc_paths, x_node_paths, x_iblock_paths, x_propagated_iblocks, x_iblocks, x_aggregated_iblocks, x_aggregated_influence);
+
+% output :: "o_json"
+%  	outputJSON();
