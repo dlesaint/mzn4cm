@@ -1,6 +1,5 @@
 {
     "openFiles": [
-        "test/test_no_cmql.mzn",
         "model/include/include_cmql.mzn",
         "model/include/include_itype.mzn",
         "model/include/include_ioperations.mzn",
@@ -16,11 +15,14 @@
         "model/cmql/primitive/primitive_value.mzn",
         "model/cmql/primitive/primitive_path_value.mzn",
         "model/cmql/primitive_api.mzn",
-        "data/cmql/cmql_path_value.dzn"
+        "data/cmql/cmql_path_value.dzn",
+        "test/test_no_cmql.mzn",
+        "model/cmql/primitive/primitive_path.mzn"
     ],
-    "openTab": 13,
+    "openTab": 16,
     "projectFiles": [
         "data/cmql/cmql_path_value.dzn",
+        "data/cmql/cmql_path_value_route.dzn",
         "data/digraph/dg_13x26_internet_1.dzn",
         "data/digraph/dg_3x2_chain_1.dzn",
         "data/digraph/dg_3x3_acyclic_1.dzn",
@@ -60,6 +62,7 @@
         "model/cmap/cmap.mzn",
         "model/cmap/cmap_api.mzn",
         "model/cmap/cmap_display.mzn",
+        "model/cmql/primitive/primitive_path.mzn",
         "model/cmql/primitive/primitive_path_value.mzn",
         "model/cmql/primitive/primitive_path_value_viz.mzn",
         "model/cmql/primitive/primitive_value.mzn",
@@ -96,12 +99,11 @@
         "model/ranges/ranges.mzn",
         "model/ranges/ranges_api.mzn",
         "model/utils/utils_string.mzn",
-        "mzn4cm.mpc",
         "test/test_no_cmql.mzn",
         "test/test_path_value.mzn",
         "test/test_value.mzn"
     ],
-    "selectedBuiltinConfigId": "com.google.ortools.sat",
-    "selectedBuiltinConfigVersion": "9.8.3296",
+    "selectedBuiltinConfigId": "org.chuffed.chuffed",
+    "selectedBuiltinConfigVersion": "0.13.2",
     "version": 106
 }

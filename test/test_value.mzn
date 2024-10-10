@@ -70,19 +70,15 @@ set of int: PATH_ID = if DEOPT_F_NB_PATH_COUNTING == F_PYTHON_COUNTING then 1..n
 %% QUERY VARIABLES
 
 % the origin node of the solution paths
-var NODE_ID: x_origin_node
-	:: no_output
-;
+var NODE_ID: x_origin_node;
 	
 % the destination node of the solution paths
-var NODE_ID: x_destination_node
-	:: no_output
-;
+var NODE_ID: x_destination_node;
 
 % the range for indexing any sequence of nodes corresponding to a solution path
 % - the upper-bound depends on the chosen path-minimality definition amongst the 2 variants
-%set of int: NODE_PATH = if F_PATH_MINIMALITY == F_PATH_MINIMALITY_NODE then 1..min(max(NODE_ID), max(ARC_ID)+1) else 1..max(ARC_ID)+1 endif;
-set of int: NODE_PATH = 1..size_path+1;
+set of int: NODE_PATH = if DEOPT_F_PATH_MINIMALITY == F_PATH_MINIMALITY_NODE then 1..min(max(NODE_ID), max(ARC_ID)+1) else 1..max(ARC_ID)+1 endif;
+
 % the range for indexing any sequence of arcs corresponding to a solution path
 % - the upper-bound depends on the chosen path-minimality definition amongst the 2 variants
 set of int: ARC_PATH = 1..max(NODE_PATH)-1;
@@ -97,16 +93,12 @@ array[PATH_ID] of var 0..card(ARC_PATH): x_arc_path_lengths;
 % the arc sequences for the solution paths completed with absent arcs
 % - x_arc_paths[i,j] is the id of the j-th occurring arc in the i-th arc sequence
 % - x_arc_paths[i,j] is absent iff the i-th arc sequence is empty or else j is greater than its length
-array[PATH_ID, ARC_PATH] of var opt ARC_ID: x_arc_paths
-	:: no_output
-;
+array[PATH_ID, ARC_PATH] of var opt ARC_ID: x_arc_paths;
 
 % the node sequences for the solution paths completed with absent nodes
 % - x_node_paths[i,j] is the id of the j-th occurring node in the i-th node sequence
 % - x_node_paths[i,j] is absent iff the i-th arc sequence is empty or else max(0, j-2) is greater than or equal to its length
-array[PATH_ID, NODE_PATH] of var opt NODE_ID: x_node_paths
-	:: no_output
-;
+array[PATH_ID, NODE_PATH] of var opt NODE_ID: x_node_paths;
 
 % the sequence of i-blocks labeling the arcs in each solution path and completed with absent i-blocks
 % - x_iblock_path[i,j,IBLOCK_COMPONENT] is the i-block of the j-th occurring arc in the i-th arc sequence
@@ -131,9 +123,7 @@ array[PATH_ID, IBLOCK_COMPONENT] of var opt int: x_aggregated_iblocks;
 % the influence aggregated from the first solution path to the last solution path and corresponding to the last term of the aggregation series
 % - x_aggregated_influence == (iblock: x_aggregated_iblocks[x_nr_paths,IBLOCK_COMPONENT]) iff x_nr_paths!=0 (a solution path exists)
 % - x_aggregated_influence == getNullInfluence(cmap.itype) iff x_nr_paths==0 (no solution path exists)
-var INFLUENCE: x_aggregated_influence
-	:: no_output
-;
+var INFLUENCE: x_aggregated_influence;
 
 % optional boolean variable representing the satisfiability of the query
 var bool: x_cmql_value;
@@ -167,13 +157,13 @@ constraint :: "constraint: path aggregation between origin and destination nodes
 %% QUERY SEARCH STRATEGY
 
 solve
-	:: cmql_value_search(x_origin_node, x_destination_node, x_nr_paths, x_arc_path_lengths, x_arc_paths, x_node_paths, x_iblock_paths, x_propagated_iblocks, x_iblocks, x_aggregated_iblocks, x_aggregated_influence, x_cmql_value)
+	%:: cmql_value_search(x_origin_node, x_destination_node, x_nr_paths, x_arc_path_lengths, x_arc_paths, x_node_paths, x_iblock_paths, x_propagated_iblocks, x_iblocks, x_aggregated_iblocks, x_aggregated_influence, x_cmql_value)
 	satisfy;
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% QUERY OUTPUT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% QUERY OUTPUT
 
 
 %
@@ -196,7 +186,4 @@ output :: "o_query"
 
 
 output :: "o_solution_cmql_value"
-cmql_value_output(cmap, x_nr_paths, x_arc_path_lengths, x_arc_paths, x_node_paths, x_iblock_paths, x_propagated_iblocks, x_iblocks, x_aggregated_iblocks, x_aggregated_influence);
-
-% output :: "o_json"
-%  	outputJSON();
+	cmql_value_output(cmap, x_nr_paths, x_arc_path_lengths, x_arc_paths, x_node_paths, x_iblock_paths, x_propagated_iblocks, x_iblocks, x_aggregated_iblocks, x_aggregated_influence);
