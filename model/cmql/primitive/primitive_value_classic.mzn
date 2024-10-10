@@ -105,9 +105,9 @@ predicate cmql_value_classic (
             cmql_path_value_classic(cmap,x_arc_paths[i,ARC_PATH], x_node_paths[i, NODE_PATH], x_iblock_paths[i, IBLOCK_COMPONENT], x_iblocks[i])
         ) /\
         % (3) checks the lengths of the paths
-        forall(i in PATH_ID)(
-           cmql_length(cmap, x_arc_paths[i,ARC_PATH],  x_node_paths[i,NODE_PATH], x_arc_path_lengths[i])
-        ) /\
+        %forall(i in PATH_ID)(
+           %cmql_length(cmap, x_arc_paths[i,ARC_PATH],  x_node_paths[i,NODE_PATH], x_arc_path_lengths[i])
+        %) /\
         % (4) checks that the paths begin and end with the origin and destination nodes
         forall(i in PATH_ID)( (i <= x_nr_paths) -> 
             (x_node_paths[i,1] == x_origin_node /\

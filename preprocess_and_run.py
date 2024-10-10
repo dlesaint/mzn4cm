@@ -60,29 +60,33 @@ def longest_path_with_cycles(matrix, start):
     return dfs(graph, start, visited, memo)
 
 def max_legth (adj_matrix):
-    result = 0
-    for i in range(adj_matrix.shape[0]):
-        tmp =  longest_path_with_cycles(adj_matrix,i)
-        #print(tmp)        
-        if result<tmp:
-            result = tmp
-    #print(result)
-    return(result)
+    max = 0
+    for m in adj_matrix:
+        result = 0
+        for i in range(m.shape[0]):
+            tmp =  longest_path_with_cycles(m,i)       
+            if result<tmp:
+                result = tmp
+    if max < result:
+        max = result
+    return(max)
 
 def adj_matrix_to_nb_path (adj_matrix):
-    tmp_matrix = adj_matrix
-    sum_matrix = adj_matrix
-    for i in range(1, adj_matrix.shape[0]) :
-        tmp_matrix = np.dot(tmp_matrix, adj_matrix)
-        sum_matrix = sum_matrix + tmp_matrix
-    max = 0
-    for i in range(adj_matrix.shape[0]):
-        for j in range(adj_matrix.shape[0]):
-            if sum_matrix[i][j] > max:
-                max = sum_matrix[i][j]
-    #print(sum_matrix)
-    #print(max)
-    return max
+    tmax = 0
+    for m in adj_matrix :
+        tmp_matrix = m
+        sum_matrix = m
+        for i in range(1, m.shape[0]) :
+            tmp_matrix = np.dot(tmp_matrix, m)
+            sum_matrix = sum_matrix + tmp_matrix
+        max = 0
+        for i in range(m.shape[0]):
+            for j in range(m.shape[0]):
+                if sum_matrix[i][j] > max:
+                    max = sum_matrix[i][j]
+    if max > tmax:
+        tmax = max
+    return tmax
 def count_paths_dfs(adj_matrix,start,end):
     def dfs(current,end,visited):
         if current == end:
@@ -99,38 +103,52 @@ def count_paths_dfs(adj_matrix,start,end):
     return dfs(start,end,visited)
 
 def adj_matrix_to_nb_path_no_cycles (adj_matrix):
-    max = 0
-    array = []
-    for i in range(0,adj_matrix.shape[0]):
-        for j in range(0,adj_matrix.shape[0]):
-            tmp = count_paths_dfs(adj_matrix,i,j)
-            array.append(tmp)
-            if tmp > max:
-                max = tmp 
-    return max,array
+    tmax = 0
+    tarray = []
+    for m in adj_matrix:
+        max = 0
+        array = []
+        for i in range(0,m.shape[0]):
+            for j in range(0,m.shape[0]):
+                tmp = count_paths_dfs(m,i,j)
+                array.append(tmp)
+                if tmp > max:
+                    max = tmp 
+    tarray.append(array)
+    if tmax < max:
+        tmax = max
+    return tmax,tarray
+
+import re
+import numpy as np
 
 def parse_icmap_file(icmap_file):
     """Parse the ICMap file and extract the adjacency matrix."""
     with open(icmap_file, 'r') as file:
         content = file.read()
     
-    # Extract node count
-    node_count = len(re.findall(r'\(node:\d+, concept:\(name:"[^"]+"\)\)', content))
-    
-    # Initialize adjacency matrix
-    adj_matrix = np.zeros((node_count, node_count), dtype=int)
-    # Extract arc_labels and fill the adjacency matrix
-    arc_labels = re.findall(r'\(arc:\(t:(\d+), h:(\d+)\), influence:\(iblock:\[(.*?)\]\)\)', content)
-    for t, h, influence in arc_labels:        
-        t, h = int(t) - 1, int(h) - 1  # Adjusting index to be zero-based
-        adj_matrix[t][h] = 1
+    icmaps = content.split('),\n(')
+    matrices = []
 
-    return adj_matrix
+    for icmap in icmaps:
+        # Extract node count
+        node_count = len(re.findall(r'\(node:\d+, concept:\(name:"[^"]+"\)\)', icmap))
+        # Initialize adjacency matrix
+        adj_matrix = np.zeros((node_count, node_count), dtype=int)
+        # Extract arc_labels and fill the adjacency matrix
+        arc_labels = re.findall(r'\(arc:\(t:(\d+), h:(\d+)\), influence:\(iblock:\[(.*?)\]\)\)', icmap)
+        for t, h, influence in arc_labels:        
+            t, h = int(t) - 1, int(h) - 1  # Adjusting index to be zero-based
+            adj_matrix[t][h] = 1
+        print(adj_matrix) 
+        matrices.append(adj_matrix)
+    return matrices
+
 
 def add_parameters_to_dzn(dzn_file, nb_paths, matrix, size_path, args):
     with open(dzn_file,"w") as f:
         f.write(f"nb_paths={nb_paths};")
-        f.write(f"\nmatrix=array2d(1..{int(sqrt(len(matrix)))},1..{int(sqrt(len(matrix)))},{matrix});")
+        #f.write(f"\nmatrix=array2d(1..{int(sqrt(len(matrix)))},1..{int(sqrt(len(matrix)))},{matrix});")
         f.write(f"\nsize_path={size_path};")
         if args.minizinc_calc != None:
             f.write(f"\nF_NB_PATH_COUNTING={args.minizinc_calc};")
@@ -158,6 +176,7 @@ def main():
     args = parser.parse_args()    
 
     icmap_parameters = parse_icmap_file(args.icmap)
+    print(icmap_parameters)
     adj_matrix_to_nb_path(icmap_parameters)
     nb_paths,matrix = adj_matrix_to_nb_path_no_cycles(icmap_parameters)    
     print(nb_paths)

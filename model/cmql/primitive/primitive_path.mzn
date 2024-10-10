@@ -20,7 +20,8 @@ function ann: cmql_path_search(var bool: x_cmql_path, var int: x_origin_node, va
 ;
 
 predicate cmql_path (
-    CMAP: cmap,
+    array[int] of CMAP: cmaps,
+	var int: cmap,
     var opt int: x_origin_node,
     var opt int: x_destination_node,	
     array[int] of var opt int: x_arc_path,
@@ -29,10 +30,12 @@ predicate cmql_path (
 =
 let {
 		% cmap data
-		set of int: NODE_ID = index_set(cmap.node_labels);
-		set of int: ARC_ID = index_set(cmap.arc_labels);
-		array[ARC_ID] of NODE_ID: from = array1d(ARC_ID, cmap.adigraph.tail_head[ARC_ID, TAIL]);
-		array[ARC_ID] of NODE_ID: to = array1d(ARC_ID, cmap.adigraph.tail_head[ARC_ID, HEAD]);
+		set of int: N_CMAP = index_set(cmaps);
+
+		set of int: NODE_ID = index_set(cmaps[arg_max([card(index_set(cmaps[i].node_labels)) | i in N_CMAP])].node_labels);
+		set of int: ARC_ID = index_set(cmaps[arg_max([card(index_set(cmaps[i].arc_labels)) | i in N_CMAP])].arc_labels);
+		array[N_CMAP,ARC_ID] of NODE_ID: from = array1d(ARC_ID, cmap.adigraph.tail_head[ARC_ID, TAIL]);
+		array[N_CMAPARC_ID] of NODE_ID: to = array1d(ARC_ID, cmap.adigraph.tail_head[ARC_ID, HEAD]);
 		% indexing range for solution array
 		set of int: ARC_PATH = index_set(x_arc_path);
 		set of int: NODE_PATH = index_set(x_node_path);
@@ -61,7 +64,7 @@ let {
 		% (5) the length of the path is the number of occurring arcs in the arc path array and their maximum index
 		% - every arc is absent if the length is 0
 		% - every arc occurs if the next arc occurs
-		cmql_length(cmap, x_arc_path,x_node_path, path_length) /\
+		%cmql_length(cmap, x_arc_path,x_node_path, path_length) /\
 		% (6) matching heads and tails of successive occurring arcs
 		forall(i in min(ARC_PATH)<..max(ARC_PATH))(occurs(x_arc_path[i]) -> from[x_arc_path[i]] == to[x_arc_path[i-1]]) /\
 		true

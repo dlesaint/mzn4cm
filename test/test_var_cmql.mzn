@@ -40,11 +40,12 @@ array[int] of CMAP: cmaps = instance.cmaps;
 
 int: nb_paths;
 int: size_path;
-array[int,int] of var int: matrix;
+%array[int,int] of var int: matrix;
 
-set of int: NODE_ID = 1..max(forall (i in index_set(cmaps)) (max(index_set(cmaps[i].node_labels)) ));
+set of int: N_CMAP = index_set(cmaps);
 
-set of int: ARC_ID = 1..max(forall (i in index_set(cmaps)) (max(index_set(cmaps[i].arc_labels)) ));
+set of int: NODE_ID = index_set(cmaps[arg_max([card(index_set(cmaps[i].node_labels)) | i in N_CMAP])].node_labels);
+set of int: ARC_ID = index_set(cmaps[arg_max([card(index_set(cmaps[i].arc_labels)) | i in N_CMAP])].arc_labels);
 
 set of int: PATH_ID = 1..nb_paths;
 
@@ -67,7 +68,9 @@ var int: x_length;
 
 constraint
 
-cmql_length(cmaps,cmap,x_arc_path, x_node_path);
+cmql_length(cmaps,cmap,x_arc_path, x_node_path, x_length)
+/\ x_length > 1
+;
 
 solve 
 satisfy;
