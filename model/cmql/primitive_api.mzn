@@ -186,7 +186,7 @@ predicate cmql_arc_path(CMAP: cmap, var int: x_arc_path_length, array[int] of va
 ;
 
 % cmql Length
-predicate cmql_length (CMAP: cmap,array[int] of var opt int: x_arc_path,array[int] of var opt int: x_node_path,var int: x_length);
+predicate cmql_length (array[int] of CMAP: cmaps, var int: cmap,array[int] of var opt int: x_arc_path,array[int] of var opt int: x_node_path,var int: x_length);
 %
 function array[int] of string: cmql_path_value_output(CMAP: cmap, var int: x_arc_path_length, array[int] of var opt int: x_arc_path, array[int] of var opt int: x_node_path, array[int, int] of var opt int: x_iblock_path, array[int, int] of var opt int: x_propagated_iblocks, var INFLUENCE: x_propagated_influence);
 

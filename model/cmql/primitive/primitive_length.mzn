@@ -10,7 +10,8 @@ include "./../../ranges/ranges_api.mzn";
 include "./../../ranges/ranges.mzn";
 
 predicate cmql_length (
-    CMAP: cmap,
+    array[int] of CMAP: cmaps,
+    var int: cmap,
     array[int] of var opt int: x_arc_path,
     array[int] of var opt int: x_node_path,
     var int: x_length
