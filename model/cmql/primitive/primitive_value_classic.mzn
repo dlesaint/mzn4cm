@@ -101,9 +101,9 @@ predicate cmql_value_classic (
         % (1) check that origine and destination nodes are different
         x_origin_node != x_destination_node /\
         % (2) determine the dipaths
-        forall(i in PATH_ID)(
-            cmql_path_value_classic(cmap,x_arc_paths[i,ARC_PATH], x_node_paths[i, NODE_PATH], x_iblock_paths[i, IBLOCK_COMPONENT], x_iblocks[i])
-        ) /\
+        %forall(i in PATH_ID)(
+         %   cmql_path_value_classic(cmap,x_arc_paths[i,ARC_PATH], x_node_paths[i, NODE_PATH], x_iblock_paths[i, IBLOCK_COMPONENT], x_iblocks[i])
+        %) /\
         % (3) checks the lengths of the paths
         %forall(i in PATH_ID)(
            %cmql_length(cmap, x_arc_paths[i,ARC_PATH],  x_node_paths[i,NODE_PATH], x_arc_path_lengths[i])

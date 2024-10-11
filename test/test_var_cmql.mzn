@@ -49,29 +49,32 @@ set of int: ARC_ID = index_set(cmaps[arg_max([card(index_set(cmaps[i].arc_labels
 
 set of int: PATH_ID = 1..nb_paths;
 
-set of int: NODE_PATH = 1..size_path;
+set of int: ARC_PATH = 1..size_path;
 
-set of int: ARC_PATH = 1..(max(NODE_PATH)-1);
+set of int: NODE_PATH = 1..(max(ARC_PATH)+1);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% QUERY VARIABLES
-var int: cmap;
+var N_CMAP: cmap;
 
-array[ARC_PATH] of var opt int: x_arc_path;
+array[ARC_PATH] of var opt ARC_ID: x_arc_path;
 
-array[NODE_PATH] of var opt int: x_node_path;
+array[NODE_PATH] of var opt NODE_ID: x_node_path;
 
-var int: x_length;
+array[ARC_PATH] of var opt int: x_propagated_iblock;  
+
+var INFLUENCE: x_propagated_influence;
+
+var bool: x_cmql;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% SOLVING STRATEGY
 
 constraint
-
-cmql_length(cmaps,cmap,x_arc_path, x_node_path, x_length)
-/\ x_length > 1
+cmql_path_value_classic(cmaps, cmap,x_arc_path, x_node_path, x_propagated_iblock, x_propagated_influence)
+/\ x_cmql = occurs(x_arc_path)
 ;
 
-solve 
+solve ::cmql_path_value_search(cmap, x_arc_path, x_node_path, x_propagated_iblock, x_propadates_influence, x_cmql)
 satisfy;
 
