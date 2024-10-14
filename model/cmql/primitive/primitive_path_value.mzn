@@ -62,7 +62,8 @@ function ann: cmql_path_value_search(var int: x_origin_node, var int: x_destinat
 % - $x_propagated_influence is the influence propagated through the dipath
 % -- it is equal to the null influence iff no dipath exists between origin and destination nodes in the c-map digraph
 predicate cmql_path_value(
-						CMAP: cmap,
+						array[int] of CMAP: cmaps,
+						var int: cmap,
 						var int: x_origin_node,
 						var int: x_destination_node,
 						var int: x_arc_path_length,
@@ -79,7 +80,7 @@ predicate cmql_path_value(
 		set of int: ARC_PATH = index_set(x_arc_path);
 	} in
 		assert(index_set_1of2(x_propagated_iblocks) == index_set(x_arc_path), "cmql_path_value: the row index set of $x_propagated_iblocks  must be equal to the index set of $x_arc_path") /\
-		assert(index_set_2of2(x_propagated_iblocks) == index_set(cmap.itype.iblock_type.sorts), "cmql_path_value: the column index set of $x_propagated_iblocks must be equal to the i-block-type encoding range of $cmap's i-type") /\
+		assert(index_set_2of2(x_propagated_iblocks) == index_set(cmaps[1].itype.iblock_type.sorts), "cmql_path_value: the column index set of $x_propagated_iblocks must be equal to the i-block-type encoding range of $cmap's i-type") /\
 
 		% (1) origin and destination nodes must be different
 		(x_origin_node != x_destination_node) /\
@@ -93,11 +94,11 @@ predicate cmql_path_value(
 		(x_node_path[x_arc_path_length+1] ~= x_destination_node) /\
 
 		% (4-1) determining a sequence of arcs corresponding to a minimal dipath of the right length in the c-map
-		cmql_arc_path(cmap, x_arc_path_length, x_arc_path) /\
+		cmql_arc_path(cmaps,cmap, x_arc_path_length, x_arc_path) /\
 		% (4-2) determining minimal consistent arc and node sequences
-		cmql_arc_node_path(cmap, x_arc_path, x_node_path) /\
+		cmql_arc_node_path(cmaps,cmap, x_arc_path, x_node_path) /\
 		% (4-3) determining consistent arc and i-block sequences	
-		cmql_arc_influence_path(cmap, x_arc_path, x_iblock_path) /\
+		cmql_arc_influence_path(cmaps,cmap, x_arc_path, x_iblock_path) /\
 
 		% (5-1) matching arc and propagated i-block occurrences
 		% - the i-th arc occurs iff all the components of the i-th propagated i-block occur
@@ -116,7 +117,7 @@ predicate cmql_path_value(
 
 		% (6) determining the propagated influence
 		% - the solution path is empty only if x_propagated_influence is the null influence (ie. absorbing element for i-propagation)
-		(x_arc_path_length == 0 -> equals(x_propagated_influence, getNullInfluence(cmap.itype))) /\ %(iblock: getAbsorbingElement(cmap.itype.ealgebra, ALGEBRAIC_OPERATION_2).value)) /\
+		(x_arc_path_length == 0 -> equals(x_propagated_influence, getNullInfluence(cmaps[1].itype))) /\ %(iblock: getAbsorbingElement(cmap.itype.ealgebra, ALGEBRAIC_OPERATION_2).value)) /\
 		% - the solution path is not empty only if x_propagated_influence is the last occurring propagated i-block
 		(x_arc_path_length > 0 -> x_propagated_influence == (iblock: [x_propagated_iblocks[x_arc_path_length,j] | j in IBLOCK_COMPONENT])) /\
 
@@ -155,11 +156,11 @@ predicate cmql_path_value_fixed(
 		(x_node_path[x_arc_path_length+1] ~= destination_node) /\
 
 		% (4-1) determining a sequence of arcs corresponding to a minimal dipath of the right length in the c-map
-		cmql_arc_path(cmap, x_arc_path_length, x_arc_path) /\
+		%cmql_arc_path(cmap, x_arc_path_length, x_arc_path) /\
 		% (4-2) determining minimal consistent arc and node sequences
-		cmql_arc_node_path(cmap, x_arc_path, x_node_path) /\
+		%cmql_arc_node_path(cmap, x_arc_path, x_node_path) /\
 		% (4-3) determining consistent arc and i-block sequences	
-		cmql_arc_influence_path(cmap, x_arc_path, x_iblock_path) /\
+		%cmql_arc_influence_path(cmap, x_arc_path, x_iblock_path) /\
 
 		% (5-1) matching arc and propagated i-block occurrences
 		% - the i-th arc occurs iff all the components of the i-th propagated i-block occur
@@ -186,18 +187,19 @@ predicate cmql_path_value_fixed(
 	;
 
 % Determines minimal consistent arc path $x_arc_path and node path $x_node_path wrt. cmap $cmap and path-minimality feature.
-predicate cmql_arc_node_path(CMAP: cmap, array[int] of var opt int: x_arc_path, array[int] of var opt int: x_node_path)
+predicate cmql_arc_node_path(array[int] of CMAP: cmaps, var int: cmap, array[int] of var opt int: x_arc_path, array[int] of var opt int: x_node_path)
 	:: "cmql_arc_node_path($cmap,$x_arc_path,$x_node_path): determines minimal consistent arc path $x_arc_path and node path $x_node_path wrt. cmap $cmap and path-minimality feature (var)"
 	=
 	let {
 		% cmap data
-		set of int: NODE_ID = index_set(cmap.node_labels);
-		set of int: ARC_ID = index_set(cmap.arc_labels);
-		array[ARC_ID] of NODE_ID: from = array1d(ARC_ID, cmap.adigraph.tail_head[ARC_ID, TAIL]);
-		array[ARC_ID] of NODE_ID: to = array1d(ARC_ID, cmap.adigraph.tail_head[ARC_ID, HEAD]);
-		% indexing ranges for solution arrays
-		set of int: NODE_PATH = index_set(x_node_path);
+		set of int: N_CMAP = index_set(cmaps);
+		set of int: NODE_ID = index_set(cmaps[arg_max([card(index_set(cmaps[i].node_labels)) | i in N_CMAP])].node_labels);
+		set of int: ARC_ID = index_set(cmaps[arg_max([card(index_set(cmaps[i].arc_labels)) | i in N_CMAP])].arc_labels);		
+		array[N_CMAP,ARC_ID] of NODE_ID: from = array2d(N_CMAP,ARC_ID, [cmaps[i].adigraph.tail_head[j, TAIL] | i in N_CMAP, j in ARC_ID]);
+		array[N_CMAP,ARC_ID] of NODE_ID: to = array2d(N_CMAP,ARC_ID, [cmaps[i].adigraph.tail_head[j, HEAD] | i in N_CMAP, j in ARC_ID]);
+		% indexing range for solution array
 		set of int: ARC_PATH = index_set(x_arc_path);
+		set of int: NODE_PATH = index_set(x_node_path);
 	} in
 		assert(max(index_set(x_node_path)) == 1 + max(index_set(x_arc_path)), "cmql_arc_node_path: index sets of $x_node_path and $x_node_path must be consistent") /\
 
@@ -218,26 +220,27 @@ predicate cmql_arc_node_path(CMAP: cmap, array[int] of var opt int: x_arc_path, 
 		% - the i-th occurring node is the tail of the i-th occurring arc
 		% - the last occurring node is the head of the last occurring arc
 		% NB. every access to x_node_path below is within bounds since max(ARC_PATH)<max(NODE_PATH)
-		forall(i in ARC_PATH)(occurs(x_arc_path[i]) -> (x_node_path[i] == from[x_arc_path[i]] /\ x_node_path[i + 1] == to[x_arc_path[i]])) /\
+		forall(i in ARC_PATH)(occurs(x_arc_path[i]) -> (x_node_path[i] == from[cmap,x_arc_path[i]] /\ x_node_path[i + 1] == to[cmap,x_arc_path[i]])) /\
 
 		true
 	;
 
 
 % Determines consistent arc path $x_arc_path and i-block path $x_iblock_path wrt. cmap $cmap.
-predicate cmql_arc_influence_path(CMAP: cmap, array[int] of var opt int: x_arc_path, array[int, int] of var opt int: x_iblock_path)
+predicate cmql_arc_influence_path(array[int] of CMAP: cmaps, var int: cmap, array[int] of var opt int: x_arc_path, array[int, int] of var opt int: x_iblock_path)
 	:: "cmql_arc_influence_path($cmap,$x_arc_path,$x_iblock_path): determines consistent arc path $x_arc_path and i-block path $x_iblock_path wrt. cmap $cmap"
 	=
 	let {
 		% cmap data
-		set of int: ARC_ID = index_set(cmap.arc_labels);
-		set of int: IBLOCK_COMPONENT = index_set(cmap.itype.iblock_type.sorts);
-		array[ARC_ID, IBLOCK_COMPONENT] of opt int: iblocks = array2d(ARC_ID, IBLOCK_COMPONENT, [cmap.arc_labels[i].influence.iblock[j] | i in ARC_ID, j in IBLOCK_COMPONENT]);
+		set of int: N_CMAP = index_set(cmaps);
+		set of int: ARC_ID = index_set(cmaps[arg_max([card(index_set(cmaps[i].arc_labels)) | i in N_CMAP])].arc_labels);
+		set of int: IBLOCK_COMPONENT = index_set(cmaps[1].itype.iblock_type.sorts);
+		array[N_CMAP,ARC_ID, IBLOCK_COMPONENT] of opt int: iblocks = array3d(N_CMAP,ARC_ID, IBLOCK_COMPONENT, [cmaps[k].arc_labels[i].influence.iblock[j] | k in N_CMAP, i in ARC_ID, j in IBLOCK_COMPONENT]);
 		% indexing range for solution arrays
 		set of int: ARC_PATH = index_set(x_arc_path);
 	} in
 		assert(index_set_1of2(x_iblock_path) == index_set(x_arc_path), "cmql_arc_influence_path: the row index set of $x_iblock_path  must be equal to the index set of $x_arc_path") /\
-		assert(index_set_2of2(x_iblock_path) == index_set(cmap.itype.iblock_type.sorts), "cmql_arc_influence_path: the column index set of $x_iblock_path must be equal to the i-block-type encoding range of $cmap's i-type") /\
+		assert(index_set_2of2(x_iblock_path) == index_set(cmaps[1].itype.iblock_type.sorts), "cmql_arc_influence_path: the column index set of $x_iblock_path must be equal to the i-block-type encoding range of $cmap's i-type") /\
 
 		% (1) matching arc and i-block (row in i-block path array) occurrences
 		% - the i-th arc occurs iff all the components of the i-th i-block occur
@@ -249,24 +252,25 @@ predicate cmql_arc_influence_path(CMAP: cmap, array[int] of var opt int: x_arc_p
 		% (2) matching i-blocks with arcs
 		% - the i-th occurring i-block is the i-block labeling the i-th ocurring arc in the c-map
 		% NB. every row access to x_iblock_path below is within bounds since ARC_PATH is the row index set of x_iblock_path
-		forall(i in ARC_PATH)(occurs(x_arc_path[i]) -> x_iblock_path[i,IBLOCK_COMPONENT] == [iblocks[x_arc_path[i],j] | j in IBLOCK_COMPONENT]) /\
+		forall(i in ARC_PATH)(occurs(x_arc_path[i]) -> x_iblock_path[i,IBLOCK_COMPONENT] == [iblocks[cmap,x_arc_path[i],j] | j in IBLOCK_COMPONENT]) /\
 
 		true
 	;
 
 
 % Determines a minimal consistent arc path $x_arc_path of length $x_arc_path_length wrt. cmap $cmap and path-minimality feature.
-predicate cmql_arc_path(CMAP: cmap, var int: x_arc_path_length, array[int] of var opt int: x_arc_path)
+predicate cmql_arc_path(array[int] of CMAP: cmaps, var int: cmap, var int: x_arc_path_length, array[int] of var opt int: x_arc_path)
 	:: "cmql_arc_path($cmap,$x_arc_path_length,$x_arc_path): determines a minimal consistent arc path $x_arc_path of length $x_arc_path_length wrt. cmap $cmap and path-minimality feature (var)"
 	=
 	let {
-		% cmap data
-		set of int: NODE_ID = index_set(cmap.node_labels);
-		set of int: ARC_ID = index_set(cmap.arc_labels);
-		array[ARC_ID] of NODE_ID: from = array1d(ARC_ID, cmap.adigraph.tail_head[ARC_ID, TAIL]);
-		array[ARC_ID] of NODE_ID: to = array1d(ARC_ID, cmap.adigraph.tail_head[ARC_ID, HEAD]);
+		set of int: N_CMAP = index_set(cmaps);
+		set of int: NODE_ID = index_set(cmaps[arg_max([card(index_set(cmaps[i].node_labels)) | i in N_CMAP])].node_labels);
+		set of int: ARC_ID = index_set(cmaps[arg_max([card(index_set(cmaps[i].arc_labels)) | i in N_CMAP])].arc_labels);		
+		array[N_CMAP,ARC_ID] of NODE_ID: from = array2d(N_CMAP,ARC_ID, [cmaps[i].adigraph.tail_head[j, TAIL] | i in N_CMAP, j in ARC_ID]);
+		array[N_CMAP,ARC_ID] of NODE_ID: to = array2d(N_CMAP,ARC_ID, [cmaps[i].adigraph.tail_head[j, HEAD] | i in N_CMAP, j in ARC_ID]);
 		% indexing range for solution array
 		set of int: ARC_PATH = index_set(x_arc_path);
+		%set of int: NODE_PATH = index_set(x_node_path);
 	} in
 		assert(isProperRange(index_set(x_arc_path)), "cmql_arc_path: index set of $x_arc_path must be a proper range") /\
 
@@ -283,7 +287,7 @@ predicate cmql_arc_path(CMAP: cmap, var int: x_arc_path_length, array[int] of va
 % 		forall(i in ARC_PATH)(occurs(x_arc_path[i]) -> x_arc_path[i] in ARC_ID) /\ % x in S false if x absent % entailed by (4)
 
 		% (4) matching heads and tails of successive occurring arcs
-		forall(i in min(ARC_PATH)<..max(ARC_PATH))(occurs(x_arc_path[i]) -> from[x_arc_path[i]] == to[x_arc_path[i-1]]) /\
+		forall(i in min(ARC_PATH)<..max(ARC_PATH))(occurs(x_arc_path[i]) -> from[cmap,x_arc_path[i]] == to[cmap,x_arc_path[i-1]]) /\
 
 		
 

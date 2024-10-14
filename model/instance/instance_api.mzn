@@ -74,7 +74,7 @@ type INSTANCE = record(
 
 % Input cmap
 % !! right now, only a single cmap per instance is supported !!
-I_CMAP: icmap;
+array[int] of I_CMAP: icmaps;
 
 % % Input cmaps to pick from catalog (icmap_catalog.mzn)
 % % !! for future versions allowing mutliple cmaps !!
@@ -85,7 +85,7 @@ DATASET: dataset = (
 	% declared in itype_api.mzn, defined from instance data
 	itype: itype,
 	% declared above, defined from instance data
-	icmaps: [icmap],
+	icmaps: icmaps,
 	);
 
 % Problem instance

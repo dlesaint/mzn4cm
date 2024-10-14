@@ -37,38 +37,26 @@ constraint assertInstance(instance);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% QUERY DATA
-
-% the reference c-map
-CMAP: cmap = instance.cmaps[1];
-
-% the range of node ids in the c-map's digraph
-set of int: NODE_ID = index_set(cmap.node_labels);
-
-% the range of arc ids in the c-map's digraph
-set of int: ARC_ID = index_set(cmap.arc_labels);
-
-% the optional fixed origin node
-opt NODE_ID: origin_node;
-
-% the optional fixed destination node
-opt NODE_ID: destination_node;
+%% QUERY DATA
+array[int] of CMAP: cmaps = instance.cmaps;
 
 int: nb_paths;
 int: size_path;
-array[int,int] of var int: matrix;
-% assertions
-constraint assert((occurs(origin_node) /\ occurs(destination_node)) -> deopt(origin_node )!= deopt(destination_node), "path origin and destination concepts must be different");
+%array[int,int] of var int: matrix;
 
-% the range of paths of length <= max(NODE_ID), not necessarily node-minimal or arc-minimal
-%set of int: PATH_ID = 1..nr_paths(transform_matrix(cmap.adigraph.a));
-%bool:  b = assert(false, show(F_NB_PATH_COUNTING));
-set of int: PATH_ID = if DEOPT_F_NB_PATH_COUNTING == F_PYTHON_COUNTING then 1..nb_paths else 1..nr_paths(transform_matrix(cmap.adigraph.a)) endif;
+set of int: N_CMAP = index_set(cmaps);
 
-set of int: NODE_PATH = if DEOPT_F_NB_PATH_COUNTING == F_PYTHON_COUNTING then 1..size_path else 1..min(max(NODE_ID), max(ARC_ID)+1)  endif;
+set of int: NODE_ID = index_set(cmaps[arg_max([card(index_set(cmaps[i].node_labels)) | i in N_CMAP])].node_labels);
+set of int: ARC_ID = index_set(cmaps[arg_max([card(index_set(cmaps[i].arc_labels)) | i in N_CMAP])].arc_labels);
 
+set of int: PATH_ID = 1..nb_paths;
+
+set of int: ARC_PATH = 1..size_path;
+
+set of int: NODE_PATH = 1..(max(ARC_PATH)+1);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% QUERY VARIABLES
-
+var int: cmap;
 % the origin node of the solution paths
 var NODE_ID: x_origin_node;
 	
@@ -81,7 +69,6 @@ var NODE_ID: x_destination_node;
 
 % the range for indexing any sequence of arcs corresponding to a solution path
 % - the upper-bound depends on the chosen path-minimality definition amongst the 2 variants
-set of int: ARC_PATH = 1..max(NODE_PATH)-1;
 
 % the number of solutions paths
 var 0..card(PATH_ID): x_nr_paths;
@@ -136,15 +123,12 @@ var bool: x_cmql_value;
 %
 constraint :: "constraint: path aggregation between origin and destination nodes"
 	% binds origin node if given
-	(occurs(origin_node) -> (x_origin_node == deopt(origin_node))) /\ % !! see semantics of == over opt vars
+	%(occurs(origin_node) -> (x_origin_node == deopt(origin_node))) /\ % !! see semantics of == over opt vars
 	% binds destination node if given
-	(occurs(destination_node) -> (x_destination_node == deopt(destination_node))) /\ % !! see semantics of == over opt vars
+	%(occurs(destination_node) -> (x_destination_node == deopt(destination_node))) /\ % !! see semantics of == over opt vars
 	% searches for non-empty dipaths
-	if DEOPT_F_FIXED_NODE = F_UNFIXED then
-		cmql_value(cmap, x_origin_node, x_destination_node, x_nr_paths, x_arc_path_lengths, x_arc_paths, x_node_paths, x_iblock_paths, x_propagated_iblocks, x_iblocks, x_aggregated_iblocks, x_aggregated_influence) 
-	else
-		cmql_value_fixed(cmap, deopt(origin_node), deopt(destination_node), x_nr_paths, x_arc_path_lengths, x_arc_paths, x_node_paths, x_iblock_paths, x_propagated_iblocks, x_iblocks, x_aggregated_iblocks, x_aggregated_influence) 
-	endif /\
+		cmql_value(cmaps,cmap, x_origin_node, x_destination_node, x_nr_paths, x_arc_path_lengths, x_arc_paths, x_node_paths, x_iblock_paths, x_propagated_iblocks, x_iblocks, x_aggregated_iblocks, x_aggregated_influence) 
+	 /\
 	% reifying satisfiability of query (to customize)
 	x_cmql_value == (x_nr_paths >= 1) /\
 	% forcing satisfiability
@@ -164,26 +148,3 @@ solve
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % QUERY OUTPUT
-
-
-%
-output :: "o_instance"
-	displayInstance(instance);
-
-%
-output :: "o_query"
-["****** TEST - Query cmql_path_value - Path influence propagation ***********"]
-++ ["\n"]
-++ ["Origin node =\t\t"]
-% ++ [show(cmap.node_labels[origin_node])]
-++ [show(cmap.node_labels[fix(x_origin_node)])]
-++ ["\n"]
-++ ["Destination node =\t"]
-% ++ [show(cmap.node_labels[destination_node])]
-++ [show(cmap.node_labels[fix(x_destination_node)])]
-++ ["\n"]
-;
-
-
-output :: "o_solution_cmql_value"
-	cmql_value_output(cmap, x_nr_paths, x_arc_path_lengths, x_arc_paths, x_node_paths, x_iblock_paths, x_propagated_iblocks, x_iblocks, x_aggregated_iblocks, x_aggregated_influence);

@@ -11,8 +11,17 @@ include "./../../ranges/ranges.mzn";
 
 include "alldifferent.mzn";
 
-predicate cmql_path_value_classic (
-    CMAP: cmap,	
+function ann: cmql_path_value_search(var int: cmap, array[int] of var opt int: x_arc_path, array[int] of var opt int: x_node_path, array[int] of var opt int: x_propagated_iblocks, var INFLUENCE: x_propagated_influence, var bool: x_cmql_path_value)
+	=
+	seq_search([
+		int_search([x_cmql_path_value], input_order, indomain_max),
+		int_search([cmap], input_order, indomain_min)
+	])
+;
+
+predicate cmql_path_value_classic (	
+    array[int] of CMAP: cmaps,
+	var int: cmap,	
     array[int] of var opt int: x_arc_path, 
 	array[int] of var opt int: x_node_path,
 	array[int] of var opt int: x_propagated_iblock,   
@@ -22,7 +31,8 @@ predicate cmql_path_value_classic (
 let {
     set of int: NODE_PATH = index_set(x_node_path);
     set of int: ARC_PATH = index_set(x_arc_path);
-	set of int: NODE_ID = index_set(cmap.node_labels);
+	set of int: N_CMAP = index_set(cmaps);
+	set of int: NODE_ID = index_set(cmaps[arg_max([card(index_set(cmaps[i].node_labels)) | i in N_CMAP])].node_labels);
 	var NODE_ID: c1;
 	var NODE_ID: c2;
 	var 0..card(ARC_PATH): x_arc_path_length;
@@ -31,15 +41,15 @@ let {
 } in 
 	
 	% (1) determining a path
-	cmql_path(cmap, c1,c2,x_arc_path, x_node_path) /\
+	cmql_path(cmaps,cmap, c1,c2,x_arc_path, x_node_path) /\
 	% (2) determining the length of the path
-	cmql_length(cmap, x_arc_path, x_node_path,x_arc_path_length) /\
+	cmql_length(cmaps, cmap, x_arc_path, x_node_path,x_arc_path_length) /\
     % (4-1) determining a sequence of arcs corresponding to a minimal dipath of the right length in the c-map
-		%cmql_arc_path(cmap, x_arc_path_length, x_arc_path) /\
+		%%cmql_arc_path(cmap, x_arc_path_length, x_arc_path) /\
 		% (4-2) determining minimal consistent arc and node sequences
-		%cmql_arc_node_path(cmap, x_arc_path, x_node_path) /\
+		%%cmql_arc_node_path(cmap, x_arc_path, x_node_path) /\
 		% (4-3) determining consistent arc and i-block sequences	
-		cmql_arc_influence_path(cmap, x_arc_path, x_iblock_path) /\
+		cmql_arc_influence_path(cmaps,cmap, x_arc_path, x_iblock_path) /\
 
 		% (5-1) matching arc and propagated i-block occurrences
 		% - the i-th arc occurs iff all the components of the i-th propagated i-block occur
@@ -58,7 +68,7 @@ let {
 
 		% (6) determining the propagated influence
 		% - the solution path is empty only if x_propagated_influence is the null influence (ie. absorbing element for i-propagation)
-		(x_arc_path_length == 0 -> equals(x_propagated_influence, getNullInfluence(cmap.itype))) /\ %(iblock: getAbsorbingElement(cmap.itype.ealgebra, ALGEBRAIC_OPERATION_2).value)) /\
+		(x_arc_path_length == 0 -> equals(x_propagated_influence, getNullInfluence(cmaps[1].itype))) /\ %(iblock: getAbsorbingElement(cmap.itype.ealgebra, ALGEBRAIC_OPERATION_2).value)) /\
 		(x_arc_path_length == 0 -> forall (i in IBLOCK_COMPONENT)(absent(x_propagated_iblock[i]))) /\
 		% - the solution path is not empty only if x_propagated_influence is the last occurring propagated i-block
 		(x_arc_path_length > 0 -> x_propagated_influence == (iblock: [x_propagated_iblocks[x_arc_path_length,j] | j in IBLOCK_COMPONENT])) /\

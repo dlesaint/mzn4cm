@@ -49,7 +49,7 @@ function ann: cmql_value_search(
 	seq_search([
 		
 		int_search([x_cmql_value], input_order, indomain_max),
-		%int_search([x_origin_node, x_destination_node], input_order, indomain_min),		
+		int_search([x_origin_node, x_destination_node], input_order, indomain_min),		
 		int_search([x_nr_paths], input_order, indomain_max),
 		int_search(x_arc_path_lengths, input_order, indomain_min),
 		int_search([x_arc_paths[i,j] | i in index_set_1of2(x_arc_paths), j in index_set_2of2(x_arc_paths)], input_order, indomain_min),
@@ -93,7 +93,8 @@ function ann: cmql_value_search(
 % - $x_aggregated_influence is the influence aggregated through the dipaths
 % -- it is equal to the null influence iff no dipath exists between origin and destination nodes in the c-map digraph
 predicate cmql_value (
-						CMAP: cmap,
+						array[int] of CMAP: cmaps,
+						var int: cmap,
 						var int: x_origin_node,
 						var int: x_destination_node,
 						var int: x_nr_paths,
@@ -112,7 +113,7 @@ predicate cmql_value (
 		set of int: PATH_ID = index_set_1of2(x_arc_paths);
 		set of int: ARC_PATH = index_set_2of2(x_arc_paths);
 		set of int: NODE_PATH = index_set_2of2(x_node_paths);
-		set of int: IBLOCK_COMPONENT = index_set(cmap.itype.iblock_type.sorts);
+		set of int: IBLOCK_COMPONENT = index_set(cmaps[1].itype.iblock_type.sorts);
 		array[PATH_ID] of var INFLUENCE: x_propagated_influences
 	} in
 		assert(index_set(x_arc_path_lengths) == PATH_ID, "cmql_value: the index set of $x_arc_path_lengths must be equal to the range of possible paths in the c-map between 2 nodes") /\
@@ -143,7 +144,7 @@ predicate cmql_value (
 		count_eq(x_arc_path_lengths, 0, card(PATH_ID) - x_nr_paths) /\
 				
 		% (4-1) determining solution paths and propagation results
-		forall(i in PATH_ID)(cmql_path_value(cmap, x_origin_node,x_destination_node,x_arc_path_lengths[i], x_arc_paths[i,ARC_PATH], x_node_paths[i,NODE_PATH], x_iblock_paths[i,ARC_PATH,IBLOCK_COMPONENT], x_propagated_iblocks[i,ARC_PATH,IBLOCK_COMPONENT], x_propagated_influences[i])) /\
+		forall(i in PATH_ID)(cmql_path_value(cmaps,cmap, x_origin_node,x_destination_node,x_arc_path_lengths[i], x_arc_paths[i,ARC_PATH], x_node_paths[i,NODE_PATH], x_iblock_paths[i,ARC_PATH,IBLOCK_COMPONENT], x_propagated_iblocks[i,ARC_PATH,IBLOCK_COMPONENT], x_propagated_influences[i])) /\
  		% (4-2) sorting solution paths lexicographically by ascending path length first then ascending arc ids
 		lex_chain_less_opt(x_nr_paths, x_arc_path_lengths, x_arc_paths) /\
 		% (4-3) check that all path begin with the origin node and end with destination node
@@ -170,7 +171,7 @@ predicate cmql_value (
 
 		% (7) determining the aggregated influence
 		% - there is no solution path only if x_aggregated_influence is the null influence (ie. neutral element for i-aggregation)
-		(x_nr_paths == 0 -> equals(x_aggregated_influence, getNullInfluence(cmap.itype))) /\ %(iblock: getAbsorbingElement(cmap.itype.ealgebra, ALGEBRAIC_OPERATION_2).value)) /\
+		(x_nr_paths == 0 -> equals(x_aggregated_influence, getNullInfluence(cmaps[1].itype))) /\ %(iblock: getAbsorbingElement(cmap.itype.ealgebra, ALGEBRAIC_OPERATION_2).value)) /\
 		% - there exists solution paths only if x_aggregated_influence is the last occurring aggregated i-block
 		(x_nr_paths > 0 -> x_aggregated_influence == (iblock: [x_aggregated_iblocks[x_nr_paths,j] | j in IBLOCK_COMPONENT])) /\
 

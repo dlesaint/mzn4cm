@@ -1,0 +1,44 @@
+icmaps = [
+    (
+% icm_S_1_dg_3x3_cyclic_1 = (
+	% name
+	name:"icm_S_1_dg_3x3_cyclic_1",
+	
+	% i-type
+	itype: itype,
+	
+	% node-labeling concepts
+	node_labels:[
+	(node:1, concept:(name:"c1")),
+	(node:2, concept:(name:"c2")),
+	(node:3, concept:(name:"c3")),
+	],
+	
+	% arc-labeling influences
+	arc_labels:[
+	(arc:(t:1, h:2), influence:(iblock:[P])),
+	(arc:(t:2, h:3), influence:(iblock:[P])),
+	(arc:(t:3, h:1), influence:(iblock:[N])),
+	],
+),
+(
+    name: "icm_S_1_dg_3x3_acyclic_1",
+
+    itype : itype,
+
+	% node-labeling concepts
+	node_labels:[
+	(node:1, concept:(name:"c1")),
+	(node:2, concept:(name:"c2")),
+	(node:3, concept:(name:"c3")),
+	],
+	
+	% arc-labeling influence blocks
+	arc_labels:[
+	(arc:(t:1, h:2), influence:(iblock:[P])),
+	(arc:(t:1, h:3), influence:(iblock:[P])),
+	(arc:(t:2, h:3), influence:(iblock:[N])),
+	],
+)
+
+];
