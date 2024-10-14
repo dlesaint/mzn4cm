@@ -39,8 +39,8 @@ constraint assertInstance(instance);
 array[int] of CMAP: cmaps = instance.cmaps;
 
 int: nb_paths;
+
 int: size_path;
-%array[int,int] of var int: matrix;
 
 set of int: N_CMAP = index_set(cmaps);
 
