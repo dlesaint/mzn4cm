@@ -103,7 +103,7 @@ function ann: cmql_value_search_classic(
 %% PathValue
 
 %
-function ann: cmql_path_value_search(var int: x_origin_node, var int: x_destination_node, var int: x_arc_path_length, array[int] of var opt int: x_arc_path, array[int] of var opt int: x_node_path, array[int, int] of var opt int: x_iblock_path, array[int, int] of var opt int: x_propagated_iblocks, var INFLUENCE: x_propagated_influence, var bool: x_cmql_path_value);
+function ann: cmql_path_value_search(var int: cmap, array[int] of var opt int: x_arc_path, array[int] of var opt int: x_node_path, array[int] of var opt int: x_propagated_iblocks, var INFLUENCE: x_propagated_influence, var bool: x_cmql_path_value);
 %function ann: cmql_path_value_search_fixed(var int: x_arc_path_length, array[int] of var opt int: x_arc_path, array[int] of var opt int: x_node_path, array[int, int] of var opt int: x_iblock_path, array[int, int] of var opt int: x_propagated_iblocks, var INFLUENCE: x_propagated_influence, var bool: x_cmql_path_value);
 	
 % Determines a (possibly empty) dipath in a c-map such that:
