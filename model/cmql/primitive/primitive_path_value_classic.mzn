@@ -41,9 +41,9 @@ let {
 } in 
 	
 	% (1) determining a path
-	%cmql_path(cmaps,cmap, c1,c2,x_arc_path, x_node_path) /\
+	cmql_path(cmaps,cmap, c1,c2,x_arc_path, x_node_path) /\
 	% (2) determining the length of the path
-	%cmql_length(cmap, x_arc_path, x_node_path,x_arc_path_length) /\
+	cmql_length(cmaps, cmap, x_arc_path, x_node_path,x_arc_path_length) /\
     % (4-1) determining a sequence of arcs corresponding to a minimal dipath of the right length in the c-map
 		%%cmql_arc_path(cmap, x_arc_path_length, x_arc_path) /\
 		% (4-2) determining minimal consistent arc and node sequences
@@ -62,9 +62,9 @@ let {
 		% - the first occurring propagated i-block is the first i-block (encoding the influence of the first occurring arc)
 		% - the i-th occurring propagated i-block is the propagation of the i-1-th propagated block with the i-th i-block
 		% NB. every row access to x_propagated_iblocks below is within bounds since ARC_PATH is the row index set of x_propagated_iblocks
-		%(x_propagated_iblocks[min(ARC_PATH),IBLOCK_COMPONENT] == x_iblock_path[min(ARC_PATH),IBLOCK_COMPONENT]) /\
-		%forall(i in min(ARC_PATH)<..max(ARC_PATH))
-		%	(occurs(x_arc_path[i]) -> x_propagated_iblocks[i,IBLOCK_COMPONENT] == iPropagate(deopt(x_propagated_iblocks[i-1,IBLOCK_COMPONENT]), deopt(x_iblock_path[i,IBLOCK_COMPONENT]))) /\
+		(x_propagated_iblocks[min(ARC_PATH),IBLOCK_COMPONENT] == x_iblock_path[min(ARC_PATH),IBLOCK_COMPONENT]) /\
+		forall(i in min(ARC_PATH)<..max(ARC_PATH))
+			(occurs(x_arc_path[i]) -> x_propagated_iblocks[i,IBLOCK_COMPONENT] == iPropagate(deopt(x_propagated_iblocks[i-1,IBLOCK_COMPONENT]), deopt(x_iblock_path[i,IBLOCK_COMPONENT]))) /\
 
 		% (6) determining the propagated influence
 		% - the solution path is empty only if x_propagated_influence is the null influence (ie. absorbing element for i-propagation)

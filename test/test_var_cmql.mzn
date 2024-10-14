@@ -57,18 +57,21 @@ set of int: NODE_PATH = 1..(max(ARC_PATH)+1);
 %% QUERY VARIABLES
 var N_CMAP: cmap;
 
+var NODE_ID: x_origin_node;
+
+var NODE_ID: x_destination_node;
+
+var ARC_PATH: x_length;
+
 array[ARC_PATH] of var opt ARC_ID: x_arc_path;
 
 array[NODE_PATH] of var opt NODE_ID: x_node_path;
 
-array[ARC_PATH] of var opt int: x_propagated_iblock;  
+array[ARC_PATH, IBLOCK_COMPONENT] of var opt int: x_iblock_path;
+
+array[ARC_PATH, IBLOCK_COMPONENT] of var opt int: x_propagated_iblocks;  
 
 var INFLUENCE: x_propagated_influence;
-
-var NODE_ID: x_origin_node;
-var NODE_ID: x_destination_node;
-
-var int: x_length;
 
 var bool: x_cmql;
 
@@ -78,12 +81,10 @@ var bool: x_cmql;
 constraint
 %cmql_length(cmaps, cmap, x_arc_path, x_node_path, x_length)
 %/\ cmql_path(cmaps, cmap, x_origin_node, x_destination_node, x_arc_path, x_node_path)
-cmql_path_value_classic(cmaps, cmap,x_arc_path, x_node_path, x_propagated_iblock, x_propagated_influence)
-/\ x_cmql = occurs(x_arc_path[1])
-/\ cmap = 1
-/\ x_cmql
+cmql_path_value(cmaps, cmap, x_origin_node, x_destination_node, x_length, x_arc_path, x_node_path, x_iblock_path, x_propagated_iblocks, x_propagated_influence)
+/\ x_length == 2
 ;
 
-solve ::cmql_path_value_search(cmap, x_arc_path, x_node_path, x_propagated_iblock, x_propagated_influence, x_cmql)
+solve %::cmql_path_value_search(cmap, x_arc_path, x_node_path, x_propagated_iblock, x_propagated_influence, x_cmql)
 satisfy;
 
