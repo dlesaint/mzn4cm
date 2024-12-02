@@ -45,7 +45,7 @@ predicate cmql_path (
 % Finds the propagated value of a path
 function ann: cmql_path_value_search(var int: cmap, array[int] of var opt int: x_arc_path, array[int] of var opt int: x_node_path, array[int] of var opt int: x_propagated_iblocks, var INFLUENCE: x_propagated_influence, var bool: x_cmql_path_value);
 
-length of the sequence of arcs
+%length of the sequence of arcs
 % -- the length is 0 iff the sequence of arcs is empty
 % - $x_node_path is the sequence of nodes including and connecting the origin and destination nodes along the dipath in the c-map digraph, completed with absent nodes to fill the opt array
 % -- the sequence is empty (ie. the array only contains absent node ids) iff no dipath exists between origin and destination nodes in the c-map digraph

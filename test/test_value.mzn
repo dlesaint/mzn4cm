@@ -130,7 +130,7 @@ constraint :: "constraint: path aggregation between origin and destination nodes
 		cmql_value(cmaps,cmap, x_origin_node, x_destination_node, x_nr_paths, x_arc_path_lengths, x_arc_paths, x_node_paths, x_iblock_paths, x_propagated_iblocks, x_iblocks, x_aggregated_iblocks, x_aggregated_influence) 
 	 /\
 	% reifying satisfiability of query (to customize)
-	x_cmql_value == (x_nr_paths >= 1) /\
+	x_cmql_value == (x_nr_paths >= 1) /\	
 	% forcing satisfiability
 	x_cmql_value /\
 	true
