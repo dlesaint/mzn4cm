@@ -180,7 +180,7 @@ def main():
     adj_matrix_to_nb_path(icmap_parameters)
     nb_paths,matrix = adj_matrix_to_nb_path_no_cycles(icmap_parameters)    
     print(nb_paths)
-    print(matrix)    
+    #print(matrix)    
     size_path = max_legth(icmap_parameters)
     print(size_path)
     dzn_file = "data.dzn"

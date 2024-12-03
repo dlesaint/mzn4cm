@@ -38,6 +38,7 @@ icmaps = [
 	(arc:(t:1, h:2), influence:(iblock:[P])),
 	(arc:(t:1, h:3), influence:(iblock:[P])),
 	(arc:(t:2, h:3), influence:(iblock:[N])),
+	(arc:(t:2, h:3), influence:(iblock:[N])),
 	],
 )
 
