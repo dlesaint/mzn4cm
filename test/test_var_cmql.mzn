@@ -44,7 +44,7 @@ int: size_path;
 
 set of int: N_CMAP = index_set(cmaps);
 
-set of int: NODE_ID = index_set(cmaps[arg_max([card(index_set(cmaps[i].node_labels)) | i in N_CMAP])].node_labels);
+set of int: NODE_ID = index_set(cmaps[arg_max([card(index_set(cmaps[i].node_labels)) | i in N_CMAP])]node_labels);
 set of int: ARC_ID = index_set(cmaps[arg_max([card(index_set(cmaps[i].arc_labels)) | i in N_CMAP])].arc_labels);
 
 set of int: PATH_ID = 1..nb_paths;
