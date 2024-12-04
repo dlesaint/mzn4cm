@@ -13,6 +13,7 @@ def matrix_to_adjacency_list(matrix):
         for v in range(len(matrix[u])):
             if matrix[u][v] != 0:  # Suppose que 0 signifie aucune connexion
                 graph[u].append((v, matrix[u][v]))
+        
     return graph
 
 def topological_sort(graph, V):
@@ -61,14 +62,17 @@ def longest_path_with_cycles(matrix, start):
 
 def max_legth (adj_matrix):
     max = 0
+    l=0
     for m in adj_matrix:
         result = 0
         for i in range(m.shape[0]):
             tmp =  longest_path_with_cycles(m,i)       
             if result<tmp:
                 result = tmp
-    if max < result:
-        max = result
+        l += result
+        if max < result:
+            max = result
+    print("taille moyenne d'un chemin: "+str(l/len(adj_matrix)))
     return(max)
 
 def adj_matrix_to_nb_path (adj_matrix):
@@ -87,6 +91,7 @@ def adj_matrix_to_nb_path (adj_matrix):
     if max > tmax:
         tmax = max
     return tmax
+
 def count_paths_dfs(adj_matrix,start,end):
     def dfs(current,end,visited):
         if current == end:
@@ -105,6 +110,7 @@ def count_paths_dfs(adj_matrix,start,end):
 def adj_matrix_to_nb_path_no_cycles (adj_matrix):
     tmax = 0
     tarray = []
+    t=0
     for m in adj_matrix:
         max = 0
         array = []
@@ -114,9 +120,11 @@ def adj_matrix_to_nb_path_no_cycles (adj_matrix):
                 array.append(tmp)
                 if tmp > max:
                     max = tmp 
-    tarray.append(array)
-    if tmax < max:
-        tmax = max
+        tarray.append(array)
+        t += max
+        if tmax < max:
+            tmax = max
+    print("Nombre moyen de chemins: " + str(t/len(adj_matrix)))
     return tmax,tarray
 
 import re
@@ -129,19 +137,36 @@ def parse_icmap_file(icmap_file):
     
     icmaps = content.split('),\n(')
     matrices = []
-
+    max_size=0
+    max_d = 0
+    size=0
+    d=0
+    print("Nombre de cartes: " + str(len(icmaps)))
     for icmap in icmaps:
+        
         # Extract node count
         node_count = len(re.findall(r'\(node:\d+, concept:\(name:"[^"]+"\)\)', icmap))
+        tmp_size = node_count
+        size += tmp_size
         # Initialize adjacency matrix
         adj_matrix = np.zeros((node_count, node_count), dtype=int)
         # Extract arc_labels and fill the adjacency matrix
         arc_labels = re.findall(r'\(arc:\(t:(\d+), h:(\d+)\), influence:\(iblock:\[(.*?)\]\)\)', icmap)
+        tmp_arc = len(arc_labels)
         for t, h, influence in arc_labels:        
             t, h = int(t) - 1, int(h) - 1  # Adjusting index to be zero-based
             adj_matrix[t][h] = 1
-        print(adj_matrix) 
-        matrices.append(adj_matrix)
+        #print(adj_matrix) 
+        matrices.append(adj_matrix) 
+        d += (tmp_size/ (tmp_arc*(tmp_arc-1)))
+        if max_d < (tmp_size/ (tmp_arc*(tmp_arc-1))):
+            max_d = (tmp_size/ (tmp_arc*(tmp_arc-1)))
+        if tmp_size > max_size:
+            max_size = tmp_size
+    print("taille_max: " + str(max_size))
+    print("taille moyenne: " + str(size/len(matrices)))
+    print("densité max: " + str(max_d))
+    print("densite moyenne: "+ str(d/len(matrices)))
     return matrices
 
 
@@ -176,7 +201,7 @@ def main():
     args = parser.parse_args()    
 
     icmap_parameters = parse_icmap_file(args.icmap)
-    print(icmap_parameters)
+    #print(icmap_parameters)
     adj_matrix_to_nb_path(icmap_parameters)
     nb_paths,matrix = adj_matrix_to_nb_path_no_cycles(icmap_parameters)    
     print(nb_paths)
