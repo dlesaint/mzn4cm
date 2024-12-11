@@ -23,9 +23,9 @@
 % Class for arcs
 type ARC = record(
 	% tail node
-	int: t,
+	opt int: t,
 	% head node
-	int: h
+	opt int: h
 	);
 
 % Class for digraphs

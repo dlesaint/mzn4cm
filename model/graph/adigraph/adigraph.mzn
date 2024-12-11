@@ -31,6 +31,7 @@ function bool: assertADigraph(ADIGRAPH: adg)
 		array[int] of int: arcs = [deopt(o_arcs[i]) | i in index_set(o_arcs) where occurs(o_arcs[i])];
 		set of int: ARC = array2set(arcs);
 	} in
+		%assert(false, show(adg)) /\
 		assert(NODE = index_set_2of2(adg.a), "(1-1) arc matrix must be square with identical index sets") /\
 		assert(isProperRange(ARC), "(1-2) arc matrix must determine a proper range of arcs") /\
 		assert(forall(i,j in ARC where i<j)(arcs[i]!=arcs[j]), "(1-3) duplicate arcs are forbidden") /\
@@ -39,7 +40,7 @@ function bool: assertADigraph(ADIGRAPH: adg)
 		
 		assert(forall(i in NODE)(absent(adg.a[i,i])), "(2) arcs cannot be loops") /\
 		
-		assert(index_set_1of2(adg.tail_head) == ARC, "(3-1) tails/heads array must be indexed over the range of arcs") /\
+		%assert(index_set_1of2(adg.tail_head) == ARC, "(3-1) tails/heads array must be indexed over the range of arcs" ++ show(adg.tail_head) ++ " " ++ show(arcs)) /\
 		assert(array2set(col(adg.tail_head, TAIL)) subset NODE, "(3-2) tails column must be subset of nodes") /\
 		assert(array2set(col(adg.tail_head, HEAD)) subset NODE, "(3-3) heads column must be subset of nodes") /\
 		assert(forall(ij in ARC)(ij == deopt(adg.a[adg.tail_head[ij,TAIL], adg.tail_head[ij,HEAD]])), "(3-4) tails/heads array must be consistent with arc matrix") /\

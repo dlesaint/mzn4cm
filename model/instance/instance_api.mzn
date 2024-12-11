@@ -93,7 +93,7 @@ INSTANCE: instance = (
 	% declared and defined above
 	dataset: dataset,
 	% defined from dataset
-	cmaps: icmap2cmap2(dataset),
+	cmaps: [icmap2cmap2(dataset,i) | i in index_set(dataset.icmaps)],
 	);
 
 

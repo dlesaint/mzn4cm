@@ -31,8 +31,9 @@ function bool: assertDigraph(DIGRAPH: dg)
 	assert(1..dg.nr_arcs == index_set(dg.a), "(3) every arc of digraph $dg must be identified by its index in the array of arcs") /\
 	assert(array2set(_mapToNodes(dg.a, _FIELD_ARC_TAIL)) subset 1..dg.nr_nodes, "(4-1) every arc tail must be a node of digraph $dg") /\
 	assert(array2set(_mapToNodes(dg.a, _FIELD_ARC_HEAD)) subset 1..dg.nr_nodes, "(4-2) every arc head must be a node of digraph $dg") /\
-	assert(forall(ij in 1..dg.nr_arcs)(dg.a[ij].t != dg.a[ij].h), "(5-1) arcs cannot be loops") /\
-	assert(forall(ij,kl in 1..dg.nr_arcs where ij<kl)(dg.a[ij].t != dg.a[kl].t \/ dg.a[ij].h != dg.a[kl].h), "(5-2) duplicate arcs are forbidden")
+	%assert(forall(ij in 1..dg.nr_arcs)(dg.a[ij].t != dg.a[ij].h), "(5-1) arcs cannot be loops") /\
+
+	assert(forall(ij,kl in 1..dg.nr_arcs where ij<kl)(dg.a[ij].t != dg.a[kl].t \/ dg.a[ij].h != dg.a[kl].h \/ (absent(dg.a[ij].t) /\ absent(dg.a[ij].t))), "(5-2) duplicate arcs are forbidden")
 % 	TODO 
 % 	/\
 % 	% (6) entails (5-2)
@@ -53,7 +54,7 @@ enum _FIELD_ARC = {_FIELD_ARC_TAIL, _FIELD_ARC_HEAD};
 %% PRIVATE
 
 %
-function array[$$I] of int: _mapToNodes(array[$$I] of ARC: arcs, _FIELD_ARC: f)
+function array[$$I] of opt int: _mapToNodes(array[$$I] of ARC: arcs, _FIELD_ARC: f)
 	:: "function _mapToNodes($arcs, $f): key-preserving map of array[$$I] of arcs $arcs to array[$$I] of their tail or head nodes based on field $f"
 	=
 	if			f==_FIELD_ARC_TAIL
@@ -65,7 +66,7 @@ function array[$$I] of int: _mapToNodes(array[$$I] of ARC: arcs, _FIELD_ARC: f)
 	;
 
 % 
-function array[1..2, $$I] of int: _mapToNodes(array[$$I] of ARC: arcs)
+function array[1..2, $$I] of opt int: _mapToNodes(array[$$I] of ARC: arcs)
 	:: "function _mapToNodes($arcs): key-preserving map of array[$$I] of arcs $arcs to array[TAIL_HEAD, index_set($arcs)] of their tail and head nodes"
 	=
 	array2d(1..2, index_set(arcs), _mapToNodes(arcs, _FIELD_ARC_TAIL) ++ _mapToNodes(arcs, _FIELD_ARC_HEAD))

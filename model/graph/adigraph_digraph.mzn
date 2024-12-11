@@ -55,16 +55,27 @@ function ADIGRAPH: digraph2adigraph(DIGRAPH: dg)
 		string: name = "a" ++ dg.name;
 		set of int: NODE_ID = 1..dg.nr_nodes;
 		set of int: ARC_ID = 1..dg.nr_arcs;
-		array[ARC_ID, TAIL_HEAD] of NODE_ID: tail_head = array2d(ARC_ID, TAIL_HEAD, [k | ij in ARC_ID, th in TAIL_HEAD, k in NODE_ID where (k==dg.a[ij].t /\ th==TAIL) \/ (k==dg.a[ij].h /\ th==HEAD)]);
+		
+		array[ARC_ID, TAIL_HEAD] of opt NODE_ID: tail_head = array2d(ARC_ID, TAIL_HEAD, [if (th == TAIL) then dg.a[ij].t elseif (th == HEAD) then dg.a[ij].h else <> endif | ij in ARC_ID, th in TAIL_HEAD]);
+		
 		array[NODE_ID, IN_OUT] of set of ARC_ID: out_in = array2d(NODE_ID, IN_OUT, [{ij | ij in ARC_ID where i==tail_head[ij,th]} | i in NODE_ID, th in TAIL_HEAD]);
+		
 		array[NODE_ID, IN_OUT] of set of ARC_ID: in_out = array2d(NODE_ID, IN_OUT, [out_in[i, to_enum(IN_OUT, 2 - (j + 1) mod 2)] | i in NODE_ID, j in IN_OUT]);
+		
 		array[NODE_ID, PRED_SUCC] of set of NODE_ID: pred_succ = array2d(NODE_ID, PRED_SUCC, [{j | j in NODE_ID where (io==IN /\ j in {k | k in NODE_ID, ki in in_out[i,io] where k==dg.a[ki].t}) \/ (io==OUT /\ j in {k | k in NODE_ID, ik in in_out[i,io] where k==dg.a[ik].h})} | i in NODE_ID, io in IN_OUT]);
+		
 		set of NODE_ID: tails = {i | i in NODE_ID where in_out[i,OUT]!={}};
+		
 		set of NODE_ID: heads = {i | i in NODE_ID where in_out[i,IN]!={}};
+		
 		set of NODE_ID: sources = tails diff heads;
+		
 		set of NODE_ID: sinks = heads diff tails;
+		
 		set of NODE_ID: loners = NODE_ID diff (tails union heads);
+		
 		array[NODE_ID, NODE_ID] of opt ARC_ID: arcs = array2d(NODE_ID, NODE_ID, [if(j in pred_succ[i,SUCC]) then min({ij | ij in in_out[i,OUT] where dg.a[ij].h==j}) else <> endif | i,j in NODE_ID]);
+		% bool: b= assert(false, show(arcs));
 	} in
 		(name:name, a:arcs, tail_head:tail_head, in_out:in_out, pred_succ:pred_succ, tails:tails, heads:heads, sources:sources, sinks:sinks, loners:loners)
 	;

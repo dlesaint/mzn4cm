@@ -47,7 +47,7 @@ type ADIGRAPH = record(
 	% Optional arc-valued adjacency matrix
 	array[int, int] of opt int: a,
 	% Tail/head nodes array
-	array[int, TAIL_HEAD] of int: tail_head,
+	array[int, TAIL_HEAD] of opt int: tail_head,
 	% Incoming/outgoing arcs array
 	array[int, IN_OUT] of set of int: in_out,
 	% Predecessors/successors array

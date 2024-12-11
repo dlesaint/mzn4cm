@@ -36,6 +36,8 @@ constraint assertInstance(instance);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% QUERY DATA
+%bool: b = assert(false,show(instance));
+
 array[int] of CMAP: cmaps = instance.cmaps;
 
 int: nb_paths;
@@ -83,6 +85,7 @@ constraint
 %/\ cmql_path(cmaps, cmap, x_origin_node, x_destination_node, x_arc_path, x_node_path)
 cmql_path_value(cmaps, cmap, x_origin_node, x_destination_node, x_length, x_arc_path, x_node_path, x_iblock_path, x_propagated_iblocks, x_propagated_influence)
 /\ x_length > 1
+%x_length > 1
 ;
 
 solve %::cmql_path_value_search(cmap, x_arc_path, x_node_path, x_propagated_iblock, x_propagated_influence, x_cmql)

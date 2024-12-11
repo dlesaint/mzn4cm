@@ -195,8 +195,8 @@ predicate cmql_arc_node_path(array[int] of CMAP: cmaps, var int: cmap, array[int
 		set of int: N_CMAP = index_set(cmaps);
 		set of int: NODE_ID = index_set(cmaps[arg_max([card(index_set(cmaps[i].node_labels)) | i in N_CMAP])].node_labels);
 		set of int: ARC_ID = index_set(cmaps[arg_max([card(index_set(cmaps[i].arc_labels)) | i in N_CMAP])].arc_labels);		
-		array[N_CMAP,ARC_ID] of NODE_ID: from = array2d(N_CMAP,ARC_ID, [cmaps[i].adigraph.tail_head[j, TAIL] | i in N_CMAP, j in ARC_ID]);
-		array[N_CMAP,ARC_ID] of NODE_ID: to = array2d(N_CMAP,ARC_ID, [cmaps[i].adigraph.tail_head[j, HEAD] | i in N_CMAP, j in ARC_ID]);
+		array[N_CMAP,ARC_ID] of opt NODE_ID: from = array2d(N_CMAP,ARC_ID, [cmaps[i].adigraph.tail_head[j, TAIL] | i in N_CMAP, j in ARC_ID]);
+		array[N_CMAP,ARC_ID] of opt NODE_ID: to = array2d(N_CMAP,ARC_ID, [cmaps[i].adigraph.tail_head[j, HEAD] | i in N_CMAP, j in ARC_ID]);
 		% indexing range for solution array
 		set of int: ARC_PATH = index_set(x_arc_path);
 		set of int: NODE_PATH = index_set(x_node_path);
@@ -215,7 +215,8 @@ predicate cmql_arc_node_path(array[int] of CMAP: cmaps, var int: cmap, array[int
 % 		forall(i in min(NODE_PATH)<..max(NODE_PATH))(occurs(x_node_path[i-1]) <- occurs(x_node_path[i])) /\
 		(absent(x_arc_path[min(ARC_PATH)]) -> absent(x_node_path[min(NODE_PATH)])) /\
 		forall(i in ARC_PATH)(absent(x_arc_path[i]) -> absent(x_node_path[i+1])) /\
-		
+		forall(i in ARC_PATH)(occurs(x_arc_path[i]) -> occurs(x_node_path[i+1])) /\
+
 		% (3) matching nodes with arcs
 		% - the i-th occurring node is the tail of the i-th occurring arc
 		% - the last occurring node is the head of the last occurring arc
@@ -266,8 +267,8 @@ predicate cmql_arc_path(array[int] of CMAP: cmaps, var int: cmap, var int: x_arc
 		set of int: N_CMAP = index_set(cmaps);
 		set of int: NODE_ID = index_set(cmaps[arg_max([card(index_set(cmaps[i].node_labels)) | i in N_CMAP])].node_labels);
 		set of int: ARC_ID = index_set(cmaps[arg_max([card(index_set(cmaps[i].arc_labels)) | i in N_CMAP])].arc_labels);		
-		array[N_CMAP,ARC_ID] of NODE_ID: from = array2d(N_CMAP,ARC_ID, [cmaps[i].adigraph.tail_head[j, TAIL] | i in N_CMAP, j in ARC_ID]);
-		array[N_CMAP,ARC_ID] of NODE_ID: to = array2d(N_CMAP,ARC_ID, [cmaps[i].adigraph.tail_head[j, HEAD] | i in N_CMAP, j in ARC_ID]);
+		array[N_CMAP,ARC_ID] of opt NODE_ID: from = array2d(N_CMAP,ARC_ID, [cmaps[i].adigraph.tail_head[j, TAIL] | i in N_CMAP, j in ARC_ID]);
+		array[N_CMAP,ARC_ID] of opt NODE_ID: to = array2d(N_CMAP,ARC_ID, [cmaps[i].adigraph.tail_head[j, HEAD] | i in N_CMAP, j in ARC_ID]);
 		% indexing range for solution array
 		set of int: ARC_PATH = index_set(x_arc_path);
 		%set of int: NODE_PATH = index_set(x_node_path);
