@@ -90,6 +90,8 @@ include "./../itype/itype_imp_api.mzn";
 include "./../ranges/ranges_api.mzn";
 include "./../ranges/ranges.mzn";
 
+include "./../itype/itype_ops.mzn";
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -227,14 +229,8 @@ function bool: isAggregationOperation(ITYPE_OPERATION: op)
 	:: "function isAggregationOperation($op): checks whether i-type operation $op is an aggregation operation or not"
 	=
 	op in {
-		ITYPE_AGGREGATION_ENUM,
-		ITYPE_AGGREGATION_AND,
-		ITYPE_AGGREGATION_OR,
-		ITYPE_AGGREGATION_PLUS,
-		ITYPE_AGGREGATION_TIMES,
-		ITYPE_AGGREGATION_MIN,
-		ITYPE_AGGREGATION_MAX,
-	% 	ITYPE_AGGREGATION_MEAN,
+		ITYPE_BOOL_AND,
+		ITYPE_BOOL_OR,
 		}
 ;
 
@@ -243,14 +239,8 @@ function bool: isPropagationOperation(ITYPE_OPERATION: op)
 	:: "function isPropagationOperation($op): checks whether i-type operation $op is a propagation operation or not"
 	=
 	op in {
-		ITYPE_PROPAGATION_ENUM,
-		ITYPE_PROPAGATION_AND,
-		ITYPE_PROPAGATION_OR,
-		ITYPE_PROPAGATION_PLUS,
-		ITYPE_PROPAGATION_TIMES,
-		ITYPE_PROPAGATION_MIN,
-		ITYPE_PROPAGATION_MAX,
-	% 	ITYPE_PROPAGATION_MEAN,
+		ITYPE_BOOL_AND,
+		ITYPE_BOOL_OR,
 	}
 ;
 
@@ -534,6 +524,7 @@ function var INFLUENCE: propagate(var INFLUENCE: x, var INFLUENCE: y)
 		constraint _typeCheckInfluence(x, y);
 		var INFLUENCE: z :: is_defined_var;
 		constraint
+		assert(false,"test") /\
 			(isNullInfluence(x) -> z == x) /\ % null absorbing for propagation
 			(isNullInfluence(y) -> z == y) /\ % null absorbing for propagation
 			(not(isNullInfluence(x) \/ isNullInfluence(y)) -> z == (iblock: iPropagate(deopt(x.iblock), deopt(y.iblock))))
@@ -975,4 +966,30 @@ function var A_ELEMENT: _toAlgebra(ITYPE: it, var INFLUENCE: x)
 	:: "_toAlgebra($x): casts influence $x to element of underlying algebra - (var)"
 	=
 	(algebra: it.ealgebra.algebra, value: x.iblock)
+	;
+
+
+%%%%%%%
+%Assertions
+predicate assertItype (ITYPE: itype)
+	=
+	if getSorts(itype)[1] == ITYPE_SORT_BOOL
+	then 
+	assert(getCategory(itype) == ITYPE_CATEGORY_SINGLE_SORTED, "(1) implementation constraint - check i-type consistency of DZN files")
+	/\	assert(isSingleSorted(itype), "(2) implementation constraint - check i-type consistency of DZN files")
+	/\	assert(getSorts(itype)[1] == ITYPE_SORT_BOOL, "(3) implementation constraint - check i-type consistency of DZN files")
+	/\	assert(getAggregation(itype) == ITYPE_BOOL_OR <-> getPropagation(itype) == ITYPE_BOOL_AND, "(4-1) implementation constraint - check consistency of DZN files")
+	/\	assert(getAggregation(itype) == ITYPE_BOOL_AND <-> getPropagation(itype) == ITYPE_BOOL_OR, "(4-2) implementation constraint - check consistency of DZN files")
+	/\	assert(getAggregation(itype) in {ITYPE_BOOL_OR, ITYPE_BOOL_AND}, "(4-3) implementation constraint - check consistency of DZN files")
+	endif
+;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% OUTPUT
+
+% Getter for influence value symbol
+function string: iShow(array[IBLOCK_COMPONENT] of int: x)
+	:: "iShow($x): returns string representation of non-virtual influence $x"
+	=
+	show(if x[1]==1 then show(true) else show(false) endif)
 	;

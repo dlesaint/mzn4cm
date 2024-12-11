@@ -142,7 +142,7 @@ def run_minizinc_command(args, dzn_file):
     command = f"minizinc {args.model} -d {args.icmap} -d {args.itype} -d {dzn_file}"
     if args.data != None:
         command += f" -d {args.data}"
-    #command += f" --json-stream -s --time-limit 60000"
+    command += f" -v -s --time-limit 60000"
     print(command)
     subprocess.run(command, shell=True)
     
