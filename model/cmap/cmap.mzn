@@ -86,14 +86,16 @@ function CMAP: icmap2cmap(I_CMAP: icmap)
 	(name:icmap.name, digraph:digraph, adigraph:adigraph, itype:itype, node_labels:icmap.node_labels, arc_labels:icmap.arc_labels, influences:influences) 
 	;
 
-function CMAP: icmap2cmap2(I_CMAP: icmap, set of int: NODE_ID, set of int: ARC_ID)
+function CMAP: icmap2cmap2(DATASET: dataset)
 	:: "function icmap2cmap($icmap): casts instance c-map $icmap to c-map"
 	=
 	let {	
-		array[int] of ARC: arcs = [(t:icmap.arc_labels[ij].arc.t, h:icmap.arc_labels[ij].arc.h) | ij in ARC_ID];
-		
-		DIGRAPH: digraph = (name:icmap.name, nr_nodes:card(NODE_ID), nr_arcs:card(ARC_ID), a:arcs);
-		%bool: b = assert(max(ARC_ID)==3,show(digraph));	
+		set of int: N_CMAP = index_set(dataset.icmaps);
+		set of int: NODE_ID = index_set(dataset.icmaps[arg_max([card(index_set(dataset.icmaps[i].node_labels)) | i in N_CMAP])].node_labels);
+		set of int: ARC_ID = index_set(dataset.icmaps[arg_max([card(index_set(dataset.icmaps[i].arc_labels)) | i in N_CMAP])].arc_labels);
+
+		array[int] of ARC: arcs = [(t:icmap.arc_labels[ij].arc.t, h:icmap.arc_labels[ij].arc.h) | ij in ARC_ID];		
+		DIGRAPH: digraph = (name:icmap.name, nr_nodes:card(NODE_ID), nr_arcs:card(ARC_ID), a:arcs);		
 		ADIGRAPH: adigraph = digraph2adigraph(digraph);
 		ITYPE: itype = icmap.itype;
 		array[int, int] of INFLUENCE: influences = array2d(NODE_ID, NODE_ID, [ buildInfluence(itype, icmap.arc_labels, adigraph.a[i,j]) | i,j in NODE_ID]);

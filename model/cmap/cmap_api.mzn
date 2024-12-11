@@ -82,11 +82,11 @@ type CMAP = record(
 	% i-type
 	ITYPE: itype,
 	% node labels
-	array[int] of NODE_LABEL: node_labels,
+	array[int] of opt NODE_LABEL: node_labels,
 	% arc labels
-	array[int] of ARC_LABEL: arc_labels,
+	array[int] of opt ARC_LABEL: arc_labels,
 	% influence matrix
-	array[int, int] of INFLUENCE: influences
+	array[int, int] of opt INFLUENCE: influences
  	);
 
 
