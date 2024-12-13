@@ -981,6 +981,21 @@ predicate assertItype (ITYPE: itype)
 	/\	assert(getAggregation(itype) == ITYPE_BOOL_OR <-> getPropagation(itype) == ITYPE_BOOL_AND, "(4-1) implementation constraint - check consistency of DZN files")
 	/\	assert(getAggregation(itype) == ITYPE_BOOL_AND <-> getPropagation(itype) == ITYPE_BOOL_OR, "(4-2) implementation constraint - check consistency of DZN files")
 	/\	assert(getAggregation(itype) in {ITYPE_BOOL_OR, ITYPE_BOOL_AND}, "(4-3) implementation constraint - check consistency of DZN files")
+	elseif getSorts(itype)[1] == ITYPE_SORT_RATIONAL
+	then	
+		assert(getCategory(itype) == ITYPE_CATEGORY_SINGLE_SORTED, "(1) implementation constraint - check i-type consistency of DZN files")
+	/\	assert(isSingleSorted(itype), "(2) implementation constraint - check i-type consistency of DZN files")
+	/\	assert(getSorts(itype)[1] == ITYPE_SORT_RATIONAL, "(3) implementation constraint - check i-type consistency of DZN files")
+	/\	assert(getAggregation(itype) == ITYPE_RATIONAL_PLUS <-> getPropagation(itype) == ITYPE_RATIONAL_TIMES, "(4-1) implementation constraint - check consistency of DZN files")
+	/\	assert(getAggregation(itype) == ITYPE_RATIONAL_TIMES <-> getPropagation(itype) == ITYPE_RATIONAL_PLUS, "(4-2) implementation constraint - check consistency of DZN files")
+	/\	assert(getAggregation(itype) == ITYPE_RATIONAL_MIN <-> getPropagation(itype) == ITYPE_RATIONAL_MAX, "(4-3) implementation constraint - check consistency of DZN files")
+	/\	assert(getAggregation(itype) == ITYPE_RATIONAL_MAX <-> getPropagation(itype) == ITYPE_RATIONAL_MIN, "(4-4) implementation constraint - check consistency of DZN files")
+	/\	assert(getAggregation(itype) in {ITYPE_RATIONAL_PLUS, ITYPE_RATIONAL_TIMES, ITYPE_RATIONAL_MIN, ITYPE_RATIONAL_MAX}, "(4-5) implementation constraint - check consistency of DZN files")
+	/\	assert((getAggregation(itype) == ITYPE_RATIONAL_TIMES /\ getPropagation(itype) == ITYPE_RATIONAL_PLUS) -> isOptType(itype), "(5-1) implementation constraint - check consistency of DZN files")
+	/\	assert((getAggregation(itype) == ITYPE_RATIONAL_MIN /\ getPropagation(itype) == ITYPE_RATIONAL_MAX) -> isOptType(itype), "(5-1) implementation constraint - check consistency of DZN files")
+	/\	assert((getAggregation(itype) == ITYPE_RATIONAL_MAX /\ getPropagation(itype) == ITYPE_RATIONAL_MIN) -> isOptType(itype), "(5-1) implementation constraint - check consistency of DZN files")
+	else	
+		assert(false, "Error: sort type not implemented")
 	endif
 ;
 
@@ -991,5 +1006,13 @@ predicate assertItype (ITYPE: itype)
 function string: iShow(array[IBLOCK_COMPONENT] of int: x)
 	:: "iShow($x): returns string representation of non-virtual influence $x"
 	=
-	show(if x[1]==1 then show(true) else show(false) endif)
+	if getSorts(itype)[1] == ITYPE_SORT_BOOL
+	then
+		show(if x[1]==1 then show(true) else show(false) endif)
+	elseif getSorts(itype)[1] == ITYPE_SORT_RATIONAL
+	then
+		show(x[1]) ++ "/" ++ show(x[2])
+	else	
+		"Error: itype sort not implemented"
+	endif
 	;

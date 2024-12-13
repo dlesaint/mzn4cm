@@ -11,7 +11,7 @@ itype_signature = (
 	% the tuple of sorts of the i-type
 	sorts:					[ITYPE_SORT_RATIONAL],
 	% the operations of the i-type
-	operations:		[(ITYPE_AGGREGATION):ITYPE_AGGREGATION_MIN, (ITYPE_PROPAGATION):ITYPE_PROPAGATION_MAX],
+	operations:		[(ITYPE_AGGREGATION):ITYPE_RATIONAL_MIN, (ITYPE_PROPAGATION):ITYPE_RATIONAL_MAX],
 );
 
 itype_domains = (
