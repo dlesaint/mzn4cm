@@ -142,7 +142,7 @@ function bool: assertITypeSignature(ITYPE: it)
 			assert(getNumberOfSorts(it) > 0, "(1-1) at least one sort must be specified")
 	/\		assert(isProperRange(index_set(getSorts(it))), "(1-2) index set of sorts must be a proper range")
 % 	/\		assert(isSingleSorted(it) <-> getCategory(it) == getSorts(it)[1], "(2-1) if the i-type is single-sorted then its sort must be set to its category")
-	/\		assert(isAggregationOperation(getAggregation(it)), "(3-1) one aggregation operation must be selected")
+	/\		assert(isAggregationOperation(getAggregation(it)), "(3-1) one aggregation operation must be selected" ++ show(getAggregation(it)))
 	/\		assert(isPropagationOperation(getPropagation(it)), "(3-2) one propagation operation must be selected")
 ;
 		
@@ -231,6 +231,12 @@ function bool: isAggregationOperation(ITYPE_OPERATION: op)
 	op in {
 		ITYPE_BOOL_AND,
 		ITYPE_BOOL_OR,
+		ITYPE_RATIONAL_PLUS,
+		ITYPE_RATIONAL_TIMES,
+		ITYPE_RATIONAL_MIN,
+		ITYPE_RATIONAL_MAX,
+		ITYPE_PROPAGATION_ENUM,
+		ITYPE_AGGREGATION_ENUM,
 		}
 ;
 
@@ -241,6 +247,12 @@ function bool: isPropagationOperation(ITYPE_OPERATION: op)
 	op in {
 		ITYPE_BOOL_AND,
 		ITYPE_BOOL_OR,
+		ITYPE_RATIONAL_PLUS,
+		ITYPE_RATIONAL_TIMES,
+		ITYPE_RATIONAL_MIN,
+		ITYPE_RATIONAL_MAX,
+		ITYPE_PROPAGATION_ENUM,
+		ITYPE_AGGREGATION_ENUM,
 	}
 ;
 
@@ -994,6 +1006,13 @@ predicate assertItype (ITYPE: itype)
 	/\	assert((getAggregation(itype) == ITYPE_RATIONAL_TIMES /\ getPropagation(itype) == ITYPE_RATIONAL_PLUS) -> isOptType(itype), "(5-1) implementation constraint - check consistency of DZN files")
 	/\	assert((getAggregation(itype) == ITYPE_RATIONAL_MIN /\ getPropagation(itype) == ITYPE_RATIONAL_MAX) -> isOptType(itype), "(5-1) implementation constraint - check consistency of DZN files")
 	/\	assert((getAggregation(itype) == ITYPE_RATIONAL_MAX /\ getPropagation(itype) == ITYPE_RATIONAL_MIN) -> isOptType(itype), "(5-1) implementation constraint - check consistency of DZN files")
+	elseif getSorts(itype)[1] == ITYPE_SORT_ENUM
+	then
+		assert(getCategory(itype) == ITYPE_CATEGORY_SINGLE_SORTED, "(1) implementation constraint - check i-type consistency of DZN files")
+	/\	assert(isSingleSorted(itype), "(2) implementation constraint - check i-type consistency of DZN files")
+	/\	assert(getSorts(itype)[1] == ITYPE_SORT_ENUM, "(3) implementation constraint - check i-type consistency of DZN files")
+	/\	assert(getAggregation(itype) == ITYPE_AGGREGATION_ENUM <-> getPropagation(itype) == ITYPE_PROPAGATION_ENUM, "(4-1) implementation constraint - check consistency of DZN files")
+	/\	assert(getAggregation(itype) in {ITYPE_AGGREGATION_ENUM, ITYPE_PROPAGATION_ENUM}, "(4-2) implementation constraint - check consistency of DZN files")
 	else	
 		assert(false, "Error: sort type not implemented")
 	endif
@@ -1012,6 +1031,9 @@ function string: iShow(array[IBLOCK_COMPONENT] of int: x)
 	elseif getSorts(itype)[1] == ITYPE_SORT_RATIONAL
 	then
 		show(x[1]) ++ "/" ++ show(x[2])
+	elseif getSorts(itype)[1] == ITYPE_SORT_ENUM
+	then 
+		deopt(I_[to_enum(I_DOMAIN, x[1])])
 	else	
 		"Error: itype sort not implemented"
 	endif

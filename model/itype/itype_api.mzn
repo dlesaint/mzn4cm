@@ -124,6 +124,8 @@ enum ITYPE_OPERATION = {
 	ITYPE_RATIONAL_TIMES,
 	ITYPE_RATIONAL_MIN,
 	ITYPE_RATIONAL_MAX,
+	ITYPE_AGGREGATION_ENUM,
+	ITYPE_PROPAGATION_ENUM,
 	};
 	
 % Proper range of sorts for the i-type
@@ -208,7 +210,9 @@ type DEOPT_INFLUENCE = record(
 	array[IBLOCK_COMPONENT] of int: iblock,
 );
 
+enum I_DOMAIN;
 
+array[I_DOMAIN] of opt string: I_;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% DATA

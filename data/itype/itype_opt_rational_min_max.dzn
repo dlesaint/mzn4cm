@@ -1,6 +1,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% OPT RATIONAL MIN/MAX I-TYPE
-
+%%%% optional types
+I_DOMAIN = {E};
+I_ = [<>];
+I_AGGREGATE = array2d(I_DOMAIN,I_DOMAIN, [<>]);
+I_PROPAGATE = array2d(I_DOMAIN,I_DOMAIN, [<>]);
+%%%%%%%%%%%%%%%%%%%%%%
 itype_nr_sorts = 1;
 
 itype_signature = (

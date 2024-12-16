@@ -21,6 +21,13 @@
 
 include "./../itype/itype_imp_api.mzn";
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% BINARY INFLUENCE OPERATIONS
+array[I_DOMAIN,I_DOMAIN] of opt I_DOMAIN: I_AGGREGATE; %= array2d(I_DOMAIN,I_DOMAIN, [I_DOMAIN[1] | i in I_DOMAIN,j in I_DOMAIN]);
+
+array[I_DOMAIN,I_DOMAIN] of opt I_DOMAIN: I_PROPAGATE; %= array2d(I_DOMAIN,I_DOMAIN, [I_DOMAIN[1] | i in I_DOMAIN,j in I_DOMAIN]);
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% PAR/VAR I-TYPE RELATIONS 
 
@@ -47,6 +54,20 @@ function var bool: iEquals(array[IBLOCK_COMPONENT] of var int: x, array[IBLOCK_C
 	assert(false, "bug: unexpected function call (equality should be identity - see _buildAlgebra() - and so pre-checked)", false)
 	endif
 	;
+
+	% %
+function bool: iSmallerThan(array[IBLOCK_COMPONENT] of int: x, array[IBLOCK_COMPONENT] of int: y)
+	:: "iSmallerThan($x,$y): checks whether $x is smaller than $y over i-type of $x - (par)"
+	=
+	x[1] * y[2] < x[2] * y[1]
+;
+
+%
+function var bool: iSmallerThan(array[IBLOCK_COMPONENT] of var int: x, array[IBLOCK_COMPONENT] of var int: y)
+	:: "iSmallerThan($x,$y): checks whether $x is smaller than $y over i-type of $x - (var)"
+	=
+	x[1] * y[2] < x[2] * y[1]
+;
 %% BINARY AGGREGATION
 %
 function array[IBLOCK_COMPONENT] of int: iAggregate(array[IBLOCK_COMPONENT] of int: x, array[IBLOCK_COMPONENT] of int: y)
@@ -64,6 +85,8 @@ function array[IBLOCK_COMPONENT] of int: iAggregate(array[IBLOCK_COMPONENT] of i
 	then	iRationalMin(x, y)
 	elseif	getAggregation(itype) == ITYPE_RATIONAL_MAX
 	then	iRationalMax(x, y)
+	elseif getAggregation(itype) == ITYPE_AGGREGATION_ENUM
+	then [deopt(I_AGGREGATE[to_enum(I_DOMAIN, x[min(index_set(x))]), to_enum(I_DOMAIN, y[min(index_set(y))])])]
     else assert(false, "bug - incomplete implementation", [])
 	endif
 ;
@@ -83,6 +106,8 @@ function array[IBLOCK_COMPONENT] of var int: iAggregate(array[IBLOCK_COMPONENT] 
 	then	iRationalMin(x, y)
 	elseif	getAggregation(itype) == ITYPE_RATIONAL_MAX
 	then	iRationalMax(x, y)
+	elseif getAggregation(itype) == ITYPE_AGGREGATION_ENUM
+	then 	[deopt(I_AGGREGATE[to_enum(I_DOMAIN, x[min(index_set(x))]), to_enum(I_DOMAIN, y[min(index_set(y))])])]
     else assert(false, "bug - incomplete implementation", [])
 	endif
 ;
@@ -104,6 +129,8 @@ function array[IBLOCK_COMPONENT] of int: iPropagate(array[IBLOCK_COMPONENT] of i
 	then	iRationalMin(x, y)
 	elseif	getPropagation(itype) == ITYPE_RATIONAL_MAX
 	then	iRationalMax(x, y)
+	elseif getPropagation(itype) == ITYPE_PROPAGATION_ENUM
+	then 	[deopt(I_PROPAGATE[to_enum(I_DOMAIN, x[min(index_set(x))]), to_enum(I_DOMAIN, y[min(index_set(y))])])]
 	else	assert(false, "bug - incomplete implementation", [])
 	endif
 ;
@@ -124,6 +151,8 @@ function array[IBLOCK_COMPONENT] of var int: iPropagate(array[IBLOCK_COMPONENT] 
 	then	iRationalMin(x, y)
 	elseif	getPropagation(itype) == ITYPE_RATIONAL_MAX
 	then	iRationalMax(x, y)
+	elseif getPropagation(itype) == ITYPE_PROPAGATION_ENUM
+	then 	[deopt(I_PROPAGATE[to_enum(I_DOMAIN, x[min(index_set(x))]), to_enum(I_DOMAIN, y[min(index_set(y))])])]
 	else	assert(false, "bug - incomplete implementation", [])
 	endif
 ;
