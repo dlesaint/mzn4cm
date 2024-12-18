@@ -80,7 +80,7 @@ predicate cmql_path_value(
 	} in
 		assert(index_set_1of2(x_propagated_iblocks) == index_set(x_arc_path), "cmql_path_value: the row index set of $x_propagated_iblocks  must be equal to the index set of $x_arc_path") /\
 		assert(index_set_2of2(x_propagated_iblocks) == index_set(cmap.itype.iblock_type.sorts), "cmql_path_value: the column index set of $x_propagated_iblocks must be equal to the i-block-type encoding range of $cmap's i-type") /\
-
+		
 		% (1) origin and destination nodes must be different
 		(x_origin_node != x_destination_node) /\
 				

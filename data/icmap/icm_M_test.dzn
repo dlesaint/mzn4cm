@@ -1,0 +1,58 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% INPUT C-MAP
+
+icmap = (
+% icm_S_1_dg_13x26_internet_1 = (
+	% name
+	name:"icm_S_1_dg_13x26_internet_1",
+
+	% i-type
+	itype: itype,
+
+	% node-labeling concepts
+	node_labels:[
+	(node:1, concept:(name:"c1")),
+	(node:2, concept:(name:"c2")),
+	(node:3, concept:(name:"c3")),
+	(node:4, concept:(name:"c4")),
+	(node:5, concept:(name:"c5")),
+	(node:6, concept:(name:"c6")),
+	(node:7, concept:(name:"c7")),
+	(node:8, concept:(name:"c8")),
+	(node:9, concept:(name:"c9")),
+	(node:10, concept:(name:"c10")),
+	(node:11, concept:(name:"c11")),
+	(node:12, concept:(name:"c12")),
+	(node:13, concept:(name:"c13")),
+	],
+
+	% arc-labeling influence blocks
+	arc_labels:[
+	(arc:(t:1, h:2), influence:(iblock:[1,2,1,1])),
+	(arc:(t:1, h:6), influence:(iblock:[1,3,1,1])),
+	(arc:(t:2, h:3), influence:(iblock:[1,4,1,1])),
+	(arc:(t:2, h:4), influence:(iblock:[1,5,1,1])),
+	(arc:(t:3, h:13), influence:(iblock:[1,6,1,1])),
+	(arc:(t:4, h:1), influence:(iblock:[1,1,1,1])),
+	(arc:(t:4, h:5), influence:(iblock:[2,3,1,1])),
+	(arc:(t:4, h:12), influence:(iblock:[1,2,1,1])),
+	(arc:(t:5, h:2), influence:(iblock:[2,5,1,1])),
+	(arc:(t:5, h:6), influence:(iblock:[1,3,1,1])),
+	(arc:(t:5, h:8), influence:(iblock:[3,2,1,1])),
+	(arc:(t:6, h:3), influence:(iblock:[1,1,1,1])),
+	(arc:(t:6, h:9), influence:(iblock:[3,4,1,1])),
+	(arc:(t:7, h:5), influence:(iblock:[3,5,1,1])),
+	(arc:(t:8, h:7), influence:(iblock:[1,2,1,1])),
+	(arc:(t:8, h:9), influence:(iblock:[2,1,1,1])),
+	(arc:(t:8, h:10), influence:(iblock:[4,3,1,1])),
+	(arc:(t:9, h:10), influence:(iblock:[4,5,1,1])),
+	(arc:(t:9, h:11), influence:(iblock:[2,3,1,1])),
+	(arc:(t:10, h:4), influence:(iblock:[5,2,1,1])),
+	(arc:(t:11, h:6), influence:(iblock:[5,3,1,1])),
+	(arc:(t:11, h:13), influence:(iblock:[5,4,1,1])),
+	(arc:(t:12, h:3), influence:(iblock:[1,1,1,1])),
+	(arc:(t:12, h:7), influence:(iblock:[5,6,1,1])),
+	(arc:(t:12, h:11), influence:(iblock:[3,1,1,1])),
+	(arc:(t:13, h:4), influence:(iblock:[2,1,1,1])),
+	],
+);

@@ -1,26 +1,18 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% OPT RATIONAL MIN/MAX I-TYPE
-%%%% optional types
 I_DOMAIN = {E};
 I_ = [<>];
-I_AGGREGATE = array2d(I_DOMAIN,I_DOMAIN, [<>]);
-I_PROPAGATE = array2d(I_DOMAIN,I_DOMAIN, [<>]);
-%%%%%%%%%%%%%%%%%%%%%%
-itype_nr_sorts = 1;
+I_AGGREGATE = array2d(I_DOMAIN,I_DOMAIN,[<>]);
+I_PROPAGATE = array2d(I_DOMAIN,I_DOMAIN,[<>]);
+
+itype_nr_sorts = 2;
 
 itype_signature = (
-	% the name of the i-type
-% 	name:					"opt rational min/max i-type",
-	% the category of the i-type
-	category:			ITYPE_CATEGORY_SINGLE_SORTED,
-	% the tuple of sorts of the i-type
-	sorts:					[ITYPE_SORT_RATIONAL],
-	% the operations of the i-type
-	operations:		array2d(1..2,1..itype_nr_sorts,[ITYPE_RATIONAL_MIN,ITYPE_RATIONAL_MAX])
+    category : ITYPE_CATEGORY_MANY_SORTED_PRODUCT,
+    sorts: [ITYPE_SORT_RATIONAL, ITYPE_SORT_RATIONAL],
+    operations : array2d(1..2,1..itype_nr_sorts,[ITYPE_RATIONAL_PLUS,ITYPE_RATIONAL_PLUS,ITYPE_RATIONAL_TIMES, ITYPE_RATIONAL_TIMES])
 );
 
 itype_domains = (
-	cardinalities:	[<>],
+    cardinalities: [<>,<>],
 );
 
 itype_algebra = (
@@ -37,8 +29,8 @@ itype_algebra = (
 									(ITYPE_PROPAGATION,	ALGEBRAIC_PROPERTY_ASSOCIATIVITY):				true,
 								],
 	% the algebraic elements of the i-type operations
-	aggregation_absorbing:	(iblock:[<>,<>]),
-	aggregation_neutral:		(iblock:[<>,<>]),
-	propagation_absorbing:	(iblock:[<>,<>]),
-	propagation_neutral:		(iblock:[<>,<>]),	
+	aggregation_absorbing:	(iblock:[<>,<>,<>,<>]),
+	aggregation_neutral:		(iblock:[<>,<>,<>,<>]),
+	propagation_absorbing:	(iblock:[<>,<>,<>,<>]),
+	propagation_neutral:		(iblock:[<>,<>,<>,<>]),	
 );

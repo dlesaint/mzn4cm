@@ -56,104 +56,146 @@ function var bool: iEquals(array[IBLOCK_COMPONENT] of var int: x, array[IBLOCK_C
 	;
 
 	% %
-function bool: iSmallerThan(array[IBLOCK_COMPONENT] of int: x, array[IBLOCK_COMPONENT] of int: y)
+function bool: iSmallerThan(array[int] of int: x, array[int] of int: y)
 	:: "iSmallerThan($x,$y): checks whether $x is smaller than $y over i-type of $x - (par)"
 	=
 	x[1] * y[2] < x[2] * y[1]
 ;
 
 %
-function var bool: iSmallerThan(array[IBLOCK_COMPONENT] of var int: x, array[IBLOCK_COMPONENT] of var int: y)
+function var bool: iSmallerThan(array[int] of var int: x, array[int] of var int: y)
 	:: "iSmallerThan($x,$y): checks whether $x is smaller than $y over i-type of $x - (var)"
 	=
 	x[1] * y[2] < x[2] * y[1]
 ;
 %% BINARY AGGREGATION
-%
 function array[IBLOCK_COMPONENT] of int: iAggregate(array[IBLOCK_COMPONENT] of int: x, array[IBLOCK_COMPONENT] of int: y)
+=
+	iAg(x,y,min(SORT));
+
+function array[IBLOCK_COMPONENT] of int: iAg(array[IBLOCK_COMPONENT] of int: x, array[IBLOCK_COMPONENT] of int: y, int: i)
+= 
+	if i == max(SORT)
+	then iAggregate(x,y,i)
+	else iAggregate(x,y,i) ++ iAg(x,y,i+1)
+	endif;
+%
+function array[IBLOCK_COMPONENT] of int: iAggregate(array[IBLOCK_COMPONENT] of int: x, array[IBLOCK_COMPONENT] of int: y, int: i)
     ::  "iAggregate($x,$y): aggregate $x with $y over i-type of $x - (par)"
-    =
-    if getAggregation(itype) == ITYPE_BOOL_OR
-    then [max(x[1],y[1])]
-    elseif getAggregation(itype) == ITYPE_BOOL_AND
-    then [x[1]*y[1]]
-	elseif 	getAggregation(itype) == ITYPE_RATIONAL_PLUS
-	then	iRationalPlus(x, y)
-	elseif	getAggregation(itype) == ITYPE_RATIONAL_TIMES
-	then	iRationalTimes(x, y)
-	elseif	getAggregation(itype) == ITYPE_RATIONAL_MIN
-	then	iRationalMin(x, y)
-	elseif	getAggregation(itype) == ITYPE_RATIONAL_MAX
-	then	iRationalMax(x, y)
-	elseif getAggregation(itype) == ITYPE_AGGREGATION_ENUM
+    =	
+	if getAggregation(itype)[i] == ITYPE_BOOL_OR
+    then [max(x[sort_size[i]],y[sort_size[i]])]
+    elseif getAggregation(itype)[i] == ITYPE_BOOL_AND
+    then [x[sort_size[i]]*y[sort_size[i]]]
+	elseif 	getAggregation(itype)[i] == ITYPE_RATIONAL_PLUS
+	then	iRationalPlus(x[i..i+1], y[i..i+1])
+	elseif	getAggregation(itype)[i] == ITYPE_RATIONAL_TIMES
+	then	iRationalTimes(x[i..i+1], y[i..i+1])
+	elseif	getAggregation(itype)[i] == ITYPE_RATIONAL_MIN
+	then	iRationalMin(x[i..i+1], y[i..i+1])
+	elseif	getAggregation(itype)[i] == ITYPE_RATIONAL_MAX
+	then	iRationalMax(x[i..i+1], y[i..i+1])
+	elseif getAggregation(itype)[i] == ITYPE_AGGREGATION_ENUM
 	then [deopt(I_AGGREGATE[to_enum(I_DOMAIN, x[min(index_set(x))]), to_enum(I_DOMAIN, y[min(index_set(y))])])]
-    else assert(false, "bug - incomplete implementation", [])
+    else assert(false, "bug - incomplete implementation",[])
 	endif
 ;
 %
 function array[IBLOCK_COMPONENT] of var int: iAggregate(array[IBLOCK_COMPONENT] of var int: x, array[IBLOCK_COMPONENT] of var int: y)
-	:: "iAggregate($x,$y): aggregate $x with $y over i-type of $x - (var)"
-	=
-	 if getAggregation(itype) == ITYPE_BOOL_OR
-    then [max(x[1],y[1])]
-    elseif getAggregation(itype) == ITYPE_BOOL_AND
-    then [x[1]*y[1]]
-	elseif 	getAggregation(itype) == ITYPE_RATIONAL_PLUS
-	then	iRationalPlus(x, y)
-	elseif	getAggregation(itype) == ITYPE_RATIONAL_TIMES
-	then	iRationalTimes(x, y)
-	elseif	getAggregation(itype) == ITYPE_RATIONAL_MIN
-	then	iRationalMin(x, y)
-	elseif	getAggregation(itype) == ITYPE_RATIONAL_MAX
-	then	iRationalMax(x, y)
-	elseif getAggregation(itype) == ITYPE_AGGREGATION_ENUM
-	then 	[deopt(I_AGGREGATE[to_enum(I_DOMAIN, x[min(index_set(x))]), to_enum(I_DOMAIN, y[min(index_set(y))])])]
-    else assert(false, "bug - incomplete implementation", [])
+=
+	iAg(x,y,min(SORT));
+
+function array[IBLOCK_COMPONENT] of var int: iAg(array[IBLOCK_COMPONENT] of var int: x, array[IBLOCK_COMPONENT] of var int: y, int: i)
+= 
+	if i == max(SORT)
+	then iAggregate(x,y,i)
+	else iAggregate(x,y,i) ++ iAg(x,y,i+1)
+	endif;
+
+function array[IBLOCK_COMPONENT] of var int: iAggregate(array[IBLOCK_COMPONENT] of var int: x, array[IBLOCK_COMPONENT] of var int: y, int: i)
+    ::  "iAggregate($x,$y): aggregate $x with $y over i-type of $x - (par)"
+    =	
+	if getAggregation(itype)[i] == ITYPE_BOOL_OR
+    then [max(x[sort_size[i]],y[sort_size[i]])]
+    elseif getAggregation(itype)[i] == ITYPE_BOOL_AND
+    then [x[sort_size[i]]*y[sort_size[i]]]
+	elseif 	getAggregation(itype)[i] == ITYPE_RATIONAL_PLUS
+	then	iRationalPlus(x[i..i+1], y[i..i+1])
+	elseif	getAggregation(itype)[i] == ITYPE_RATIONAL_TIMES
+	then	iRationalTimes(x[i..i+1], y[i..i+1])
+	elseif	getAggregation(itype)[i] == ITYPE_RATIONAL_MIN
+	then	iRationalMin(x[i..i+1], y[i..i+1])
+	elseif	getAggregation(itype)[i] == ITYPE_RATIONAL_MAX
+	then	iRationalMax(x[i..i+1], y[i..i+1])
+	elseif getAggregation(itype)[i] == ITYPE_AGGREGATION_ENUM
+	then [deopt(I_AGGREGATE[to_enum(I_DOMAIN, x[min(index_set(x))]), to_enum(I_DOMAIN, y[min(index_set(y))])])]
+    else assert(false, "bug - incomplete implementation",[])
 	endif
 ;
 
 %% BINARY PROPAGATION
 %
 function array[IBLOCK_COMPONENT] of int: iPropagate(array[IBLOCK_COMPONENT] of int: x, array[IBLOCK_COMPONENT] of int: y)
+=
+	iPr(x,y,min(SORT));
+function array[IBLOCK_COMPONENT] of int: iPr(array[IBLOCK_COMPONENT] of int: x, array[IBLOCK_COMPONENT] of int: y,int: i)
+=
+	if i == max(SORT)
+	then iPropagate(x,y,i)
+	else iPropagate(x,y,i) ++ iPr(x,y,i+1)
+	endif;
+
+function array[IBLOCK_COMPONENT] of int: iPropagate(array[IBLOCK_COMPONENT] of int: x, array[IBLOCK_COMPONENT] of int: y,int: i)
 	:: "iPropagate($x,$y): propagate $x with $y over i-type of $x - (par)"
 	=
-	if 		getPropagation(itype) == ITYPE_BOOL_OR
-	then	[max(x[1], y[1])]
-	elseif	getPropagation(itype) == ITYPE_BOOL_AND
-	then	[x[1] * y[1]]
-	elseif 		getPropagation(itype) == ITYPE_RATIONAL_PLUS
-	then	iRationalPlus(x, y)
-	elseif	getPropagation(itype) == ITYPE_RATIONAL_TIMES
-	then	iRationalTimes(x, y)
-	elseif	getPropagation(itype) == ITYPE_RATIONAL_MIN
-	then	iRationalMin(x, y)
-	elseif	getPropagation(itype) == ITYPE_RATIONAL_MAX
-	then	iRationalMax(x, y)
-	elseif getPropagation(itype) == ITYPE_PROPAGATION_ENUM
-	then 	[deopt(I_PROPAGATE[to_enum(I_DOMAIN, x[min(index_set(x))]), to_enum(I_DOMAIN, y[min(index_set(y))])])]
-	else	assert(false, "bug - incomplete implementation", [])
+	if getPropagation(itype)[i] == ITYPE_BOOL_OR
+    then [max(x[sort_size[i]],y[sort_size[i]])]
+    elseif getPropagation(itype)[i] == ITYPE_BOOL_AND
+    then [x[sort_size[i]]*y[sort_size[i]]]
+	elseif 	getPropagation(itype)[i] == ITYPE_RATIONAL_PLUS
+	then	iRationalPlus(x[i..i+1], y[i..i+1])
+	elseif	getPropagation(itype)[i] == ITYPE_RATIONAL_TIMES
+	then	iRationalTimes(x[i..i+1], y[i..i+1])
+	elseif	getPropagation(itype)[i] == ITYPE_RATIONAL_MIN
+	then	iRationalMin(x[i..i+1], y[i..i+1])
+	elseif	getPropagation(itype)[i] == ITYPE_RATIONAL_MAX
+	then	iRationalMax(x[i..i+1], y[i..i+1])
+	elseif getPropagation(itype)[i] == ITYPE_AGGREGATION_ENUM
+	then [deopt(I_AGGREGATE[to_enum(I_DOMAIN, x[min(index_set(x))]), to_enum(I_DOMAIN, y[min(index_set(y))])])]
+    else assert(false, "bug - incomplete implementation",[])
 	endif
 ;
 
 %
 function array[IBLOCK_COMPONENT] of var int: iPropagate(array[IBLOCK_COMPONENT] of var int: x, array[IBLOCK_COMPONENT] of var int: y)
-	:: "iPropagate($x,$y): propagate $x with $y over i-type of $x - (var)"
+=
+	%iPr(x,y,min(SORT));
+	assert(false, show(sort_size),[]);
+function array[IBLOCK_COMPONENT] of var int: iPr(array[IBLOCK_COMPONENT] of var int: x, array[IBLOCK_COMPONENT] of var int: y,int: i)
+=
+	if i == max(SORT)
+	then iPropagate(x,y,i)
+	else iPropagate(x,y,i) ++ iPr(x,y,i+1)
+	endif;
+
+function array[IBLOCK_COMPONENT] of var int: iPropagate(array[IBLOCK_COMPONENT] of var int: x, array[IBLOCK_COMPONENT] of var int: y,int: i)
+	:: "iPropagate($x,$y): propagate $x with $y over i-type of $x - (par)"
 	=
-	if 		getPropagation(itype) == ITYPE_BOOL_OR
-	then	[max(x[1], y[1])]
-	elseif	getPropagation(itype) == ITYPE_BOOL_AND
-	then	[x[1] * y[1]]
-	elseif 		getPropagation(itype) == ITYPE_RATIONAL_PLUS
-	then	iRationalPlus(x, y)
-	elseif	getPropagation(itype) == ITYPE_RATIONAL_TIMES
-	then	iRationalTimes(x, y)
-	elseif	getPropagation(itype) == ITYPE_RATIONAL_MIN
-	then	iRationalMin(x, y)
-	elseif	getPropagation(itype) == ITYPE_RATIONAL_MAX
-	then	iRationalMax(x, y)
-	elseif getPropagation(itype) == ITYPE_PROPAGATION_ENUM
-	then 	[deopt(I_PROPAGATE[to_enum(I_DOMAIN, x[min(index_set(x))]), to_enum(I_DOMAIN, y[min(index_set(y))])])]
-	else	assert(false, "bug - incomplete implementation", [])
+	if getPropagation(itype)[i] == ITYPE_BOOL_OR
+    then [max(x[sort_size[i]],y[sort_size[i]])]
+    elseif getPropagation(itype)[i] == ITYPE_BOOL_AND
+    then [x[sort_size[i]]*y[sort_size[i]]]
+	elseif 	getPropagation(itype)[i] == ITYPE_RATIONAL_PLUS
+	then	iRationalPlus(x[i..i+1], y[i..i+1])
+	elseif	getPropagation(itype)[i] == ITYPE_RATIONAL_TIMES
+	then	iRationalTimes(x[i..i+1], y[i..i+1])
+	elseif	getPropagation(itype)[i] == ITYPE_RATIONAL_MIN
+	then	iRationalMin(x[i..i+1], y[i..i+1])
+	elseif	getPropagation(itype)[i] == ITYPE_RATIONAL_MAX
+	then	iRationalMax(x[i..i+1], y[i..i+1])
+	elseif getPropagation(itype)[i] == ITYPE_AGGREGATION_ENUM
+	then [deopt(I_AGGREGATE[to_enum(I_DOMAIN, x[min(index_set(x))]), to_enum(I_DOMAIN, y[min(index_set(y))])])]
+    else assert(false, "bug - incomplete implementation",[])
 	endif
 ;
 
@@ -193,7 +235,7 @@ function var int: greatestCommonDivisor(var int: x, var int: y)
 ;
 
 %
-function array[IBLOCK_COMPONENT] of int: iRationalReduce(array[IBLOCK_COMPONENT] of int: x)
+function array[1..2] of int: iRationalReduce(array[1..2] of int: x)
 	:: "iRationalReduce($x,$y): reduces $x by dividing numerator and denominator with their greatest common divisor - (par)"
 	=
 	let {
@@ -203,12 +245,12 @@ function array[IBLOCK_COMPONENT] of int: iRationalReduce(array[IBLOCK_COMPONENT]
 ;
 
 %
-function array[IBLOCK_COMPONENT] of var int: iRationalReduce(array[IBLOCK_COMPONENT] of var int: x)
+function array[1..2] of var int: iRationalReduce(array[1..2] of var int: x)
 	:: "iRationalReduce($x,$y): reduces $x by dividing numerator and denominator with their greatest common divisor - (var)"
 	=
 	let {
 		var int: x_gcd = greatestCommonDivisor(x[1], x[2]) ::is_defined_var;
-		array[IBLOCK_COMPONENT] of var int: z ::is_defined_var;
+		array[1..2] of var int: z ::is_defined_var;
 		constraint
 			(z[1] == x[1] div x_gcd) /\
 			(z[2] == x[2] div x_gcd)
@@ -219,18 +261,18 @@ function array[IBLOCK_COMPONENT] of var int: iRationalReduce(array[IBLOCK_COMPON
 ;
 
 %
-function array[IBLOCK_COMPONENT] of int: iRationalPlus(array[IBLOCK_COMPONENT] of int: x, array[IBLOCK_COMPONENT] of int: y)
+function array[1..2] of int: iRationalPlus(array[1..2] of int: x, array[1..2] of int: y)
 	:: "iRationalPlus($x,$y): adds $x to $y over i-type of $x - (par)"
 	=
 	iRationalReduce([x[1] * y[2] + x[2] * y[1], x[2] * y[2]])
 ;
 
 %
-function array[IBLOCK_COMPONENT] of var int: iRationalPlus(array[IBLOCK_COMPONENT] of var int: x, array[IBLOCK_COMPONENT] of var int: y)
+function array[1..2] of var int: iRationalPlus(array[1..2] of var int: x, array[1..2] of var int: y)
 	:: "iRationalPlus($x,$y): adds $x to $y over i-type of $x - (var)"
 	=
 	let {
-		array[IBLOCK_COMPONENT] of var int: z ::is_defined_var;
+		array[1..2] of var int: z ::is_defined_var;
 		constraint
 			(z[1] == x[1] * y[2] + x[2] * y[1]) /\
 			(z[2] == x[2] * y[2])
@@ -242,18 +284,18 @@ function array[IBLOCK_COMPONENT] of var int: iRationalPlus(array[IBLOCK_COMPONEN
 ;
 
 %
-function array[IBLOCK_COMPONENT] of int: iRationalTimes(array[IBLOCK_COMPONENT] of int: x, array[IBLOCK_COMPONENT] of int: y)
+function array[1..2] of int: iRationalTimes(array[1..2] of int: x, array[1..2] of int: y)
 	:: "iRationalTimes($x,$y): multiplies $x and $y over i-type of $x - (par)"
 	=
 	iRationalReduce([x[1] * y[1], x[2] * y[2]])
 ;
 
 %
-function array[IBLOCK_COMPONENT] of var int: iRationalTimes(array[IBLOCK_COMPONENT] of var int: x, array[IBLOCK_COMPONENT] of var int: y)
+function array[1..2] of var int: iRationalTimes(array[1..2] of var int: x, array[1..2] of var int: y)
 	:: "iRationalTimes($x,$y): multiplies $x and $y over i-type of $x - (var)"
 	=
 	let {
-		array[IBLOCK_COMPONENT] of var int: z ::is_defined_var;
+		array[1..2] of var int: z ::is_defined_var;
 		constraint
 			(z[1] == x[1] * y[1]) /\
 			(z[2] == x[2] * y[2])
@@ -265,7 +307,7 @@ function array[IBLOCK_COMPONENT] of var int: iRationalTimes(array[IBLOCK_COMPONE
 ;
 
 %
-function array[IBLOCK_COMPONENT] of int: iRationalMin(array[IBLOCK_COMPONENT] of int: x, array[IBLOCK_COMPONENT] of int: y)
+function array[1..2] of int: iRationalMin(array[1..2] of int: x, array[1..2] of int: y)
 	:: "iRationalMin($x,$y): returns the minimum of $x and $y over i-type of $x - (par)"
 	=
 	if	iSmallerThan(x, y)
@@ -275,11 +317,11 @@ function array[IBLOCK_COMPONENT] of int: iRationalMin(array[IBLOCK_COMPONENT] of
 ;
 
 %
-function array[IBLOCK_COMPONENT] of var int: iRationalMin(array[IBLOCK_COMPONENT] of var int: x, array[IBLOCK_COMPONENT] of var int: y)
+function array[1..2] of var int: iRationalMin(array[1..2] of var int: x, array[1..2] of var int: y)
 	:: "iRationalMin($x,$y): returns the minimum of $x and $y over i-type of $x - (var)"
 	=
 	let {
-		array[IBLOCK_COMPONENT] of var int: z ::is_defined_var;
+		array[1..2] of var int: z ::is_defined_var;
 		constraint
 			(iSmallerThan(x, y) -> z == x) /\ 
 			(iSmallerThan(y, x) -> z == y) /\
@@ -291,7 +333,7 @@ function array[IBLOCK_COMPONENT] of var int: iRationalMin(array[IBLOCK_COMPONENT
 ;
 
 %
-function array[IBLOCK_COMPONENT] of int: iRationalMax(array[IBLOCK_COMPONENT] of int: x, array[IBLOCK_COMPONENT] of int: y)
+function array[1..2] of int: iRationalMax(array[1..2] of int: x, array[1..2] of int: y)
 	:: "iRationalMax($x,$y): returns the maximum of $x and $y over i-type of $x - (par)"
 	=
 	if	iSmallerThan(x, y)
@@ -301,11 +343,11 @@ function array[IBLOCK_COMPONENT] of int: iRationalMax(array[IBLOCK_COMPONENT] of
 ;
 
 %
-function array[IBLOCK_COMPONENT] of var int: iRationalMax(array[IBLOCK_COMPONENT] of var int: x, array[IBLOCK_COMPONENT] of var int: y)
+function array[1..2] of var int: iRationalMax(array[1..2] of var int: x, array[1..2] of var int: y)
 	:: "iRationalMax($x,$y): returns the maximum of $x and $y over i-type of $x - (var)"
 	=
 	let {
-		array[IBLOCK_COMPONENT] of var int: z ::is_defined_var;
+		array[1..2] of var int: z ::is_defined_var;
 		constraint
 			(iSmallerThan(x, y) -> z == y) /\ 
 			(iSmallerThan(y, x) -> z == x) /\

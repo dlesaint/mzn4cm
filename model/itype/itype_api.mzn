@@ -132,6 +132,8 @@ enum ITYPE_OPERATION = {
 %% 1..n if the i-type is n-sorted
 set of int: SORT;
 
+array[SORT] of int: sort_size;
+
 % Class for i-type signatures
 type ITYPE_SIGNATURE = record(
 	% the category of the i-type
@@ -139,7 +141,7 @@ type ITYPE_SIGNATURE = record(
 	% the tuple of sorts of the i-type
 	array[SORT] of ITYPE_SORT: sorts,
 	% the operations of the i-type
-	array[ITYPE_OPERATION_CLASS] of ITYPE_OPERATION: operations,
+	array[ITYPE_OPERATION_CLASS,SORT] of ITYPE_OPERATION: operations,
 );
 
 % Class for i-type domains

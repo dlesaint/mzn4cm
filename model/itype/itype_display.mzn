@@ -133,7 +133,7 @@ function array[int] of string: displayITypeAlgebra(ITYPE: it)
 %
 function array[int] of string: displayITypeProperties(ITYPE: it) =
 	let {
-		array[int] of string: rows = map2string([getAggregation(it), getPropagation(it)]);
+		array[int] of string: rows = map2string(getAggregation(it) ++ getPropagation(it));
 		array[int] of string: cols = map2string(set2array(ALGEBRAIC_PROPERTY));
 		array[int, int] of string: names = array2d(ITYPE_OPERATION_CLASS, ALGEBRAIC_PROPERTY, [show(checkProperty(getAlgebra(it), i, j)) | i in ALGEBRAIC_OPERATION, j in ALGEBRAIC_PROPERTY]);
 	} in
@@ -144,7 +144,7 @@ function array[int] of string: displayITypeProperties(ITYPE: it) =
 %
 function array[int] of string: displayITypeElements(ITYPE: it) =
 	let {
-		array[int] of string: rows = map2string([getAggregation(it), getPropagation(it)]);
+		array[int] of string: rows = map2string(getAggregation(it) ++ getPropagation(it));
 		array[int] of string: cols = map2string(set2array(ALGEBRAIC_ELEMENT));
 		array[int, int] of string: names = array2d(ITYPE_OPERATION_CLASS, ALGEBRAIC_ELEMENT, [showAlgebraElement(getElement(getAlgebra(it), i, j)) | i in ALGEBRAIC_OPERATION, j in ALGEBRAIC_ELEMENT]);
 	} in
