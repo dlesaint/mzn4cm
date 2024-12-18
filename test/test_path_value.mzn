@@ -12,10 +12,10 @@
 include "./../model/include/include.mzn";
 
 % Influence type
-include "./../model/include/include_itype.mzn";
+%include "./../model/include/include_itype.mzn";
 
 % Influence operations
-include "./../model/include/include_ioperations.mzn";
+%include "./../model/include/include_ioperations.mzn";
 
 % CMQL
 include "./../model/include/include_cmql.mzn";

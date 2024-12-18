@@ -90,6 +90,8 @@ include "./../itype/itype_imp_api.mzn";
 include "./../ranges/ranges_api.mzn";
 include "./../ranges/ranges.mzn";
 
+include "./../itype/itype_ops.mzn";
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -140,7 +142,7 @@ function bool: assertITypeSignature(ITYPE: it)
 			assert(getNumberOfSorts(it) > 0, "(1-1) at least one sort must be specified")
 	/\		assert(isProperRange(index_set(getSorts(it))), "(1-2) index set of sorts must be a proper range")
 % 	/\		assert(isSingleSorted(it) <-> getCategory(it) == getSorts(it)[1], "(2-1) if the i-type is single-sorted then its sort must be set to its category")
-	/\		assert(isAggregationOperation(getAggregation(it)), "(3-1) one aggregation operation must be selected")
+	/\		assert(isAggregationOperation(getAggregation(it)), "(3-1) one aggregation operation must be selected" ++ show(getAggregation(it)))
 	/\		assert(isPropagationOperation(getPropagation(it)), "(3-2) one propagation operation must be selected")
 ;
 		
@@ -227,14 +229,14 @@ function bool: isAggregationOperation(ITYPE_OPERATION: op)
 	:: "function isAggregationOperation($op): checks whether i-type operation $op is an aggregation operation or not"
 	=
 	op in {
+		ITYPE_BOOL_AND,
+		ITYPE_BOOL_OR,
+		ITYPE_RATIONAL_PLUS,
+		ITYPE_RATIONAL_TIMES,
+		ITYPE_RATIONAL_MIN,
+		ITYPE_RATIONAL_MAX,
+		ITYPE_PROPAGATION_ENUM,
 		ITYPE_AGGREGATION_ENUM,
-		ITYPE_AGGREGATION_AND,
-		ITYPE_AGGREGATION_OR,
-		ITYPE_AGGREGATION_PLUS,
-		ITYPE_AGGREGATION_TIMES,
-		ITYPE_AGGREGATION_MIN,
-		ITYPE_AGGREGATION_MAX,
-	% 	ITYPE_AGGREGATION_MEAN,
 		}
 ;
 
@@ -243,14 +245,14 @@ function bool: isPropagationOperation(ITYPE_OPERATION: op)
 	:: "function isPropagationOperation($op): checks whether i-type operation $op is a propagation operation or not"
 	=
 	op in {
+		ITYPE_BOOL_AND,
+		ITYPE_BOOL_OR,
+		ITYPE_RATIONAL_PLUS,
+		ITYPE_RATIONAL_TIMES,
+		ITYPE_RATIONAL_MIN,
+		ITYPE_RATIONAL_MAX,
 		ITYPE_PROPAGATION_ENUM,
-		ITYPE_PROPAGATION_AND,
-		ITYPE_PROPAGATION_OR,
-		ITYPE_PROPAGATION_PLUS,
-		ITYPE_PROPAGATION_TIMES,
-		ITYPE_PROPAGATION_MIN,
-		ITYPE_PROPAGATION_MAX,
-	% 	ITYPE_PROPAGATION_MEAN,
+		ITYPE_AGGREGATION_ENUM,
 	}
 ;
 
@@ -534,6 +536,7 @@ function var INFLUENCE: propagate(var INFLUENCE: x, var INFLUENCE: y)
 		constraint _typeCheckInfluence(x, y);
 		var INFLUENCE: z :: is_defined_var;
 		constraint
+		assert(false,"test") /\
 			(isNullInfluence(x) -> z == x) /\ % null absorbing for propagation
 			(isNullInfluence(y) -> z == y) /\ % null absorbing for propagation
 			(not(isNullInfluence(x) \/ isNullInfluence(y)) -> z == (iblock: iPropagate(deopt(x.iblock), deopt(y.iblock))))
@@ -975,4 +978,63 @@ function var A_ELEMENT: _toAlgebra(ITYPE: it, var INFLUENCE: x)
 	:: "_toAlgebra($x): casts influence $x to element of underlying algebra - (var)"
 	=
 	(algebra: it.ealgebra.algebra, value: x.iblock)
+	;
+
+
+%%%%%%%
+%Assertions
+predicate assertItype (ITYPE: itype)
+	=
+	if getSorts(itype)[1] == ITYPE_SORT_BOOL
+	then 
+	assert(getCategory(itype) == ITYPE_CATEGORY_SINGLE_SORTED, "(1) implementation constraint - check i-type consistency of DZN files")
+	/\	assert(isSingleSorted(itype), "(2) implementation constraint - check i-type consistency of DZN files")
+	/\	assert(getSorts(itype)[1] == ITYPE_SORT_BOOL, "(3) implementation constraint - check i-type consistency of DZN files")
+	/\	assert(getAggregation(itype) == ITYPE_BOOL_OR <-> getPropagation(itype) == ITYPE_BOOL_AND, "(4-1) implementation constraint - check consistency of DZN files")
+	/\	assert(getAggregation(itype) == ITYPE_BOOL_AND <-> getPropagation(itype) == ITYPE_BOOL_OR, "(4-2) implementation constraint - check consistency of DZN files")
+	/\	assert(getAggregation(itype) in {ITYPE_BOOL_OR, ITYPE_BOOL_AND}, "(4-3) implementation constraint - check consistency of DZN files")
+	elseif getSorts(itype)[1] == ITYPE_SORT_RATIONAL
+	then	
+		assert(getCategory(itype) == ITYPE_CATEGORY_SINGLE_SORTED, "(1) implementation constraint - check i-type consistency of DZN files")
+	/\	assert(isSingleSorted(itype), "(2) implementation constraint - check i-type consistency of DZN files")
+	/\	assert(getSorts(itype)[1] == ITYPE_SORT_RATIONAL, "(3) implementation constraint - check i-type consistency of DZN files")
+	/\	assert(getAggregation(itype) == ITYPE_RATIONAL_PLUS <-> getPropagation(itype) == ITYPE_RATIONAL_TIMES, "(4-1) implementation constraint - check consistency of DZN files")
+	/\	assert(getAggregation(itype) == ITYPE_RATIONAL_TIMES <-> getPropagation(itype) == ITYPE_RATIONAL_PLUS, "(4-2) implementation constraint - check consistency of DZN files")
+	/\	assert(getAggregation(itype) == ITYPE_RATIONAL_MIN <-> getPropagation(itype) == ITYPE_RATIONAL_MAX, "(4-3) implementation constraint - check consistency of DZN files")
+	/\	assert(getAggregation(itype) == ITYPE_RATIONAL_MAX <-> getPropagation(itype) == ITYPE_RATIONAL_MIN, "(4-4) implementation constraint - check consistency of DZN files")
+	/\	assert(getAggregation(itype) in {ITYPE_RATIONAL_PLUS, ITYPE_RATIONAL_TIMES, ITYPE_RATIONAL_MIN, ITYPE_RATIONAL_MAX}, "(4-5) implementation constraint - check consistency of DZN files")
+	/\	assert((getAggregation(itype) == ITYPE_RATIONAL_TIMES /\ getPropagation(itype) == ITYPE_RATIONAL_PLUS) -> isOptType(itype), "(5-1) implementation constraint - check consistency of DZN files")
+	/\	assert((getAggregation(itype) == ITYPE_RATIONAL_MIN /\ getPropagation(itype) == ITYPE_RATIONAL_MAX) -> isOptType(itype), "(5-1) implementation constraint - check consistency of DZN files")
+	/\	assert((getAggregation(itype) == ITYPE_RATIONAL_MAX /\ getPropagation(itype) == ITYPE_RATIONAL_MIN) -> isOptType(itype), "(5-1) implementation constraint - check consistency of DZN files")
+	elseif getSorts(itype)[1] == ITYPE_SORT_ENUM
+	then
+		assert(getCategory(itype) == ITYPE_CATEGORY_SINGLE_SORTED, "(1) implementation constraint - check i-type consistency of DZN files")
+	/\	assert(isSingleSorted(itype), "(2) implementation constraint - check i-type consistency of DZN files")
+	/\	assert(getSorts(itype)[1] == ITYPE_SORT_ENUM, "(3) implementation constraint - check i-type consistency of DZN files")
+	/\	assert(getAggregation(itype) == ITYPE_AGGREGATION_ENUM <-> getPropagation(itype) == ITYPE_PROPAGATION_ENUM, "(4-1) implementation constraint - check consistency of DZN files")
+	/\	assert(getAggregation(itype) in {ITYPE_AGGREGATION_ENUM, ITYPE_PROPAGATION_ENUM}, "(4-2) implementation constraint - check consistency of DZN files")
+	else	
+		assert(false, "Error: sort type not implemented")
+	endif
+;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% OUTPUT
+
+% Getter for influence value symbol
+function string: iShow(array[IBLOCK_COMPONENT] of int: x)
+	:: "iShow($x): returns string representation of non-virtual influence $x"
+	=
+	if getSorts(itype)[1] == ITYPE_SORT_BOOL
+	then
+		show(if x[1]==1 then show(true) else show(false) endif)
+	elseif getSorts(itype)[1] == ITYPE_SORT_RATIONAL
+	then
+		show(x[1]) ++ "/" ++ show(x[2])
+	elseif getSorts(itype)[1] == ITYPE_SORT_ENUM
+	then 
+		deopt(I_[to_enum(I_DOMAIN, x[1])])
+	else	
+		"Error: itype sort not implemented"
+	endif
 	;
