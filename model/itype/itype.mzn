@@ -673,7 +673,7 @@ function int: _buildNrIBlockComponent(ITYPE_SORT: sort)
 
 function array[int] of int: _buildSortSize(ITYPE_SIGNATURE: signature)
 =
-	[sum(j in min(SORT)..i)(_buildNrIBlockComponent(signature.sorts[j])) | i in SORT]
+	[1] ++ [1+ sum(j in min(SORT)..i)(_buildNrIBlockComponent(signature.sorts[j])) | i in 1..max(SORT)-1]
 ;
 
 %%%%%%%

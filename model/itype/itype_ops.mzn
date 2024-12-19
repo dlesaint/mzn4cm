@@ -169,8 +169,7 @@ function array[IBLOCK_COMPONENT] of int: iPropagate(array[IBLOCK_COMPONENT] of i
 %
 function array[IBLOCK_COMPONENT] of var int: iPropagate(array[IBLOCK_COMPONENT] of var int: x, array[IBLOCK_COMPONENT] of var int: y)
 =
-	%iPr(x,y,min(SORT));
-	assert(false, show(sort_size),[]);
+	iPr(x,y,min(SORT));
 function array[IBLOCK_COMPONENT] of var int: iPr(array[IBLOCK_COMPONENT] of var int: x, array[IBLOCK_COMPONENT] of var int: y,int: i)
 =
 	if i == max(SORT)
@@ -186,13 +185,13 @@ function array[IBLOCK_COMPONENT] of var int: iPropagate(array[IBLOCK_COMPONENT] 
     elseif getPropagation(itype)[i] == ITYPE_BOOL_AND
     then [x[sort_size[i]]*y[sort_size[i]]]
 	elseif 	getPropagation(itype)[i] == ITYPE_RATIONAL_PLUS
-	then	iRationalPlus(x[i..i+1], y[i..i+1])
+	then	iRationalPlus(array1d(1..2,x[sort_size[i]..sort_size[i]+1]), array1d(1..2,y[sort_size[i]..sort_size[i]+1]))
 	elseif	getPropagation(itype)[i] == ITYPE_RATIONAL_TIMES
-	then	iRationalTimes(x[i..i+1], y[i..i+1])
+	then	iRationalTimes(array1d(1..2,x[sort_size[i]..sort_size[i]+1]), array1d(1..2,y[sort_size[i]..sort_size[i]+1]))
 	elseif	getPropagation(itype)[i] == ITYPE_RATIONAL_MIN
-	then	iRationalMin(x[i..i+1], y[i..i+1])
+	then	iRationalMin(array1d(1..2,x[sort_size[i]..sort_size[i]+1]), array1d(1..2,y[sort_size[i]..sort_size[i]+1]))
 	elseif	getPropagation(itype)[i] == ITYPE_RATIONAL_MAX
-	then	iRationalMax(x[i..i+1], y[i..i+1])
+	then	iRationalMax(array1d(1..2,x[sort_size[i]..sort_size[i]+1]), array1d(1..2,y[sort_size[i]..sort_size[i]+1]))
 	elseif getPropagation(itype)[i] == ITYPE_AGGREGATION_ENUM
 	then [deopt(I_AGGREGATE[to_enum(I_DOMAIN, x[min(index_set(x))]), to_enum(I_DOMAIN, y[min(index_set(y))])])]
     else assert(false, "bug - incomplete implementation",[])
@@ -279,8 +278,8 @@ function array[1..2] of var int: iRationalPlus(array[1..2] of var int: x, array[
 			:: defines_var(z)
 			;
 	} in
-		iRationalReduce(z)
-		%z
+		%iRationalReduce(z)
+		z
 ;
 
 %
