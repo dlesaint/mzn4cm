@@ -129,6 +129,7 @@ var bool: x_cmql_path_value;
 %
 constraint :: "constraint: path propagation between origin and destination nodes"
 	
+	%assert(false, show(max(x_arc_path_length))) /\
 	% binds origin node if given
 	(occurs(origin_node) -> (x_origin_node == deopt(origin_node))) /\ % !! see semantics of == over opt vars
 	% binds destination node if given
