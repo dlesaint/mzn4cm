@@ -8,7 +8,7 @@ itype_nr_sorts = 2;
 itype_signature = (
     category : ITYPE_CATEGORY_MANY_SORTED_PRODUCT,
     sorts: [ITYPE_SORT_RATIONAL, ITYPE_SORT_RATIONAL],
-    operations : array2d(1..2,1..itype_nr_sorts,[ITYPE_RATIONAL_PLUS,ITYPE_RATIONAL_PLUS,ITYPE_RATIONAL_TIMES, ITYPE_RATIONAL_TIMES])
+    operations : array2d(1..2,1..itype_nr_sorts,[ITYPE_RATIONAL_MIN,ITYPE_RATIONAL_PLUS,ITYPE_RATIONAL_MAX, ITYPE_RATIONAL_TIMES])
 );
 
 itype_domains = (

@@ -32,7 +32,7 @@ array[I_DOMAIN,I_DOMAIN] of opt I_DOMAIN: I_PROPAGATE; %= array2d(I_DOMAIN,I_DOM
 %% PAR/VAR I-TYPE RELATIONS 
 
 %
-function bool: iEquals(array[IBLOCK_COMPONENT] of int: x, array[IBLOCK_COMPONENT] of int: y)
+function bool: iEquals(array[int] of int: x, array[int] of int: y)
 	:: "iEquals($x,$y): checks whether equality relation holds between $x and $y over i-type of $x - (par)"
 	=
 	if getBlockTypeSorts(itype)[1] == ITYPE_SORT_RATIONAL
@@ -44,7 +44,7 @@ function bool: iEquals(array[IBLOCK_COMPONENT] of int: x, array[IBLOCK_COMPONENT
 	;
 	
 %
-function var bool: iEquals(array[IBLOCK_COMPONENT] of var int: x, array[IBLOCK_COMPONENT] of var int: y)
+function var bool: iEquals(array[int] of var int: x, array[int] of var int: y)
 	:: "iEquals($x,$y): checks whether equality relation holds between $x and $y over i-type of $x - (var)"
 	=
 	if getBlockTypeSorts(itype)[1] == ITYPE_SORT_RATIONAL
