@@ -1,0 +1,36 @@
+I_DOMAIN = {E};
+I_ = [<>];
+I_AGGREGATE = array2d(I_DOMAIN,I_DOMAIN,[<>]);
+I_PROPAGATE = array2d(I_DOMAIN,I_DOMAIN,[<>]);
+
+itype_nr_sorts = 2;
+
+itype_signature = (
+    category : ITYPE_CATEGORY_MANY_SORTED_PRODUCT,
+    sorts: [ITYPE_SORT_RATIONAL, ITYPE_SORT_BOOL],
+    operations : array2d(1..2,1..itype_nr_sorts,[ITYPE_RATIONAL_MIN,ITYPE_BOOL_AND,ITYPE_RATIONAL_MAX, ITYPE_BOOL_OR])
+);
+
+itype_domains = (
+    cardinalities: [<>,<>],
+);
+
+itype_algebra = (
+	% the algebraic properties of the i-type operations
+	properties:		[
+									(ITYPE_AGGREGATION,	ALGEBRAIC_PROPERTY_HAS_ABSORBING_ELEMENT):	false,
+									(ITYPE_AGGREGATION,	ALGEBRAIC_PROPERTY_HAS_NEUTRAL_ELEMENT):		true,
+									(ITYPE_AGGREGATION,	ALGEBRAIC_PROPERTY_COMMUTATIVITY):				true,
+									(ITYPE_AGGREGATION,	ALGEBRAIC_PROPERTY_ASSOCIATIVITY):				true,
+									
+									(ITYPE_PROPAGATION,	ALGEBRAIC_PROPERTY_HAS_ABSORBING_ELEMENT):	true,
+									(ITYPE_PROPAGATION,	ALGEBRAIC_PROPERTY_HAS_NEUTRAL_ELEMENT):		true, %TODO should be false: either relax requirement (assertion) or required bounded rationals (eg {-1/1,..,1/1}) => itype to create
+									(ITYPE_PROPAGATION,	ALGEBRAIC_PROPERTY_COMMUTATIVITY):				true,
+									(ITYPE_PROPAGATION,	ALGEBRAIC_PROPERTY_ASSOCIATIVITY):				true,
+								],
+	% the algebraic elements of the i-type operations
+	aggregation_absorbing:	(iblock:[<>,<>,<>]),
+	aggregation_neutral:		(iblock:[<>,<>,<>]),
+	propagation_absorbing:	(iblock:[<>,<>,<>]),
+	propagation_neutral:		(iblock:[<>,<>,<>]),	
+);

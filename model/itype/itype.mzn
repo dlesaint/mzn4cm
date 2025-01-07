@@ -1035,20 +1035,23 @@ predicate assertItype (ITYPE: itype)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% OUTPUT
-
-% Getter for influence value symbol
 function string: iShow(array[IBLOCK_COMPONENT] of int: x)
+	= 
+	concat([iShow(x,i) | i in SORT])
+	;
+% Getter for influence value symbol
+function string: iShow(array[IBLOCK_COMPONENT] of int: x, int: i)
 	:: "iShow($x): returns string representation of non-virtual influence $x"
 	=
-	if getSorts(itype)[1] == ITYPE_SORT_BOOL
+	if getSorts(itype)[i] == ITYPE_SORT_BOOL
 	then
-		show(if x[1]==1 then show(true) else show(false) endif)
-	elseif getSorts(itype)[1] == ITYPE_SORT_RATIONAL
+		show(if x[sort_size[i]]==1 then show(true) ++ ", " else show(false) ++ ", " endif)
+	elseif getSorts(itype)[i] == ITYPE_SORT_RATIONAL
 	then
-		show(x[1]) ++ "/" ++ show(x[2])
-	elseif getSorts(itype)[1] == ITYPE_SORT_ENUM
+		show(x[sort_size[i]]) ++ "/" ++ show(x[sort_size[i]+1]) ++ ", "
+	elseif getSorts(itype)[i] == ITYPE_SORT_ENUM
 	then 
-		deopt(I_[to_enum(I_DOMAIN, x[1])])
+		deopt(I_[to_enum(I_DOMAIN, x[sort_size[i]])]) ++ ", "
 	else	
 		"Error: itype sort not implemented"
 	endif
