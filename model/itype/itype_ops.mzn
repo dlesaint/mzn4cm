@@ -160,8 +160,8 @@ function array[IBLOCK_COMPONENT] of int: iPropagate(array[IBLOCK_COMPONENT] of i
 	then	iRationalMin(array1d(1..2,x[sort_size[i]..sort_size[i]+1]), array1d(1..2,y[sort_size[i]..sort_size[i]+1]))
 	elseif	getPropagation(itype)[i] == ITYPE_RATIONAL_MAX
 	then	iRationalMax(array1d(1..2,x[sort_size[i]..sort_size[i]+1]), array1d(1..2,y[sort_size[i]..sort_size[i]+1]))
-	elseif getPropagation(itype)[i] == ITYPE_AGGREGATION_ENUM
-	then [deopt(I_AGGREGATE[to_enum(I_DOMAIN, x[min(index_set(x))]), to_enum(I_DOMAIN, y[min(index_set(y))])])]
+	elseif getPropagation(itype)[i] == ITYPE_PROPAGATION_ENUM
+	then [deopt(I_PROPAGATE[to_enum(I_DOMAIN, x[min(index_set(x))]), to_enum(I_DOMAIN, y[min(index_set(y))])])]
     else assert(false, "bug - incomplete implementation",[])
 	endif
 ;
@@ -195,9 +195,9 @@ function array[int] of var int: iPropagate(array[int] of var int: x, array[int] 
 	then	iRationalMin(array1d(1..2,x[sort_size[i]..sort_size[i]+1]), array1d(1..2,y[sort_size[i]..sort_size[i]+1]))
 	elseif	getPropagation(itype)[i] == ITYPE_RATIONAL_MAX
 	then	iRationalMax(array1d(1..2,x[sort_size[i]..sort_size[i]+1]), array1d(1..2,y[sort_size[i]..sort_size[i]+1]))
-	elseif getPropagation(itype)[i] == ITYPE_AGGREGATION_ENUM
-	then [deopt(I_AGGREGATE[to_enum(I_DOMAIN, x[min(index_set(x))]), to_enum(I_DOMAIN, y[min(index_set(y))])])]
-    else assert(false, "bug - incomplete implementation",[])
+	elseif getPropagation(itype)[i] == ITYPE_PROPAGATION_ENUM
+	then [deopt(I_PROPAGATE[to_enum(I_DOMAIN, x[min(index_set(x))]), to_enum(I_DOMAIN, y[min(index_set(y))])])]
+    else assert(false, "bug - incomplete implementation " ++ show(getPropagation(itype)[i]),[])
 	endif
 ;
 

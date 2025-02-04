@@ -141,7 +141,7 @@ constraint :: "constraint: path propagation between origin and destination nodes
 		cmql_path_value_fixed(cmap,deopt(origin_node),deopt(destination_node),x_arc_path_length,x_arc_path,x_node_path,x_iblock_path,x_propagated_iblocks,x_propagated_influence)
 	endif	 /\
 	% reifying satisfiability of query (to customize)
-	x_cmql_path_value == (x_arc_path_length > 1) /\
+	x_cmql_path_value == (x_arc_path_length >= 1) /\
 	% forcing satisfiability
 	x_cmql_path_value
 ;

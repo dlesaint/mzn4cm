@@ -1,0 +1,59 @@
+I_DOMAIN = {
+	Z,	% zero
+	A,	% ambiguous
+	P,	% plus
+	N	% minus
+};
+
+% Symbols of non-virtual i-type domain elements
+I_ = ["0", "?", "+", "-"];
+
+% I-type aggregation table
+I_AGGREGATE =
+[	
+	(Z,Z):Z,	(Z,A):A,	(Z,P):P,	(Z,N):N,
+	(A,Z):A,	(A,A):A,	(A,P):A,	(A,N):A,
+	(P,Z):P,	(P,A):A,	(P,P):P,	(P,N):A,
+	(N,Z):N,	(N,A):A,	(N,P):A,	(N,N):N,
+];
+
+% I-type propagation table
+I_PROPAGATE =
+[	
+	(Z,Z):Z,	(Z,A):Z,	(Z,P):Z,	(Z,N):Z,
+	(A,Z):Z,	(A,A):A,	(A,P):A,	(A,N):A,
+	(P,Z):Z,	(P,A):A,	(P,P):P,	(P,N):N,
+	(N,Z):Z,	(N,A):A,	(N,P):N,	(N,N):P,
+];
+
+itype_nr_sorts = 2;
+
+itype_signature = (
+    category : ITYPE_CATEGORY_MANY_SORTED_PRODUCT,
+    sorts: [ITYPE_SORT_RATIONAL, ITYPE_SORT_ENUM],
+    operations : array2d(1..2,1..itype_nr_sorts,[ITYPE_RATIONAL_MIN,ITYPE_AGGREGATION_ENUM,ITYPE_RATIONAL_MAX, ITYPE_PROPAGATION_ENUM])
+);
+
+itype_domains = (
+    cardinalities: [<>,card(I_DOMAIN)],
+);
+
+itype_algebra = (
+	% the algebraic properties of the i-type operations
+	properties:		[
+									(ITYPE_AGGREGATION,	ALGEBRAIC_PROPERTY_HAS_ABSORBING_ELEMENT):	false,
+									(ITYPE_AGGREGATION,	ALGEBRAIC_PROPERTY_HAS_NEUTRAL_ELEMENT):		true,
+									(ITYPE_AGGREGATION,	ALGEBRAIC_PROPERTY_COMMUTATIVITY):				true,
+									(ITYPE_AGGREGATION,	ALGEBRAIC_PROPERTY_ASSOCIATIVITY):				true,
+									
+									(ITYPE_PROPAGATION,	ALGEBRAIC_PROPERTY_HAS_ABSORBING_ELEMENT):	true,
+									(ITYPE_PROPAGATION,	ALGEBRAIC_PROPERTY_HAS_NEUTRAL_ELEMENT):		true, %TODO should be false: either relax requirement (assertion) or required bounded rationals (eg {-1/1,..,1/1}) => itype to create
+									(ITYPE_PROPAGATION,	ALGEBRAIC_PROPERTY_COMMUTATIVITY):				true,
+									(ITYPE_PROPAGATION,	ALGEBRAIC_PROPERTY_ASSOCIATIVITY):				true,
+								],
+	% the algebraic elements of the i-type operations
+	aggregation_absorbing:	(iblock:[<>,<>,<>]),
+	aggregation_neutral:		(iblock:[<>,<>,<>]),
+	propagation_absorbing:	(iblock:[<>,<>,<>]),
+	propagation_neutral:		(iblock:[<>,<>,<>]),	
+);
