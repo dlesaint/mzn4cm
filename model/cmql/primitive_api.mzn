@@ -39,3 +39,9 @@ predicate cmql_inclusion (
     array[int,int] of var opt int: x_node_paths,
     array[int,int] of var opt int: y_node_paths
 );
+
+predicate cmql_addition (
+    array[int, int] of var opt int: x_node_paths,
+    array[int, int] of var opt int: y_node_paths,
+    array[int, int] of var opt int: z_node_paths,
+);
