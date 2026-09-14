@@ -22,4 +22,4 @@
 % % include "./../itype/type/itype_order_api.mzn";
 
 % %% SYMBOLIC (ENUMERATION)
-%  include "./../itype/type/itype_enum_api.mzn";
+  include "./../itype/type/itype_enum_api.mzn";

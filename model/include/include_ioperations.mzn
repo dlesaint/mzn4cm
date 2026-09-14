@@ -22,5 +22,5 @@
 % % include "./../itype/operations/itype_ops_min_max.mzn";
 
 % %% SYMBOLIC I_AND/I_OR
-%   include "./../itype/operations/itype_ops_enum.mzn";
+% % include "./../itype/operations/itype_ops_enum.mzn";
 
