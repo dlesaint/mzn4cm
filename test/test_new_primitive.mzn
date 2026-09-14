@@ -55,23 +55,21 @@ set of int: ARC_PATH = 1..(max(NODE_PATH)-1);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % QUERY VARIABLES
 %%%%% 
-var 0..size_path: x_path_length;
-array[NODE_PATH] of var opt NODE_ID: x_node_path;
+var 0..nb_paths: x_nb_paths;
+array[PATH_ID] of var 0..size_path: x_paths_length;
+array[PATH_ID,NODE_PATH] of var opt NODE_ID: x_node_paths;
+array[PATH_ID,ARC_PATH] of var opt ARC_ID: x_arc_paths;
 
-var 0..size_path: y_path_length;
-array[NODE_PATH] of var opt NODE_ID: y_node_path;
-
-var 0..nb_paths: z_nb_paths;
-array[PATH_ID] of var 0..size_path: z_paths_length;
-array[PATH_ID,NODE_PATH] of var opt NODE_ID: z_node_paths;
-
+var 0..nb_paths: y_nb_paths;
+array[PATH_ID] of var 0..size_path: y_paths_length;
+array[PATH_ID,NODE_PATH] of var opt NODE_ID: y_node_paths;
+array[PATH_ID,ARC_PATH] of var opt ARC_ID: y_arc_paths;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Solving
-constraint x_path_length = 2;
-constraint x_node_path[1] = 2;
-constraint x_node_path[2] = 4;
-constraint y_path_length = 2;
-constraint y_node_path[1] = 2;
-constraint y_node_path[2] = 4;
-constraint cmql_concatenation(x_path_length, x_node_path, y_path_length, y_node_path, z_nb_paths, z_paths_length, z_node_paths);
+constraint x_paths_length[1] > 1;
+constraint x_nb_paths < y_nb_paths;
+constraint cmql_k_variable(cmap, x_nb_paths, x_paths_length, x_node_paths, x_arc_paths);
+constraint cmql_k_variable(cmap, y_nb_paths, y_paths_length, y_node_paths, y_arc_paths);
+constraint cmql_inclusion(x_node_paths, y_node_paths);
+
 solve satisfy;
