@@ -13,3 +13,5 @@ include "./../cmql/primitive/K-variable.mzn";
 include "./../cmql/primitive/concatenation.mzn";
 include "./../cmql/primitive/inclusion.mzn";
 include "./../cmql/primitive/addition.mzn";
+include "./../cmql/primitive/fusion.mzn";
+include "./../cmql/primitive/influence.mzn";

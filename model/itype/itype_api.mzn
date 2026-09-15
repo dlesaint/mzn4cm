@@ -58,9 +58,10 @@
 % 			- isPolySort
 % 			- isOptType
 % 			- isEqualityIdentityOverIType
-%		- PAR/VAR I-TYPE ELEMENTS 
+%		- PAR/VAR I-TYPE ELEMENTS
 %			- getNullInfluence (par)
 %			- isNullInfluenceVirtual (par)
+%			- getPropagationNeutral (par)
 %			- isNullInfluence (par)
 %			- isNullInfluence (var)
 %			- isVirtualInfluence (par)
@@ -315,6 +316,9 @@ function INFLUENCE: getNullInfluence(ITYPE: it) :: "getNullInfluence($it): retur
 
 %
 function bool: isNullInfluenceVirtual(ITYPE: it) :: "isNullInfluenceVirtual($it): checks whether the null influence over i-type $it is virtual (par)";
+
+%
+function INFLUENCE: getPropagationNeutral(ITYPE: it) :: "getPropagationNeutral($it): returns the propagation neutral influence over i-type $it - (par)";
 
 %
 function bool: isNullInfluence(INFLUENCE: x) :: "isNullInfluence($x): checks whether $x is the null influence over i-type of $x - (par)";

@@ -36,9 +36,10 @@
 % 			- isPolySort
 % 			- isOptType
 % 			- isEqualityIdentityOverIType
-%		- PAR/VAR I-TYPE ELEMENTS 
+%		- PAR/VAR I-TYPE ELEMENTS
 %			- getNullInfluence (par)
 %			- isNullInfluenceVirtual (par)
+%			- getPropagationNeutral (par)
 %			- isNullInfluence (par)
 %			- isNullInfluence (var)
 %			- isVirtualInfluence (par)
@@ -396,6 +397,13 @@ function bool: isNullInfluenceVirtual(ITYPE: it)
 	isVirtualElement(_toAlgebra(it, getNullInfluence(it)))
 ;
 
+%
+function INFLUENCE: getPropagationNeutral(ITYPE: it)
+	:: "getPropagationNeutral($it): returns the propagation neutral influence over i-type $it - (par)"
+	=
+	_toInfluence(it, getNeutralElement(getAlgebra(it), getAlgebraicPropagation(it)))
+;
+
 
 %%%%%%%
 
@@ -536,7 +544,6 @@ function var INFLUENCE: propagate(var INFLUENCE: x, var INFLUENCE: y)
 		constraint _typeCheckInfluence(x, y);
 		var INFLUENCE: z :: is_defined_var;
 		constraint
-		assert(false,"test") /\
 			(isNullInfluence(x) -> z == x) /\ % null absorbing for propagation
 			(isNullInfluence(y) -> z == y) /\ % null absorbing for propagation
 			(not(isNullInfluence(x) \/ isNullInfluence(y)) -> z == (iblock: iPropagate(deopt(x.iblock), deopt(y.iblock))))
@@ -823,8 +830,8 @@ function var bool: _typeCheckInfluence(var INFLUENCE: x)
 	:: "_typeCheckInfluence($x): checks whether $x is well-typed - (var)"
 	=
 	%TODO feature-enable these checks
-		isVirtualElement(_toAlgebra(itype, x)) -> isOptAlgebra(itype.ealgebra) %, "(1-1) type checking: virtual influence over non-opt i-type (par)") /\ % GLOBAL
-	/\isVirtualElement(_toAlgebra(itype, x)) -> equalAElements(_toAlgebra(itype, x), getNeutralElement(itype.ealgebra, itype.algebraic_operations[ITYPE_AGGREGATION])) %, "(1-2) type checking: virtual influence must be null (par)" ++ show(x) ++ show(equalAElements(_toAlgebra(itype, x), getNeutralElement(itype.ealgebra, itype.algebraic_operations[ITYPE_AGGREGATION])))) /\
+		(isVirtualElement(_toAlgebra(itype, x)) -> isOptAlgebra(itype.ealgebra)) %, "(1-1) type checking: virtual influence over non-opt i-type (par)") /\ % GLOBAL
+	/\	(isVirtualElement(_toAlgebra(itype, x)) -> equalAElements(_toAlgebra(itype, x), getNeutralElement(itype.ealgebra, itype.algebraic_operations[ITYPE_AGGREGATION]))) %, "(1-2) type checking: virtual influence must be null (par)" ++ show(x) ++ show(equalAElements(_toAlgebra(itype, x), getNeutralElement(itype.ealgebra, itype.algebraic_operations[ITYPE_AGGREGATION])))) /\
 	/\	_typeCheckIblock(x.iblock, itype) % GLOBAL
 	;
 
