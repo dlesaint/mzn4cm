@@ -14,11 +14,13 @@ include "./../cmap/cmap.mzn";
 
 
 %%-----------------------------New Primitives -------------------------------------------------
-predicate cmql_k_variable (CMAP: cmap,
+predicate cmql_k_variable (
+    CMAP: cmap,
     var int: x_nb_path,
     array[int] of var int: x_paths_length,
     array[int, int] of var opt int: x_node_paths,
-    array[int, int] of var opt int: x_arc_paths
+    array[int, int] of var opt int: x_arc_paths,
+	array[int,int] of var INFLUENCE: x_influence_path
 );
 
 

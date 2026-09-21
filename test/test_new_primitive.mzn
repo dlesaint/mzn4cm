@@ -78,7 +78,7 @@ constraint x_nb_paths > 1;
 %constraint y_nb_paths > 1;
 %constraint z_nb_paths > 1;
 constraint x_influence = cmap.arc_labels[6].influence;
-constraint cmql_k_variable(cmap, x_nb_paths, x_paths_length, x_node_paths, x_arc_paths);
+constraint cmql_k_variable(cmap, x_nb_paths, x_paths_length, x_node_paths, x_arc_paths, x_influence_path);
 % constraint cmql_k_variable(cmap, y_nb_paths, y_paths_length, y_node_paths, y_arc_paths);
 % constraint cmql_k_variable(cmap, z_nb_paths, z_paths_length, z_node_paths, z_arc_paths);
 % constraint cmql_fusion(x_node_paths, y_node_paths, z_node_paths, x_paths_length, y_paths_length, z_paths_length);

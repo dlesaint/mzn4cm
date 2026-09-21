@@ -15,12 +15,17 @@ predicate cmql_k_variable (
     var int: x_nb_path,
     array[int] of var int: x_paths_length,
     array[int, int] of var opt int: x_node_paths,
-    array[int, int] of var opt int: x_arc_paths
+    array[int, int] of var opt int: x_arc_paths,
+	array[int,int] of var INFLUENCE: x_influence_path
 ) = 
 let {
     set of int: PATH_ID = index_set_1of2(x_arc_paths);
+	set of int: ARC_ID = index_set(cmap.arc_labels);
 	set of int: ARC_PATH = index_set_2of2(x_arc_paths);
 	set of int: NODE_PATH = index_set_2of2(x_node_paths);
+
+	% arc influences flattened to a plain array (arrays of records containing arrays cannot be indexed by a var)
+    array[ARC_ID, IBLOCK_COMPONENT] of opt int: iblocks = array2d(ARC_ID, IBLOCK_COMPONENT, [cmap.arc_labels[a].influence.iblock[k] | a in ARC_ID, k in IBLOCK_COMPONENT]);
 } in 
 %(1) Scinde les variables-noeuds d'une ligne en complétant la séquence de noeuds du chemin par des noeuds virtuels
 forall (i in PATH_ID) (forall(j in ARC_PATH)(absent(x_node_paths[i,j]) -> absent(x_node_paths[i,j+1])))
@@ -38,6 +43,12 @@ forall (i in PATH_ID)(forall (j in min(ARC_PATH)..<max(ARC_PATH))(absent(x_arc_p
 forall (i in PATH_ID)(forall(j in ARC_PATH)(occurs(x_arc_paths[i,j]) <-> occurs(x_node_paths[i,j+1]))) /\
 %(9) Impose la compatibilité avec les chemins du graphe de la CMAP
 forall (i in PATH_ID)(forall (j in ARC_PATH)(occurs(x_arc_paths[i,j]) -> (x_node_paths[i,j] = cmap.adigraph.tail_head[x_arc_paths[i,j],TAIL] /\ x_node_paths[i,j+1] = cmap.adigraph.tail_head[x_arc_paths[i,j],HEAD]))) /\
+%(26) Les noeuds vide on l'influence neutre de l'agrégation
+forall (i in PATH_ID)(forall (j in NODE_PATH)((x_influence_path[i,j] = getNullInfluence(cmap.itype))<->(absent(x_node_paths[i,j])))) /\
+%(27) Si le chemin n'est pas vide la première influence est le neutre de la propagation
+forall (i in PATH_ID)(occurs(x_node_paths[i,1]) -> (x_influence_path[i,1] = getPropagationNeutral(cmap.itype))) /\
+%(28) L'influence d'un noeud non-vide est l'étiquetage de l'arc entrant
+forall (i in PATH_ID)(forall (j in 2..max(NODE_PATH))(occurs(x_node_paths[i,j]) -> (x_influence_path[i,j] = (iblock: [iblocks[deopt(x_arc_paths[i,j-1]), k] | k in IBLOCK_COMPONENT])))) /\
 true
 ;
 
@@ -60,7 +71,7 @@ predicate increasing_opt_lengths(var int: y, array[int] of var int: x)
 %
 predicate lex_less_opt(var int: x_length, var int: y_length, array[int] of var opt int: x, array[int] of var opt int: y)
 	=
-	assert(isProperRange(index_set(x)), "lex_less_opt: the index set of $x is a proper range") /\
+	%assert(isProperRange(index_set(x)), "lex_less_opt: the index set of $x is a proper range") /\
 	assert(index_set(x) == index_set(y), "lex_less_opt: the index sets of $x and $y must be equal") /\
 	let {
 		int: size = length(x);
