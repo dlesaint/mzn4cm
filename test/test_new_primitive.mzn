@@ -55,32 +55,40 @@ set of int: ARC_PATH = 1..(max(NODE_PATH)-1);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % QUERY VARIABLES
 %%%%% 
-var 0..nb_paths: x_nb_paths;
-array[PATH_ID] of var 0..size_path: x_paths_length;
-array[PATH_ID,NODE_PATH] of var opt NODE_ID: x_node_paths;
-array[PATH_ID,ARC_PATH] of var opt ARC_ID: x_arc_paths;
+% var 0..nb_paths: x_nb_paths;
+% array[PATH_ID] of var 0..size_path: x_paths_length;
+% array[PATH_ID,NODE_PATH] of var opt NODE_ID: x_node_paths;
+% array[PATH_ID,ARC_PATH] of var opt ARC_ID: x_arc_paths;
 
-array[PATH_ID, NODE_PATH] of var INFLUENCE: x_influence_path;
-var INFLUENCE: x_influence;
+% array[PATH_ID, NODE_PATH] of var INFLUENCE: x_influence_path;
+% var INFLUENCE: x_influence;
 
 % var 0..nb_paths: y_nb_paths;
 % array[PATH_ID] of var 0..size_path: y_paths_length;
 % array[PATH_ID,NODE_PATH] of var opt NODE_ID: y_node_paths;
 % array[PATH_ID,ARC_PATH] of var opt ARC_ID: y_arc_paths;
 
-% var 0..nb_paths: z_nb_paths;
-% array[PATH_ID] of var 0..size_path: z_paths_length;
-% array[PATH_ID,NODE_PATH] of var opt NODE_ID: z_node_paths;
-% array[PATH_ID,ARC_PATH] of var opt ARC_ID: z_arc_paths;
+var int:x_node;
+var INFLUENCE: x_influence;
+
+var int: y_node;
+var INFLUENCE: y_influence;
+
+var 0..nb_paths: z_nb_paths;
+array[PATH_ID] of var 0..size_path: z_paths_length;
+array[PATH_ID,NODE_PATH] of var opt NODE_ID: z_node_paths;
+array[PATH_ID,ARC_PATH] of var opt ARC_ID: z_arc_paths;
+array[PATH_ID, NODE_PATH] of var INFLUENCE: z_influence_paths;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Solving
-constraint x_nb_paths > 1;
+%constraint x_nb_paths > 1;
 %constraint y_nb_paths > 1;
 %constraint z_nb_paths > 1;
-constraint x_influence = cmap.arc_labels[6].influence;
-constraint cmql_k_variable(cmap, x_nb_paths, x_paths_length, x_node_paths, x_arc_paths, x_influence_path);
+%constraint x_influence = cmap.arc_labels[6].influence;
+%constraint cmql_k_variable(cmap, x_nb_paths, x_paths_length, x_node_paths, x_arc_paths, x_influence_path);
 % constraint cmql_k_variable(cmap, y_nb_paths, y_paths_length, y_node_paths, y_arc_paths);
-% constraint cmql_k_variable(cmap, z_nb_paths, z_paths_length, z_node_paths, z_arc_paths);
+constraint cmql_concatenation(x_node, x_influence, y_node, y_influence, z_nb_paths, z_paths_length, z_node_paths, z_influence_paths);
+constraint cmql_k_variable(cmap, z_nb_paths, z_paths_length, z_node_paths, z_arc_paths, z_influence_paths);
 % constraint cmql_fusion(x_node_paths, y_node_paths, z_node_paths, x_paths_length, y_paths_length, z_paths_length);
-constraint cmql_influence(cmap, x_node_paths,x_arc_paths, x_influence_path, x_influence);
+%constraint cmql_influence(cmap, x_node_paths,x_arc_paths, x_influence_path, x_influence);
 solve satisfy;
