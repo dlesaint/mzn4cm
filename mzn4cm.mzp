@@ -11,7 +11,7 @@
         "model/cmql/primitive/inclusion.mzn",
         "model/cmql/primitive/influence.mzn",
         "model/cmql/primitive/K-variable.mzn",
-        "test/test_new_primitive.mzn"
+        "test/test_s_t_paths.mzn"
     ],
     "openTab": 16,
     "projectFiles": [

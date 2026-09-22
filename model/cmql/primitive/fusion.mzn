@@ -37,9 +37,9 @@ in
     %(21)
     forall (i in PATH_ID)((zID[i] != 0) -> (forall (j in NODE_PATH)((j <= x_paths_length[xID[i]])->(z_node_paths[zID[i],j] = x_node_paths[xID[i], j])))) /\
     %(22)
-    forall (i in PATH_ID)((zID[i] != 0)->(forall (j in NODE_PATH)((j >= x_paths_length[xID[i]])->(z_node_paths[zID[i],j] = y_node_paths[yID[i], j-x_paths_length[xID[i]+1]])))) /\
+    forall (i in PATH_ID)((zID[i] != 0)->(forall (j in NODE_PATH)((j >= x_paths_length[xID[i]])->(z_node_paths[zID[i],j] = y_node_paths[yID[i], j-x_paths_length[xID[i]]+1])))) /\
     %(23)
-    forall (k,l in PATH_ID) ((x_node_paths[k, x_paths_length[k]] = y_node_paths[l,1]) -> (xID[xyID[k,l]] = k /\ yID[xyID[k,l]] = l)) /\
+    forall (k,l in PATH_ID) ((x_paths_length[k] != 0) -> ((x_node_paths[k, max(1,x_paths_length[k])] = y_node_paths[l,1]) -> (xID[xyID[k,l]] = k /\ yID[xyID[k,l]] = l))) /\
     %(24)
     forall (m in PATH_ID)((z_paths_length[m] != 0) -> (m in zID)) /\
     %(25)
