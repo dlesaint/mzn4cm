@@ -1,0 +1,144 @@
+$ minizinc D:\Documents\Travail\mzn4cm\test\test_s_t_paths.mzn -d D:\Documents\Travail\mzn4cm\data\icmap\kifanlo\SG01.dzn -d D:\Documents\Travail\mzn4cm\data\itype\itype_opt_rational_min_max.dzn -d C:\Users\marti\AppData\Local\Temp\s_t_paths_query_vvjc13_k.dzn --solver Chuffed -s --time-limit 60000
+
+=== STDOUT ===
+% Generated FlatZinc statistics:
+%%%mzn-stat: paths=0
+%%%mzn-stat: flatBoolVars=6358
+%%%mzn-stat: flatIntVars=1949
+%%%mzn-stat: flatBoolConstraints=5741
+%%%mzn-stat: flatIntConstraints=4848
+%%%mzn-stat: evaluatedReifiedConstraints=1864
+%%%mzn-stat: evaluatedHalfReifiedConstraints=2555
+%%%mzn-stat: eliminatedImplications=1309
+%%%mzn-stat: method="maximize"
+%%%mzn-stat: flatTime=0.528436
+%%%mzn-stat-end
+%%%mzn-stat: nodes=2646
+%%%mzn-stat: failures=211
+%%%mzn-stat: restarts=2
+%%%mzn-stat: variables=43778
+%%%mzn-stat: intVars=2014
+%%%mzn-stat: boolVariables=41762
+%%%mzn-stat: propagators=3646
+%%%mzn-stat: propagations=152905
+%%%mzn-stat: peakDepth=713
+%%%mzn-stat: nogoods=211
+%%%mzn-stat: backjumps=1021
+%%%mzn-stat: peakMem=0.00
+%%%mzn-stat: time=0.145
+%%%mzn-stat: initTime=0.123
+%%%mzn-stat: solveTime=0.022
+%%%mzn-stat: objective=1
+%%%mzn-stat: optTime=0.021
+%%%mzn-stat: baseMem=0.00
+%%%mzn-stat: trailMem=0.12
+%%%mzn-stat: randomSeed=1356431664
+%%%mzn-stat-end
+result_nb_paths = 1;
+result_paths_length = [2, 0, 0, 0];
+result_node_paths = 
+[|  2,  7, <>, <>
+ | <>, <>, <>, <>
+ | <>, <>, <>, <>
+ | <>, <>, <>, <>
+ |];
+result_arc_paths = 
+[|  2, <>, <>
+ | <>, <>, <>
+ | <>, <>, <>
+ | <>, <>, <>
+ |];
+result_influence_paths = 
+[|  (iblock: [-1, 1]),   (iblock: [3, 4]), (iblock: [<>, <>]), (iblock: [<>, <>])
+ | (iblock: [<>, <>]), (iblock: [<>, <>]), (iblock: [<>, <>]), (iblock: [<>, <>])
+ | (iblock: [<>, <>]), (iblock: [<>, <>]), (iblock: [<>, <>]), (iblock: [<>, <>])
+ | (iblock: [<>, <>]), (iblock: [<>, <>]), (iblock: [<>, <>]), (iblock: [<>, <>])
+ |];
+result_influence = (iblock: [-1, 1]);
+a_nb_paths = 1;
+a_paths_length = [1, 0, 0, 0];
+a_node_paths = 
+[|  2, <>, <>, <>
+ | <>, <>, <>, <>
+ | <>, <>, <>, <>
+ | <>, <>, <>, <>
+ |];
+a_arc_paths = 
+[| <>, <>, <>
+ | <>, <>, <>
+ | <>, <>, <>
+ | <>, <>, <>
+ |];
+a_influence_paths = 
+[|  (iblock: [-1, 1]), (iblock: [<>, <>]), (iblock: [<>, <>]), (iblock: [<>, <>])
+ | (iblock: [<>, <>]), (iblock: [<>, <>]), (iblock: [<>, <>]), (iblock: [<>, <>])
+ | (iblock: [<>, <>]), (iblock: [<>, <>]), (iblock: [<>, <>]), (iblock: [<>, <>])
+ | (iblock: [<>, <>]), (iblock: [<>, <>]), (iblock: [<>, <>]), (iblock: [<>, <>])
+ |];
+b_nb_paths = 1;
+b_paths_length = [1, 0, 0, 0];
+b_node_paths = 
+[|  7, <>, <>, <>
+ | <>, <>, <>, <>
+ | <>, <>, <>, <>
+ | <>, <>, <>, <>
+ |];
+b_arc_paths = 
+[| <>, <>, <>
+ | <>, <>, <>
+ | <>, <>, <>
+ | <>, <>, <>
+ |];
+b_influence_paths = 
+[|  (iblock: [-1, 1]), (iblock: [<>, <>]), (iblock: [<>, <>]), (iblock: [<>, <>])
+ | (iblock: [<>, <>]), (iblock: [<>, <>]), (iblock: [<>, <>]), (iblock: [<>, <>])
+ | (iblock: [<>, <>]), (iblock: [<>, <>]), (iblock: [<>, <>]), (iblock: [<>, <>])
+ | (iblock: [<>, <>]), (iblock: [<>, <>]), (iblock: [<>, <>]), (iblock: [<>, <>])
+ |];
+f_nb_paths = 4;
+f_paths_length = [1, 2, 2, 3];
+f_node_paths = 
+[| 2, <>, <>, <>
+ | 2,  1, <>, <>
+ | 2,  7, <>, <>
+ | 3, 10,  7, <>
+ |];
+f_arc_paths = 
+[| <>, <>, <>
+ |  1, <>, <>
+ |  2, <>, <>
+ |  3, 11, <>
+ |];
+f_influence_paths = 
+[| (iblock: [-1, 1]), (iblock: [<>, <>]), (iblock: [<>, <>]), (iblock: [<>, <>])
+ | (iblock: [-1, 1]),   (iblock: [3, 4]), (iblock: [<>, <>]), (iblock: [<>, <>])
+ | (iblock: [-1, 1]),   (iblock: [3, 4]), (iblock: [<>, <>]), (iblock: [<>, <>])
+ | (iblock: [-1, 1]),   (iblock: [4, 4]),   (iblock: [4, 4]), (iblock: [<>, <>])
+ |];
+fr_nb_paths = 3;
+fr_paths_length = [1, 2, 2, 0];
+fr_node_paths = 
+[|  2, <>, <>, <>
+ |  2,  1, <>, <>
+ |  2,  7, <>, <>
+ | <>, <>, <>, <>
+ |];
+fr_arc_paths = 
+[| <>, <>, <>
+ |  1, <>, <>
+ |  2, <>, <>
+ | <>, <>, <>
+ |];
+fr_influence_paths = 
+[|  (iblock: [-1, 1]), (iblock: [<>, <>]), (iblock: [<>, <>]), (iblock: [<>, <>])
+ |  (iblock: [-1, 1]),   (iblock: [3, 4]), (iblock: [<>, <>]), (iblock: [<>, <>])
+ |  (iblock: [-1, 1]),   (iblock: [3, 4]), (iblock: [<>, <>]), (iblock: [<>, <>])
+ | (iblock: [<>, <>]), (iblock: [<>, <>]), (iblock: [<>, <>]), (iblock: [<>, <>])
+ |];
+----------
+==========
+%%%mzn-stat: nSolutions=1
+%%%mzn-stat-end
+
+=== STDERR ===
+WARNING: the --time-out flag has recently been changed.The time-out is now provided in milliseconds instead of seconds

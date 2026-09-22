@@ -110,7 +110,7 @@ def create_batch(sizes, densities, repetitions, output_dir="."):
             e = int(density * n * (n - 1))
             concept_names = generate_concept_names(n)
 
-            acyclic_possible = e < ((n-1)*n)/2
+            acyclic_possible = e < ((n-1)*n)/2 
             if not acyclic_possible:
                 print(f"Densite {density} trop elevee pour n={n} (e={e} >= n={n}): graphe acyclique ignore.")
 

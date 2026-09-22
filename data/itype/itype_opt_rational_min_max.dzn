@@ -40,5 +40,5 @@ itype_algebra = (
 	aggregation_absorbing:	(iblock:[<>,<>]),
 	aggregation_neutral:		(iblock:[<>,<>]),
 	propagation_absorbing:	(iblock:[<>,<>]),
-	propagation_neutral:		(iblock:[<>,<>]),	
+	propagation_neutral:		(iblock:[-1,1]),
 );

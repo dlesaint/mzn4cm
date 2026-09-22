@@ -1,0 +1,99 @@
+$ minizinc D:\Documents\Travail\mzn4cm\test\test_s_t_paths.mzn -d D:\Documents\Travail\mzn4cm\data\icmap\kifanlo\SG06.dzn -d D:\Documents\Travail\mzn4cm\data\itype\itype_opt_rational_min_max.dzn -d C:\Users\marti\AppData\Local\Temp\s_t_paths_query_wktp5f9z.dzn --solver Chuffed -s --time-limit 60000
+
+=== STDOUT ===
+% Generated FlatZinc statistics:
+%%%mzn-stat: paths=0
+%%%mzn-stat: flatBoolVars=933
+%%%mzn-stat: flatIntVars=268
+%%%mzn-stat: flatBoolConstraints=909
+%%%mzn-stat: flatIntConstraints=690
+%%%mzn-stat: evaluatedReifiedConstraints=286
+%%%mzn-stat: evaluatedHalfReifiedConstraints=334
+%%%mzn-stat: eliminatedImplications=185
+%%%mzn-stat: method="maximize"
+%%%mzn-stat: flatTime=0.216983
+%%%mzn-stat-end
+%%%mzn-stat: nodes=129
+%%%mzn-stat: failures=10
+%%%mzn-stat: restarts=1
+%%%mzn-stat: variables=6040
+%%%mzn-stat: intVars=282
+%%%mzn-stat: boolVariables=5756
+%%%mzn-stat: propagators=487
+%%%mzn-stat: propagations=1974
+%%%mzn-stat: peakDepth=88
+%%%mzn-stat: nogoods=10
+%%%mzn-stat: backjumps=32
+%%%mzn-stat: peakMem=0.00
+%%%mzn-stat: time=0.015
+%%%mzn-stat: initTime=0.015
+%%%mzn-stat: solveTime=0.000
+%%%mzn-stat: objective=0
+%%%mzn-stat: optTime=0.000
+%%%mzn-stat: baseMem=0.00
+%%%mzn-stat: trailMem=0.02
+%%%mzn-stat: randomSeed=548700226
+%%%mzn-stat-end
+result_nb_paths = 0;
+result_paths_length = [0];
+result_node_paths = 
+[| <>, <>, <>
+ |];
+result_arc_paths = 
+[| <>, <>
+ |];
+result_influence_paths = 
+[| (iblock: [<>, <>]), (iblock: [<>, <>]), (iblock: [<>, <>])
+ |];
+result_influence = (iblock: [<>, <>]);
+a_nb_paths = 1;
+a_paths_length = [1];
+a_node_paths = 
+[| 12, <>, <>
+ |];
+a_arc_paths = 
+[| <>, <>
+ |];
+a_influence_paths = 
+[| (iblock: [-1, 1]), (iblock: [<>, <>]), (iblock: [<>, <>])
+ |];
+b_nb_paths = 1;
+b_paths_length = [1];
+b_node_paths = 
+[| 11, <>, <>
+ |];
+b_arc_paths = 
+[| <>, <>
+ |];
+b_influence_paths = 
+[| (iblock: [-1, 1]), (iblock: [<>, <>]), (iblock: [<>, <>])
+ |];
+f_nb_paths = 1;
+f_paths_length = [2];
+f_node_paths = 
+[| 12, 4, <>
+ |];
+f_arc_paths = 
+[| 12, <>
+ |];
+f_influence_paths = 
+[| (iblock: [-1, 1]), (iblock: [2, 4]), (iblock: [<>, <>])
+ |];
+fr_nb_paths = 1;
+fr_paths_length = [2];
+fr_node_paths = 
+[| 12, 4, <>
+ |];
+fr_arc_paths = 
+[| 12, <>
+ |];
+fr_influence_paths = 
+[| (iblock: [-1, 1]), (iblock: [2, 4]), (iblock: [<>, <>])
+ |];
+----------
+==========
+%%%mzn-stat: nSolutions=1
+%%%mzn-stat-end
+
+=== STDERR ===
+WARNING: the --time-out flag has recently been changed.The time-out is now provided in milliseconds instead of seconds
