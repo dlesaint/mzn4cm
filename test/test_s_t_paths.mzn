@@ -94,10 +94,10 @@ array[PATH_ID, NODE_PATH] of var INFLUENCE: fr_influence_paths;
 % CONSTRAINTS
 %%%%%%
 constraint cmql_k_variable(cmap, a_nb_paths, a_paths_length, a_node_paths, a_arc_paths, a_influence_paths);
-constraint forall(i in PATH_ID)(a_paths_length[i] != 0 -> a_node_paths[i,1] = s_node);
+constraint a_nb_paths = 1 /\ a_paths_length[1] = 1 /\  a_node_paths[1,1] = s_node;
 
+constraint b_nb_paths = 1 /\ b_paths_length[1] = 1 /\  b_node_paths[1,1] = t_node;
 constraint cmql_k_variable(cmap, b_nb_paths, b_paths_length, b_node_paths, b_arc_paths, b_influence_paths);
-constraint forall(i in PATH_ID)(b_paths_length[i] != 0 -> b_node_paths[i, max(1,b_paths_length[i])] = t_node);
 
 constraint cmql_k_variable(cmap, f_nb_paths, f_paths_length, f_node_paths, f_arc_paths, f_influence_paths);
 constraint cmql_k_variable(cmap, fr_nb_paths, fr_paths_length, fr_node_paths, fr_arc_paths, fr_influence_paths);
@@ -106,5 +106,6 @@ constraint cmql_fusion(a_node_paths,f_node_paths, fr_node_paths, a_paths_length,
 constraint cmql_fusion(fr_node_paths, b_node_paths, result_node_paths, fr_paths_length, b_paths_length, result_paths_length);
 
 constraint cmql_k_variable(cmap, result_nb_paths, result_paths_length, result_node_paths, result_arc_paths, result_influence_paths);
+constraint cmql_influence(cmap, result_node_paths, result_arc_paths, result_influence_paths, result_influence);
 
 solve maximize(result_nb_paths);

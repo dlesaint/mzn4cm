@@ -44,13 +44,23 @@ def create_acyclyc_max_edge_graph(n):
             G.add_edge(i,j)
     return G
 
+def create_cyclic_max_edge_graph(n):
+    # Complete digraph without self-loops: n*(n-1) arcs, i.e. (n-1)*n.
+    G = nx.DiGraph()
+    G.add_nodes_from(range(1, n + 1))
+    for u in range(1, n + 1):
+        for v in range(1, n + 1):
+            if u != v:
+                G.add_edge(u, v)
+    return G
+
 def generate_concept_names(n):
     return [f"concept_{i}" for i in range(1, n + 1)]
 
 INT_INFLUENCES = ['-4', '-3', '-2', '-1', '1', '2', '3', '4']
 ENUM_INFLUENCES = ['Z', 'A', 'P', 'N']  # zero, ambiguous, plus, minus (cf. data/itype/itype_enum_signed.dzn)
 
-def generate_dzn_file(graph, concept_names, file_path, influence_type="int"):
+def generate_dzn_file(graph, concept_names, file_path, influence_type):
     if influence_type not in ("int", "enum"):
         raise ValueError('influence_type must be "int" or "enum"')
 
@@ -63,6 +73,11 @@ def generate_dzn_file(graph, concept_names, file_path, influence_type="int"):
     # The map name is derived from the file name so it reflects the
     # graph/influence configuration used to generate it.
     name = os.path.splitext(os.path.basename(file_path))[0]
+
+    # Files are grouped into an "enum" or "int" subfolder based on the influence type.
+    directory = os.path.join(os.path.dirname(file_path), influence_type)
+    os.makedirs(directory, exist_ok=True)
+    file_path = os.path.join(directory, os.path.basename(file_path))
 
     with open(file_path, 'w') as f:
         f.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n')
@@ -95,7 +110,7 @@ def create_batch(sizes, densities, repetitions, output_dir="."):
             e = int(density * n * (n - 1))
             concept_names = generate_concept_names(n)
 
-            acyclic_possible = e < n
+            acyclic_possible = e < ((n-1)*n)/2
             if not acyclic_possible:
                 print(f"Densite {density} trop elevee pour n={n} (e={e} >= n={n}): graphe acyclique ignore.")
 
@@ -111,6 +126,22 @@ def create_batch(sizes, densities, repetitions, output_dir="."):
                     cyclic_path = os.path.join(output_dir, f"graph_n{n}_d{density}_cyclic_{influence_type}_{rep}.dzn")
                     generate_dzn_file(cyclic_graph, concept_names, cyclic_path, influence_type)
 
+def create_complete_graphs_batch(sizes, output_dir="."):
+    os.makedirs(output_dir, exist_ok=True)
+
+    for n in sizes:
+        concept_names = generate_concept_names(n)
+
+        acyclic_graph = create_acyclyc_max_edge_graph(n)
+        cyclic_graph = create_cyclic_max_edge_graph(n)
+
+        for influence_type in ("int", "enum"):
+            acyclic_path = os.path.join(output_dir, f"graph_n{n}_complete_acyclic_{influence_type}.dzn")
+            generate_dzn_file(acyclic_graph, concept_names, acyclic_path, influence_type)
+
+            cyclic_path = os.path.join(output_dir, f"graph_n{n}_complete_cyclic_{influence_type}.dzn")
+            generate_dzn_file(cyclic_graph, concept_names, cyclic_path, influence_type)
+
 
 # Parameters
 sizes = [10,20,50,100, 1000]
@@ -118,4 +149,5 @@ densities = [0.1, 0.2, 0.5, 0.9]
 repetitions = 10
 outputdir="test/test_cmaps"
 create_batch(sizes, densities, repetitions, outputdir)
+create_complete_graphs_batch(sizes, outputdir)
 print(f"Graph .dzn file created at {outputdir}")

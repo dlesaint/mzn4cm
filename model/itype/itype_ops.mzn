@@ -86,7 +86,7 @@ function array[IBLOCK_COMPONENT] of int: iAggregate(array[IBLOCK_COMPONENT] of i
 	elseif	getAggregation(itype) == ITYPE_RATIONAL_MAX
 	then	iRationalMax(x, y)
 	elseif getAggregation(itype) == ITYPE_AGGREGATION_ENUM
-	then [deopt(I_AGGREGATE[to_enum(I_DOMAIN, x[min(index_set(x))]), to_enum(I_DOMAIN, y[min(index_set(y))])])]
+	then [enum2int(deopt(I_AGGREGATE[to_enum(I_DOMAIN, x[min(index_set(x))]), to_enum(I_DOMAIN, y[min(index_set(y))])]))]
     else assert(false, "bug - incomplete implementation", [])
 	endif
 ;
@@ -107,7 +107,7 @@ function array[IBLOCK_COMPONENT] of var int: iAggregate(array[IBLOCK_COMPONENT] 
 	elseif	getAggregation(itype) == ITYPE_RATIONAL_MAX
 	then	iRationalMax(x, y)
 	elseif getAggregation(itype) == ITYPE_AGGREGATION_ENUM
-	then 	[deopt(I_AGGREGATE[to_enum(I_DOMAIN, x[min(index_set(x))]), to_enum(I_DOMAIN, y[min(index_set(y))])])]
+	then 	[enum2int(deopt(I_AGGREGATE[to_enum(I_DOMAIN, x[min(index_set(x))]), to_enum(I_DOMAIN, y[min(index_set(y))])]))]
     else assert(false, "bug - incomplete implementation", [])
 	endif
 ;
@@ -130,7 +130,7 @@ function array[IBLOCK_COMPONENT] of int: iPropagate(array[IBLOCK_COMPONENT] of i
 	elseif	getPropagation(itype) == ITYPE_RATIONAL_MAX
 	then	iRationalMax(x, y)
 	elseif getPropagation(itype) == ITYPE_PROPAGATION_ENUM
-	then 	[deopt(I_PROPAGATE[to_enum(I_DOMAIN, x[min(index_set(x))]), to_enum(I_DOMAIN, y[min(index_set(y))])])]
+	then 	[enum2int(deopt(I_PROPAGATE[to_enum(I_DOMAIN, x[min(index_set(x))]), to_enum(I_DOMAIN, y[min(index_set(y))])]))]
 	else	assert(false, "bug - incomplete implementation", [])
 	endif
 ;
@@ -152,7 +152,7 @@ function array[IBLOCK_COMPONENT] of var int: iPropagate(array[IBLOCK_COMPONENT] 
 	elseif	getPropagation(itype) == ITYPE_RATIONAL_MAX
 	then	iRationalMax(x, y)
 	elseif getPropagation(itype) == ITYPE_PROPAGATION_ENUM
-	then 	[deopt(I_PROPAGATE[to_enum(I_DOMAIN, x[min(index_set(x))]), to_enum(I_DOMAIN, y[min(index_set(y))])])]
+	then 	[enum2int(deopt(I_PROPAGATE[to_enum(I_DOMAIN, x[min(index_set(x))]), to_enum(I_DOMAIN, y[min(index_set(y))])]))]
 	else	assert(false, "bug - incomplete implementation", [])
 	endif
 ;

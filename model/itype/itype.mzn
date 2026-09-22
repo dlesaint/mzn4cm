@@ -751,7 +751,7 @@ function array[int] of opt int: _buildIBlockTypeSizes(ITYPE_SORT: sort, opt int:
 % Build 1-to-1 mapping between the i-type operations and their algebraic counterparts
 function array[ITYPE_OPERATION_CLASS] of ALGEBRAIC_OPERATION: _buildAlgebraicOperationsMap(ITYPE_DOMAINS: domains)
 	=
-	array1d(ITYPE_OPERATION_CLASS, to_enum(ALGEBRAIC_OPERATION, [ITYPE_AGGREGATION, ITYPE_PROPAGATION]))
+	array1d(ITYPE_OPERATION_CLASS, to_enum(ALGEBRAIC_OPERATION, [enum2int(ITYPE_AGGREGATION), enum2int(ITYPE_PROPAGATION)]))
 	;
 
 %%%%%%%

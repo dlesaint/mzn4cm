@@ -1,0 +1,39 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% INPUT C-MAP
+
+icmap = (
+    name:"graph_n10_d0.2_cyclic_int_10",
+    itype: itype,
+    node_labels:[
+        (node:1, concept:(name:"concept_1")),
+        (node:2, concept:(name:"concept_2")),
+        (node:3, concept:(name:"concept_3")),
+        (node:4, concept:(name:"concept_4")),
+        (node:5, concept:(name:"concept_5")),
+        (node:6, concept:(name:"concept_6")),
+        (node:7, concept:(name:"concept_7")),
+        (node:8, concept:(name:"concept_8")),
+        (node:9, concept:(name:"concept_9")),
+        (node:10, concept:(name:"concept_10")),
+    ],
+    arc_labels:[
+        (arc:(t:1, h:9), influence:(iblock:[2,4])),
+        (arc:(t:1, h:10), influence:(iblock:[-3,4])),
+        (arc:(t:2, h:3), influence:(iblock:[-3,4])),
+        (arc:(t:2, h:6), influence:(iblock:[-2,4])),
+        (arc:(t:2, h:9), influence:(iblock:[-3,4])),
+        (arc:(t:2, h:10), influence:(iblock:[-3,4])),
+        (arc:(t:3, h:1), influence:(iblock:[-1,4])),
+        (arc:(t:3, h:4), influence:(iblock:[4,4])),
+        (arc:(t:5, h:8), influence:(iblock:[1,4])),
+        (arc:(t:7, h:5), influence:(iblock:[-4,4])),
+        (arc:(t:7, h:9), influence:(iblock:[-1,4])),
+        (arc:(t:7, h:10), influence:(iblock:[-1,4])),
+        (arc:(t:8, h:1), influence:(iblock:[2,4])),
+        (arc:(t:8, h:2), influence:(iblock:[-1,4])),
+        (arc:(t:8, h:6), influence:(iblock:[-1,4])),
+        (arc:(t:9, h:3), influence:(iblock:[-1,4])),
+        (arc:(t:9, h:4), influence:(iblock:[1,4])),
+        (arc:(t:9, h:7), influence:(iblock:[1,4])),
+    ],
+);
