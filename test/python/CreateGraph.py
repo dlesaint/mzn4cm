@@ -47,31 +47,43 @@ def create_acyclyc_max_edge_graph(n):
 def generate_concept_names(n):
     return [f"concept_{i}" for i in range(1, n + 1)]
 
-def generate_dzn_file(graph, concept_names, file_path):
+INT_INFLUENCES = ['-4', '-3', '-2', '-1', '1', '2', '3', '4']
+ENUM_INFLUENCES = ['Z', 'A', 'P', 'N']  # zero, ambiguous, plus, minus (cf. data/itype/itype_enum_signed.dzn)
+
+def generate_dzn_file(graph, concept_names, file_path, influence_type="int"):
+    if influence_type not in ("int", "enum"):
+        raise ValueError('influence_type must be "int" or "enum"')
+
     nodes = list(graph.nodes())
     edges = list(graph.edges())
 
     # Sort edges lexicographically
     edges = sorted(edges, key=lambda x: (x[0], x[1]))
-    
-    influences = ['-4', '-3',"-2","-1","1","2","3","4"]
-    
+
+    # The map name is derived from the file name so it reflects the
+    # graph/influence configuration used to generate it.
+    name = os.path.splitext(os.path.basename(file_path))[0]
+
     with open(file_path, 'w') as f:
         f.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n')
         f.write('%%% INPUT C-MAP\n\n')
         f.write('icmap = (\n')
-        f.write('    name:"generated_graph",\n')
+        f.write(f'    name:"{name}",\n')
         f.write('    itype: itype,\n')
-        
+
         f.write('    node_labels:[\n')
         for node in nodes:
             f.write(f'        (node:{node}, concept:(name:"{concept_names[node-1]}")),\n')
         f.write('    ],\n')
-        
+
         f.write('    arc_labels:[\n')
         for u, v in edges:
-            influence = random.choice(influences)
-            f.write(f'        (arc:(t:{u}, h:{v}), influence:(iblock:[{influence},4])),\n')
+            if influence_type == "enum":
+                influence = random.choice(ENUM_INFLUENCES)
+                f.write(f'        (arc:(t:{u}, h:{v}), influence:(iblock:[{influence}])),\n')
+            else:
+                influence = random.choice(INT_INFLUENCES)
+                f.write(f'        (arc:(t:{u}, h:{v}), influence:(iblock:[{influence},4])),\n')
         f.write('    ],\n')
         f.write(');\n')
 
@@ -90,12 +102,14 @@ def create_batch(sizes, densities, repetitions, output_dir="."):
             for rep in range(1, repetitions + 1):
                 if acyclic_possible:
                     acyclic_graph = create_acyclic_graph(n, e)
-                    acyclic_path = os.path.join(output_dir, f"graph_n{n}_d{density}_acyclic_{rep}.dzn")
-                    generate_dzn_file(acyclic_graph, concept_names, acyclic_path)
+                    for influence_type in ("int", "enum"):
+                        acyclic_path = os.path.join(output_dir, f"graph_n{n}_d{density}_acyclic_{influence_type}_{rep}.dzn")
+                        generate_dzn_file(acyclic_graph, concept_names, acyclic_path, influence_type)
 
                 cyclic_graph = create_cyclic_graph(n, e)
-                cyclic_path = os.path.join(output_dir, f"graph_n{n}_d{density}_cyclic_{rep}.dzn")
-                generate_dzn_file(cyclic_graph, concept_names, cyclic_path)
+                for influence_type in ("int", "enum"):
+                    cyclic_path = os.path.join(output_dir, f"graph_n{n}_d{density}_cyclic_{influence_type}_{rep}.dzn")
+                    generate_dzn_file(cyclic_graph, concept_names, cyclic_path, influence_type)
 
 
 # Parameters
