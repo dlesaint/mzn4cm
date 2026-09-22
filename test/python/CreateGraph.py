@@ -1,11 +1,12 @@
 import networkx as nx
 import random
+import os
 
 def create_acyclic_graph(n, e):
     #if e >= n:
     #    raise ValueError("The number of edges must be less than the number of nodes to avoid cycles.")
     #if e < 0:
-    #    raise ValueError("The number of edges must be non-negative.")
+    #   raise ValueError("The number of edges must be non-negative.")
     
     G = nx.Graph()
     G.add_nodes_from(range(1, n + 1))
@@ -18,6 +19,20 @@ def create_acyclic_graph(n, e):
             G.add_edge(u, v)
             edges.add((u, v))
     
+    return G
+
+def create_cyclic_graph(n, e):
+    G = nx.DiGraph()
+    G.add_nodes_from(range(1, n + 1))
+
+    edges = set()
+    while len(edges) < e:
+        u = random.randint(1, n)
+        v = random.randint(1, n)
+        if u != v and (u, v) not in edges:  # cycles are allowed, only avoid self-loops and duplicate arcs
+            G.add_edge(u, v)
+            edges.add((u, v))
+
     return G
 
 def create_acyclyc_max_edge_graph(n):
@@ -60,18 +75,33 @@ def generate_dzn_file(graph, concept_names, file_path):
         f.write('    ],\n')
         f.write(');\n')
 
+def create_batch(sizes, densities, repetitions, output_dir="."):
+    os.makedirs(output_dir, exist_ok=True)
+
+    for n in sizes:
+        for density in densities:
+            e = int(density * n * (n - 1))
+            concept_names = generate_concept_names(n)
+
+            acyclic_possible = e < n
+            if not acyclic_possible:
+                print(f"Densite {density} trop elevee pour n={n} (e={e} >= n={n}): graphe acyclique ignore.")
+
+            for rep in range(1, repetitions + 1):
+                if acyclic_possible:
+                    acyclic_graph = create_acyclic_graph(n, e)
+                    acyclic_path = os.path.join(output_dir, f"graph_n{n}_d{density}_acyclic_{rep}.dzn")
+                    generate_dzn_file(acyclic_graph, concept_names, acyclic_path)
+
+                cyclic_graph = create_cyclic_graph(n, e)
+                cyclic_path = os.path.join(output_dir, f"graph_n{n}_d{density}_cyclic_{rep}.dzn")
+                generate_dzn_file(cyclic_graph, concept_names, cyclic_path)
+
+
 # Parameters
-n = 50  # number of nodes
-e = (int)( 0.07*n*(n-1))  # number of edges
-file_path = 'graph.dzn'
-
-# Generate graph
-G = create_acyclic_graph(n,e)
-
-# Generate concept names
-concept_names = generate_concept_names(n)
-
-# Create DZN file
-generate_dzn_file(G, concept_names, file_path)
-
-print(f"Graph .dzn file created at {file_path}")
+sizes = [10,20,50,100, 1000]
+densities = [0.1, 0.2, 0.5, 0.9]
+repetitions = 10
+outputdir="test/test_cmaps"
+create_batch(sizes, densities, repetitions, outputdir)
+print(f"Graph .dzn file created at {outputdir}")
