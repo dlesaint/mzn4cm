@@ -1,7 +1,0 @@
-$ minizinc D:\Documents\Travail\mzn4cm\test\test_s_t_paths.mzn -d D:\Documents\Travail\mzn4cm\data\icmap\kifanlo\LT01.dzn -d D:\Documents\Travail\mzn4cm\data\itype\itype_opt_rational_min_max.dzn -d C:\Users\marti\AppData\Local\Temp\s_t_paths_query_3qwasy7u.dzn --solver Chuffed -s --time-limit 60000
-
-=== STDOUT ===
-
-=== STDERR ===
-Error: type error: undefined identifier `None'
-D:\Documents\Travail\mzn4cm\data\icmap\kifanlo\LT01.dzn:52.40-43

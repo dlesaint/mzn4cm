@@ -58,7 +58,7 @@ def generate_concept_names(n):
     return [f"concept_{i}" for i in range(1, n + 1)]
 
 INT_INFLUENCES = ['-4', '-3', '-2', '-1', '1', '2', '3', '4']
-ENUM_INFLUENCES = ['Z', 'A', 'P', 'N']  # zero, ambiguous, plus, minus (cf. data/itype/itype_enum_signed.dzn)
+ENUM_INFLUENCES = ['A', 'P', 'N']  # ambiguous, plus, minus (cf. data/itype/itype_opt_enum_signed.dzn - no Z: the opt i-type represents zero/no influence as the virtual value, not as an explicit domain symbol)
 
 def generate_dzn_file(graph, concept_names, file_path, influence_type):
     if influence_type not in ("int", "enum"):
@@ -146,7 +146,7 @@ def create_complete_graphs_batch(sizes, output_dir="."):
 # Parameters
 sizes = [10,20,50,100, 1000]
 densities = [0.1, 0.2, 0.5, 0.9]
-repetitions = 10
+repetitions = 1
 outputdir="test/test_cmaps"
 create_batch(sizes, densities, repetitions, outputdir)
 create_complete_graphs_batch(sizes, outputdir)
