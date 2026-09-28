@@ -35,8 +35,8 @@ forall (i in PATH_ID) (forall(j in ARC_PATH)(absent(x_node_paths[i,j]) -> absent
 /\ forall (i in PATH_ID)(alldifferent(x_node_paths[i, NODE_PATH]))
 %(4) Rassemble les chemins vides en fin de tableau
 /\ forall (i in PATH_ID)(x_nb_path < i <-> x_paths_length[i] = 0)
-%(5-6) Forcent un ordre lexicographique strict sur les chemins non-vides
-/\ lex_chain_less_opt(x_nb_path, x_paths_length, x_arc_paths) /\
+%(5-6) Forcent un ordre lexicographique strict (sur les noeuds) sur les chemins non-vides
+/\ lex_chain_less_opt(x_nb_path, x_paths_length, x_node_paths) /\
 %(7) Applique le pattern de (1) aux variables-arcs
 forall (i in PATH_ID)(forall (j in min(ARC_PATH)..<max(ARC_PATH))(absent(x_arc_paths[i,j]) -> absent(x_arc_paths[i,j+1]))) /\
 %(8) Couple les varialbles arcs et noeuds des chemins
@@ -44,7 +44,10 @@ forall (i in PATH_ID)(forall(j in ARC_PATH)(occurs(x_arc_paths[i,j]) <-> occurs(
 %(9) Impose la compatibilité avec les chemins du graphe de la CMAP
 forall (i in PATH_ID)(forall (j in ARC_PATH)(occurs(x_arc_paths[i,j]) -> (x_node_paths[i,j] = cmap.adigraph.tail_head[x_arc_paths[i,j],TAIL] /\ x_node_paths[i,j+1] = cmap.adigraph.tail_head[x_arc_paths[i,j],HEAD]))) /\
 %(26) Les noeuds vide on l'influence neutre de l'agrégation
-forall (i in PATH_ID)(forall (j in NODE_PATH)((x_influence_path[i,j] = getNullInfluence(cmap.itype))<->(absent(x_node_paths[i,j])))) /\
+% (comparaison composante par composante : comparer les enregistrements entiers fait échouer
+% la compilation de MiniZinc 2.10.1 quand des composantes sont fixées à <> pendant l'aplatissement,
+% "type-inst variable $T instantiated with incompatible types (var opt int vs var opt top)")
+forall (i in PATH_ID)(forall (j in NODE_PATH)(forall (k in IBLOCK_COMPONENT)(x_influence_path[i,j].iblock[k] = getNullInfluence(cmap.itype).iblock[k])<->(absent(x_node_paths[i,j])))) /\
 %(27) Si le chemin n'est pas vide la première influence est le neutre de la propagation
 forall (i in PATH_ID)(occurs(x_node_paths[i,1]) -> (x_influence_path[i,1] = getPropagationNeutral(cmap.itype))) /\
 %(28) L'influence d'un noeud non-vide est l'étiquetage de l'arc entrant

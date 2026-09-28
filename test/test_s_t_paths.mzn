@@ -108,4 +108,16 @@ constraint cmql_fusion(fr_node_paths, b_node_paths, result_node_paths, fr_paths_
 constraint cmql_k_variable(cmap, result_nb_paths, result_paths_length, result_node_paths, result_arc_paths, result_influence_paths);
 constraint cmql_influence(cmap, result_node_paths, result_arc_paths, result_influence_paths, result_influence);
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% SEARCH
+%%%%%%
+% Search order used for the "annot" runs of the test campaigns (test/python/run_campaign.py, Chuffed):
+% the nb_paths variables first, then the paths_length variables, then the node_paths variables.
+% solve :: seq_search([
+%     int_search([result_nb_paths, a_nb_paths, b_nb_paths, f_nb_paths, fr_nb_paths], input_order, indomain_reverse_split),
+%     int_search(result_paths_length ++ a_paths_length ++ b_paths_length ++ f_paths_length ++ fr_paths_length, input_order, indomain_split),
+%     int_search(array1d(result_node_paths) ++ array1d(a_node_paths) ++ array1d(b_node_paths) ++ array1d(f_node_paths) ++ array1d(fr_node_paths), input_order, indomain_min)
+% ])
+%     maximize(result_nb_paths);
+
 solve maximize(result_nb_paths);
