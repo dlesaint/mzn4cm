@@ -1,0 +1,51 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% INPUT C-MAP
+
+icmap = (
+	% name
+	name:"icm_R_1_dg_14x19_Poignonec_Oundjo",
+
+	% i-type
+	itype: itype,
+
+	% node-labeling concepts
+	node_labels:[
+	(node:1, concept:(name:"Facteurs_naturels")),
+	(node:2, concept:(name:"Actvite_miniere")),
+	(node:3, concept:(name:"Eaux_douces")),
+	(node:4, concept:(name:"Mangroves")),
+	(node:5, concept:(name:"Gestion_reglementation_contrôle")),
+	(node:6, concept:(name:"Milieu_recifo_lagonaire")),
+	(node:7, concept:(name:"Etat_des_ressources")),
+	(node:8, concept:(name:"Facteurs_influencant_la_peche")),
+	(node:9, concept:(name:"Developpement_de_la_region")),
+	(node:10, concept:(name:"Conscience_ecologique")),
+	(node:11, concept:(name:"Bataux")),
+	(node:12, concept:(name:"Pecheurs")),
+	(node:13, concept:(name:"Peche")),
+	(node:14, concept:(name:"Vente_des_produits_de_la_mer")),
+	],
+
+	% arc-labeling influences
+	arc_labels:[
+	(arc:(t:1, h:3), influence:(iblock:[-3,10])),
+	(arc:(t:1, h:7), influence:(iblock:[-7,10])),
+	(arc:(t:2, h:3), influence:(iblock:[-7,5])),
+	(arc:(t:3, h:4), influence:(iblock:[1,2])),
+	(arc:(t:3, h:6), influence:(iblock:[8,5])),
+	(arc:(t:4, h:7), influence:(iblock:[1,2])),
+	(arc:(t:5, h:7), influence:(iblock:[7,10])),
+	(arc:(t:5, h:13), influence:(iblock:[-7,5])),
+	(arc:(t:6, h:5), influence:(iblock:[7,10])),
+	(arc:(t:6, h:7), influence:(iblock:[3,2])),
+	(arc:(t:7, h:12), influence:(iblock:[9,10])),
+	(arc:(t:8, h:12), influence:(iblock:[-9,10])),
+	(arc:(t:8, h:13), influence:(iblock:[9,5])),
+	(arc:(t:9, h:12), influence:(iblock:[7,10])),
+	(arc:(t:10, h:13), influence:(iblock:[-1,2])),
+	(arc:(t:11, h:13), influence:(iblock:[-1,2])),
+	(arc:(t:12, h:13), influence:(iblock:[21,10])),
+	(arc:(t:12, h:14), influence:(iblock:[-1,2])),
+	(arc:(t:14, h:13), influence:(iblock:[5,2])),
+	],
+);
