@@ -111,8 +111,6 @@ constraint cmql_influence(cmap, result_node_paths, result_arc_paths, result_infl
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % SEARCH
 %%%%%%
-% Search order used for the "annot" runs of the test campaigns (test/python/run_campaign.py, Chuffed):
-% the nb_paths variables first, then the paths_length variables, then the node_paths variables.
 % solve :: seq_search([
 %     int_search([result_nb_paths, a_nb_paths, b_nb_paths, f_nb_paths, fr_nb_paths], input_order, indomain_reverse_split),
 %     int_search(result_paths_length ++ a_paths_length ++ b_paths_length ++ f_paths_length ++ fr_paths_length, input_order, indomain_split),
