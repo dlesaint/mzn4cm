@@ -1,3 +1,2 @@
-nb_paths=1;
-matrix=array2d(1..4,1..4,[1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1]);
-size_path=3;
+nb_paths=9;
+size_path=7;

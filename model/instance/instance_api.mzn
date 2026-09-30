@@ -74,7 +74,7 @@ type INSTANCE = record(
 
 % Input cmap
 % !! right now, only a single cmap per instance is supported !!
-I_CMAP: icmap;
+array[int] of I_CMAP: icmaps;
 
 % % Input cmaps to pick from catalog (icmap_catalog.mzn)
 % % !! for future versions allowing mutliple cmaps !!
@@ -85,7 +85,7 @@ DATASET: dataset = (
 	% declared in itype_api.mzn, defined from instance data
 	itype: itype,
 	% declared above, defined from instance data
-	icmaps: [icmap],
+	icmaps: icmaps,
 	);
 
 % Problem instance
@@ -93,7 +93,7 @@ INSTANCE: instance = (
 	% declared and defined above
 	dataset: dataset,
 	% defined from dataset
-	cmaps: [icmap2cmap(dataset.icmaps[i]) | i in index_set(dataset.icmaps)],
+	cmaps: [icmap2cmap2(dataset.icmaps[i], index_set(cmaps[arg_max([card(index_set(cmaps[i].node_labels)) | i in N_CMAP])]node_labels), index_set(cmaps[arg_max([card(index_set(cmaps[i].arc_labels)) | i in N_CMAP])].arc_labels)) | i in index_set(dataset.icmaps)],
 	);
 
 
