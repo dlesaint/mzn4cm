@@ -1,5 +1,5 @@
 a=1;
-b=5;
-c=4;
-nb_paths=2;
-size_path=4;
+b=2;
+c=3;
+nb_paths=5;
+size_path=3;

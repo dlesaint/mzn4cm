@@ -44,10 +44,11 @@ forall (i in PATH_ID)(forall(j in ARC_PATH)(occurs(x_arc_paths[i,j]) <-> occurs(
 %(9) Impose la compatibilité avec les chemins du graphe de la CMAP
 forall (i in PATH_ID)(forall (j in ARC_PATH)(occurs(x_arc_paths[i,j]) -> (x_node_paths[i,j] = cmap.adigraph.tail_head[x_arc_paths[i,j],TAIL] /\ x_node_paths[i,j+1] = cmap.adigraph.tail_head[x_arc_paths[i,j],HEAD]))) /\
 %(26) Les noeuds vide on l'influence neutre de l'agrégation
+% (implication seulement : pour un i-type sans opt, l'influence neutre peut aussi étiqueter un arc réel)
 % (comparaison composante par composante : comparer les enregistrements entiers fait échouer
 % la compilation de MiniZinc 2.10.1 quand des composantes sont fixées à <> pendant l'aplatissement,
 % "type-inst variable $T instantiated with incompatible types (var opt int vs var opt top)")
-forall (i in PATH_ID)(forall (j in NODE_PATH)(forall (k in IBLOCK_COMPONENT)(x_influence_path[i,j].iblock[k] = getNullInfluence(cmap.itype).iblock[k])<->(absent(x_node_paths[i,j])))) /\
+forall (i in PATH_ID)(forall (j in NODE_PATH)(forall (k in IBLOCK_COMPONENT)(x_influence_path[i,j].iblock[k] = getNullInfluence(cmap.itype).iblock[k])<-(absent(x_node_paths[i,j])))) /\
 %(27) Si le chemin n'est pas vide la première influence est le neutre de la propagation
 forall (i in PATH_ID)(occurs(x_node_paths[i,1]) -> (x_influence_path[i,1] = getPropagationNeutral(cmap.itype))) /\
 %(28) L'influence d'un noeud non-vide est l'étiquetage de l'arc entrant

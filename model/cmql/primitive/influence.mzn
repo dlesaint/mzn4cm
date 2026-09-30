@@ -31,8 +31,8 @@ predicate cmql_influence (
 } in
 %(29) Pose la première valeur des calculs de propagation
 forall (i in PATH_ID) (cmql_influence_eq(x_propagated_path[i,1], getPropagationNeutral(cmap.itype))) /\
-%(30) noeud absent corresponde à l'influence neutre pour la propagation
-forall (i in PATH_ID)(forall (j in 2..max(NODE_PATH))((absent(x_node_paths[i,j]))->cmql_influence_eq(x_propagated_path[i,j], getPropagationNeutral(cmap.itype)))) /\
+%(30) un noeud absent recopie l'influence propagée du noeud précédent (la dernière colonne porte ainsi l'influence du chemin entier)
+forall (i in PATH_ID)(forall (j in 2..max(NODE_PATH))((absent(x_node_paths[i,j]))->cmql_influence_eq(x_propagated_path[i,j], x_propagated_path[i,j-1]))) /\
 %(31) Calcul de propagation
 forall (i in PATH_ID)(forall (j in 2..max(NODE_PATH))((occurs(x_node_paths[i,j]))->cmql_influence_eq(x_propagated_path[i,j], propagate(x_propagated_path[i,j-1], x_influence_path[i,j])))) /\
 %(32) Un chemin vide a une influence nulle pour l'agrégation

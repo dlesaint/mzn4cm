@@ -107,27 +107,29 @@ Four queries are given, two that use a bit of all query data and two that use on
 
 Here are sample commands to run from the command line.
 
-1. The query that calculate the influence of a set of paths that all start with a node `s` and finish with a node `s` of a c-map built with the signed opt-enumerated i-type:
+1. The query that calculates the influence of the set of paths that start with node `s_node` and end with node `t_node`, on a c-map built with the signed opt-enumerated i-type:
 
 ```
 minizinc \
 -d ./data/itype/itype_opt_enum_signed.dzn \
--d ./data/icmap/icm_S_1_dg_4x3_chain_1.dzn \
+-d ./data/icmap/icm_S_1_dg_3x3_acyclic_1.dzn \
 -d ./data/cmql/cmql_test_s_t_paths.dzn \
-./test/test_s_t_paths.mzn
+./test/test_s_t_paths_new.mzn
 ```
 
-`./data/cmql/cmql_test.dzn` is necessary to bind some variables such as `nb_paths` and `size_paths` used to  bound the size of the variables. `s_node` and `t_node` are necessary for this query only.
+`./data/cmql/cmql_test_s_t_paths.dzn` sets `nb_paths` and `size_path`, which bound the number and the size of the paths, and the nodes `s_node` and `t_node` of this query.
 
-2. Switch to a cmap build over the rational opt-itype $(\mathbb{Q}, +, \times)$ by adapting inclusion directives first and then running:
+2. The query that calculates the influence of the paths that go through arc `a`→`b` or through node `c`, on the same c-map:
 
 ```
 minizinc \
--d ./data/icmap/icm_R_1_dg_8x8_routes_1.dzn \
--d ./data/itype/itype_opt_rational_min_max.dzn \
--d ./data/cmql/cmql_test_s_t_paths.dzn \
-./test/test_s_t_paths.mzn
+-d ./data/itype/itype_opt_enum_signed.dzn \
+-d ./data/icmap/icm_S_1_dg_3x3_acyclic_1.dzn \
+-d ./data/cmql/cmql_test_all_primitives.dzn \
+./test/test_all_primitives_new.mzn
 ```
+
+Note: rational i-types do not work yet with these queries.
 
 
 ### Minizinc IDE usage
@@ -136,7 +138,7 @@ You may run the same commands from the Minizinc IDE:
 
 1. Open up cp4cm project file `./cp4cm.mzp`.
 
-2. Run model file (ex. `./test/test_s_t_paths.mzn`) by pre-selecting first the i-type, c-map and other datafiles.
+2. Run model file (ex. `./test/test_s_t_paths_new.mzn`) by pre-selecting first the i-type, c-map and other datafiles.
 
 ---
 
