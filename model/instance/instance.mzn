@@ -33,9 +33,8 @@ include "./../cmap/cmap.mzn";
 function bool: assertDataset(DATASET: ds)
 	:: "function assertDataset($ds): asserts consistency of dataset $ds"
 	=
-	assert(forall(i in min(index_set(ds.icmaps))..<max(index_set(ds.icmaps))) (ds.icmaps[i].itype == ds.icmaps[i+1].itype), "(1) dataset input cmaps must share the same i-type") /\
-	assert(forall(i in index_set(ds.icmaps))(assertIType(ds.icmaps[i].itype)), "(2) dataset i-types must be consistent") /\
-	assert(forall(i in index_set(ds.icmaps))(assertICmap(ds.icmaps[i])), "(3) dataset input cmaps must be consistent")
+	assert(assertIType(ds.icmap.itype), "(1) dataset i-type must be consistent") /\
+	assert(assertICmap(ds.icmap), "(2) dataset input cmap must be consistent")
 	;
 
 % Checks consistency of problem instance data
@@ -43,5 +42,5 @@ function bool: assertInstance(INSTANCE: pi)
 	:: "function assertInstance($pi): asserts consistency of problem instance $pi"
 	=
 	assert(assertDataset(pi.dataset), "(1) instance dataset must be consistent") /\
-	assert(forall(i in index_set(pi.cmaps)) (assertCmap(pi.cmaps[i])), "(2) instance cmaps must be consistent")
+	assert(assertCmap(pi.cmap), "(2) instance cmap must be consistent")
 	;

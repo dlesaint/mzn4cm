@@ -20,7 +20,6 @@
 %			- assertInstance
 %		- OUTPUT
 %			- displayInstance
-%			- displayCmaps
 %
 %	- Uses INFLUENCE API
 %		- CLASSES
@@ -49,22 +48,22 @@ include "./../cmap/cmap.mzn";
 
 % Class for datasets
 %	- a dataset is defined for a given extended influence type
-%	- a dataset includes one or more input c-maps, all of which are defined over the extended influence type
+%	- a dataset includes a single input c-map defined over the extended influence type
 type DATASET = record(
 	% the extended influence type
 	ITYPE: itype,
-	% the input c-maps defined over the extended influence type
-	array[int] of I_CMAP: icmaps
+	% the input c-map defined over the extended influence type
+	I_CMAP: icmap
 	);
 
 % Class for problem instances
 %	- a problem instance includes a single dataset
-%	- it also includes the c-maps constructed from the input c-maps of the dataset
+%	- it also includes the c-map constructed from the input c-map of the dataset
 type INSTANCE = record(
 	% the dataset
-	DATASET: dataset,	
-	% the c-maps
-	array[int] of CMAP: cmaps
+	DATASET: dataset,
+	% the c-map
+	CMAP: cmap
 	);
 
 
@@ -73,19 +72,14 @@ type INSTANCE = record(
 %% DATA
 
 % Input cmap
-% !! right now, only a single cmap per instance is supported !!
-array[int] of I_CMAP: icmaps;
-
-% % Input cmaps to pick from catalog (icmap_catalog.mzn)
-% % !! for future versions allowing mutliple cmaps !!
-% array[int] of I_CMAP: icmaps;
+I_CMAP: icmap;
 
 % Dataset of problem instance
 DATASET: dataset = (
 	% declared in itype_api.mzn, defined from instance data
 	itype: itype,
 	% declared above, defined from instance data
-	icmaps: icmaps,
+	icmap: icmap,
 	);
 
 % Problem instance
@@ -93,7 +87,7 @@ INSTANCE: instance = (
 	% declared and defined above
 	dataset: dataset,
 	% defined from dataset
-	cmaps: [icmap2cmap2(dataset.icmaps[i], index_set(cmaps[arg_max([card(index_set(cmaps[i].node_labels)) | i in N_CMAP])]node_labels), index_set(cmaps[arg_max([card(index_set(cmaps[i].arc_labels)) | i in N_CMAP])].arc_labels)) | i in index_set(dataset.icmaps)],
+	cmap: icmap2cmap(dataset.icmap),
 	);
 
 
@@ -116,6 +110,3 @@ function bool: assertInstance(INSTANCE: pi)
 
 %
 function array[int] of string: displayInstance(INSTANCE: pi);
-
-%
-function array[int] of string: displayCmaps(array[int] of CMAP: cmaps);

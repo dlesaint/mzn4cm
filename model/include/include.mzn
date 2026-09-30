@@ -42,8 +42,6 @@ include "./../itype/itype_imp_api.mzn";
 include "./../cmap/cmap_api.mzn";
 include "./../cmap/cmap.mzn";
 include "./../cmap/cmap_display.mzn";
-% TODO for future versions allowing mutliple cmaps???
-% include "./../data/icmap/icmap_catalog.mzn";
 
 
 %% INSTANCE

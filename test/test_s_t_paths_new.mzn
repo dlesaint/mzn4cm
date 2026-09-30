@@ -34,7 +34,7 @@ constraint assertInstance(instance);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% QUERY DATA
 % the reference c-map
-CMAP: cmap = instance.cmaps[1];
+CMAP: cmap = instance.cmap;
 
 % the range of node ids in the c-map's digraph
 set of int: NODE_ID = index_set(cmap.node_labels);

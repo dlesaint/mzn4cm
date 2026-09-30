@@ -1,7 +1,0 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% PATH_VALUE QUERY DATA
-
-s_node=1;
-t_node=5;
-nb_paths=2;
-size_path=4;
