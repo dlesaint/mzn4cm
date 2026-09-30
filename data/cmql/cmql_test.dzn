@@ -1,1 +1,4 @@
-origin_node = 7;destination_node = 12;F_PATH_MINIMALITY == F_PATH_MINIMALITY_ARC
+s_node=1;
+t_node=5;
+nb_paths=2;
+size_paths=4;

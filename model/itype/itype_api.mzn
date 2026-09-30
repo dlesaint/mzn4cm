@@ -58,9 +58,10 @@
 % 			- isPolySort
 % 			- isOptType
 % 			- isEqualityIdentityOverIType
-%		- PAR/VAR I-TYPE ELEMENTS 
+%		- PAR/VAR I-TYPE ELEMENTS
 %			- getNullInfluence (par)
 %			- isNullInfluenceVirtual (par)
+%			- getPropagationNeutral (par)
 %			- isNullInfluence (par)
 %			- isNullInfluence (var)
 %			- isVirtualInfluence (par)
@@ -118,22 +119,14 @@ enum ITYPE_OPERATION_CLASS = {ITYPE_AGGREGATION, ITYPE_PROPAGATION};
 
 % I-type operations
 enum ITYPE_OPERATION = {
+	ITYPE_BOOL_AND,
+	ITYPE_BOOL_OR,
+	ITYPE_RATIONAL_PLUS,
+	ITYPE_RATIONAL_TIMES,
+	ITYPE_RATIONAL_MIN,
+	ITYPE_RATIONAL_MAX,
 	ITYPE_AGGREGATION_ENUM,
-	ITYPE_AGGREGATION_AND,
-	ITYPE_AGGREGATION_OR,
-	ITYPE_AGGREGATION_PLUS,
-	ITYPE_AGGREGATION_TIMES,
-	ITYPE_AGGREGATION_MIN,
-	ITYPE_AGGREGATION_MAX,
-% 	ITYPE_AGGREGATION_MEAN,
 	ITYPE_PROPAGATION_ENUM,
-	ITYPE_PROPAGATION_AND,
-	ITYPE_PROPAGATION_OR,
-	ITYPE_PROPAGATION_PLUS,
-	ITYPE_PROPAGATION_TIMES,
-	ITYPE_PROPAGATION_MIN,
-	ITYPE_PROPAGATION_MAX,
-% 	ITYPE_PROPAGATION_MEAN,
 	};
 	
 % Proper range of sorts for the i-type
@@ -218,7 +211,9 @@ type DEOPT_INFLUENCE = record(
 	array[IBLOCK_COMPONENT] of int: iblock,
 );
 
+enum I_DOMAIN;
 
+array[I_DOMAIN] of opt string: I_;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% DATA
@@ -321,6 +316,9 @@ function INFLUENCE: getNullInfluence(ITYPE: it) :: "getNullInfluence($it): retur
 
 %
 function bool: isNullInfluenceVirtual(ITYPE: it) :: "isNullInfluenceVirtual($it): checks whether the null influence over i-type $it is virtual (par)";
+
+%
+function INFLUENCE: getPropagationNeutral(ITYPE: it) :: "getPropagationNeutral($it): returns the propagation neutral influence over i-type $it - (par)";
 
 %
 function bool: isNullInfluence(INFLUENCE: x) :: "isNullInfluence($x): checks whether $x is the null influence over i-type of $x - (par)";

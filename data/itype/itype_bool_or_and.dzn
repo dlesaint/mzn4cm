@@ -1,6 +1,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% NO-OPT BOOLEAN OR/AND I-TYPE
-
+%%%% optional types
+I_DOMAIN = {E};
+I_ = [<>];
+I_AGGREGATE = array2d(I_DOMAIN,I_DOMAIN, [<>]);
+I_PROPAGATE = array2d(I_DOMAIN,I_DOMAIN, [<>]);
+%%%%%%%%%%%%%%%%%%%%%%
 itype_nr_sorts = 1;
 
 itype_signature = (
@@ -11,7 +16,7 @@ itype_signature = (
 	% the tuple of sorts of the i-type
 	sorts:					[ITYPE_SORT_BOOL],
 	% the operations of the i-type
-	operations:		[(ITYPE_AGGREGATION):ITYPE_AGGREGATION_OR, (ITYPE_PROPAGATION):ITYPE_PROPAGATION_AND],
+	operations:		[(ITYPE_AGGREGATION):ITYPE_BOOL_OR, (ITYPE_PROPAGATION):ITYPE_BOOL_AND],
 );
 
 itype_domains = (

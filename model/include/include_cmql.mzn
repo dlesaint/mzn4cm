@@ -9,9 +9,9 @@
 %% FILE INCLUSION
 
 include "./../cmql/primitive_api.mzn";
-include "./../cmql/primitive/primitive_path_value.mzn";
-include "./../cmql/primitive/primitive_value.mzn";
-include "./../cmql/primitive/primitive_path_value_classic.mzn";
-include "./../cmql/primitive/primitive_path.mzn";
-include "./../cmql/primitive/primitive_value_classic.mzn";
-include "./../cmql/primitive/primitive_length.mzn";
+include "./../cmql/primitive/K-variable.mzn";
+include "./../cmql/primitive/concatenation.mzn";
+include "./../cmql/primitive/inclusion.mzn";
+include "./../cmql/primitive/addition.mzn";
+include "./../cmql/primitive/fusion.mzn";
+include "./../cmql/primitive/influence.mzn";

@@ -1,12 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% PATH_VALUE QUERY DATA
 
-% origin node
-origin_node = 1;
-% 2 for route testing
-% 8 for internet
-
-% destination node
-destination_node = 3;
-% 8 for route testing
-% 3 for internet testing with max 20 solutions
+s_node=1;
+t_node=5;
+nb_paths=2;
+size_path=4;

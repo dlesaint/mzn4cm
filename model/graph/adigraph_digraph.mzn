@@ -57,7 +57,7 @@ function ADIGRAPH: digraph2adigraph(DIGRAPH: dg)
 		set of int: ARC_ID = 1..dg.nr_arcs;
 		array[ARC_ID, TAIL_HEAD] of NODE_ID: tail_head = array2d(ARC_ID, TAIL_HEAD, [k | ij in ARC_ID, th in TAIL_HEAD, k in NODE_ID where (k==dg.a[ij].t /\ th==TAIL) \/ (k==dg.a[ij].h /\ th==HEAD)]);
 		array[NODE_ID, IN_OUT] of set of ARC_ID: out_in = array2d(NODE_ID, IN_OUT, [{ij | ij in ARC_ID where i==tail_head[ij,th]} | i in NODE_ID, th in TAIL_HEAD]);
-		array[NODE_ID, IN_OUT] of set of ARC_ID: in_out = array2d(NODE_ID, IN_OUT, [out_in[i, to_enum(IN_OUT, 2 - (j + 1) mod 2)] | i in NODE_ID, j in IN_OUT]);
+		array[NODE_ID, IN_OUT] of set of ARC_ID: in_out = array2d(NODE_ID, IN_OUT, [out_in[i, to_enum(IN_OUT, 2 - (enum2int(j) + 1) mod 2)] | i in NODE_ID, j in IN_OUT]);
 		array[NODE_ID, PRED_SUCC] of set of NODE_ID: pred_succ = array2d(NODE_ID, PRED_SUCC, [{j | j in NODE_ID where (io==IN /\ j in {k | k in NODE_ID, ki in in_out[i,io] where k==dg.a[ki].t}) \/ (io==OUT /\ j in {k | k in NODE_ID, ik in in_out[i,io] where k==dg.a[ik].h})} | i in NODE_ID, io in IN_OUT]);
 		set of NODE_ID: tails = {i | i in NODE_ID where in_out[i,OUT]!={}};
 		set of NODE_ID: heads = {i | i in NODE_ID where in_out[i,IN]!={}};
