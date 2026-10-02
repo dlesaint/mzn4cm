@@ -1,8 +1,8 @@
 
     icmap =(
-    % icm_LH12 = (
+    % icm_BB12 = (
         % name
-        name:"LH12",
+        name:"BB12",
 
         % i-type
         itype: itype,

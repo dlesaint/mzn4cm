@@ -1,8 +1,8 @@
 
     icmap =(
-    % icm_SG12 = (
+    % icm_HH12 = (
         % name
-        name:"SG12",
+        name:"HH12",
 
         % i-type
         itype: itype,

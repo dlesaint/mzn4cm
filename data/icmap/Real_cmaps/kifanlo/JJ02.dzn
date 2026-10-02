@@ -1,8 +1,8 @@
 
     icmap =(
-    % icm_YE02 = (
+    % icm_JJ02 = (
         % name
-        name:"YE02",
+        name:"JJ02",
 
         % i-type
         itype: itype,

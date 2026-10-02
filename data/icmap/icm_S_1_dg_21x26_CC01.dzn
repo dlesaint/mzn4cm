@@ -1,5 +1,5 @@
 icmap = (
-    name:"icm_R_1_dg_21x28_LS01",
+    name:"icm_R_1_dg_21x28_CC01",
     itype: itype,
 
     node_labels: [
